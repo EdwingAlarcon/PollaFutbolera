@@ -91,7 +91,7 @@ export default function CreatePoolPage() {
                   }
                   required
                   maxLength={100}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent bg-white text-gray-900"
                   placeholder="Ej: Polla de la Oficina"
                 />
               </div>
@@ -105,7 +105,7 @@ export default function CreatePoolPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, tournament_id: e.target.value })
                   }
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent bg-white text-gray-900"
                 >
                   <option value="world-cup-2026">Mundial 2026</option>
                   <option value="copa-america-2024">Copa América 2024</option>
