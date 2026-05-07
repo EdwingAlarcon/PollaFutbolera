@@ -26,6 +26,19 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+/* Estilos globales para mejorar contraste */
+input,
+select,
+textarea {
+  @apply bg-white text-gray-900;
+}
+
+/* Placeholders más visibles */
+input::placeholder,
+textarea::placeholder {
+  @apply text-gray-500 opacity-100;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
