@@ -199,22 +199,25 @@ export default function AdminMatchesPage() {
                 <ol className="space-y-2.5 text-gray-300">
                   <li className="flex gap-3">
                     <span className="bg-blue-900/60 text-blue-300 font-black text-xs w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5">1</span>
-                    <span><strong className="text-white">Antes del partido</strong> — El partido aparece en estado <span className="bg-blue-900/50 text-blue-300 px-1.5 py-0.5 rounded text-xs font-bold">Programado</span>. Los usuarios pueden ingresar su pronóstico hasta que empiece.</span>
+                    <span><strong className="text-white">Antes del partido</strong> — Estado <span className="bg-blue-900/50 text-blue-300 px-1.5 py-0.5 rounded text-xs font-bold">Programado</span>. Los usuarios pueden ingresar su pronóstico hasta que empiece.</span>
                   </li>
                   <li className="flex gap-3">
                     <span className="bg-red-900/60 text-red-300 font-black text-xs w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5">2</span>
                     <div>
-                      <span><strong className="text-white">Al comenzar</strong> — El estado cambia a <span className="bg-red-600/50 text-red-300 px-1.5 py-0.5 rounded text-xs font-bold">En vivo</span> <strong className="text-green-400">automáticamente</strong> cuando llega la hora del partido (cron cada 10 min). Esto bloquea los pronósticos de los usuarios.</span>
-                      <p className="text-gray-600 text-xs mt-1">Si ves un partido que ya empezó pero aún aparece como Programado, puedes cambiarlo manualmente aquí.</p>
+                      <span><strong className="text-white">Al comenzar</strong> — Pasa a <span className="bg-red-600/50 text-red-300 px-1.5 py-0.5 rounded text-xs font-bold">En vivo</span> <strong className="text-green-400">✨ automáticamente</strong> cuando llega la hora del partido (cron cada 10 min).</span>
+                      <p className="text-gray-600 text-xs mt-1">Si ves un partido que ya empezó pero sigue como Programado, puedes cambiarlo manualmente.</p>
                     </div>
                   </li>
                   <li className="flex gap-3">
                     <span className="bg-green-900/60 text-green-300 font-black text-xs w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5">3</span>
-                    <span><strong className="text-white">Al terminar</strong> — Ingresa el marcador final (solo 90 min, sin tiempo extra ni penales), cambia a <span className="bg-gray-700 text-gray-300 px-1.5 py-0.5 rounded text-xs font-bold">Finalizado</span> y guarda.</span>
+                    <div>
+                      <span><strong className="text-white">Al terminar</strong> — Pasa a <span className="bg-gray-700 text-gray-300 px-1.5 py-0.5 rounded text-xs font-bold">Finalizado</span> con el marcador real <strong className="text-green-400">✨ automáticamente</strong> desde la API de ESPN.</span>
+                      <p className="text-gray-600 text-xs mt-1">Solo los 90 minutos reglamentarios (fase de grupos: sin tiempo extra ni penales).</p>
+                    </div>
                   </li>
                   <li className="flex gap-3">
                     <span className="bg-yellow-900/60 text-yellow-300 font-black text-xs w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5">✓</span>
-                    <span><strong className="text-white">Automático</strong> — Al guardar como Finalizado, Supabase calcula los puntos de cada usuario automáticamente y actualiza la tabla de posiciones.</span>
+                    <span><strong className="text-white">Puntos</strong> — Supabase los calcula automáticamente al finalizar y actualiza la tabla de posiciones.</span>
                   </li>
                 </ol>
               </div>
@@ -247,6 +250,15 @@ export default function AdminMatchesPage() {
                 <p className="text-gray-300 leading-relaxed">
                   Toma <strong className="text-white">todos los partidos que tienen marcador ingresado</strong> y que aún no están en estado Finalizado, y los finaliza en lote de una vez.
                   Útil al final de una jornada con varios partidos. Siempre pide confirmación antes de ejecutar.
+                </p>
+              </div>
+
+              <div className="md:col-span-2 bg-green-900/15 border border-green-700/30 rounded-xl p-4">
+                <p className="text-green-300 font-bold text-xs mb-2">✨ Totalmente automático con ESPN</p>
+                <p className="text-gray-400 text-xs leading-relaxed">
+                  El cron de cron-job.org corre cada 10 min y consulta la <strong className="text-gray-200">API pública de ESPN</strong> (sin key, gratuita).
+                  Cuando ESPN reporta un partido como <em>Final</em>, actualiza el marcador en Supabase y dispara el cálculo de puntos automáticamente.
+                  Este panel sirve como <strong className="text-gray-200">respaldo manual</strong> en caso de que la API falle o si se necesita corregir un resultado.
                 </p>
               </div>
 
