@@ -187,6 +187,7 @@ export async function POST(request: NextRequest) {
     const awayScore = away.score != null ? parseInt(away.score) : null
 
     return [{
+      external_api_id: String(event.id),
       tournament_id: tournamentId,
       home_team: home.team.displayName as string,
       away_team: away.team.displayName as string,
@@ -200,33 +201,50 @@ export async function POST(request: NextRequest) {
     }]
   })
 
-  // Separar partidos nuevos de existentes para insertar/actualizar ESPN IDs
+  // Fetch existing matches — keyed by external_api_id (most reliable) with date fallback
   const { data: existing } = await supabaseAdmin
     .from('matches')
-    .select('id, home_team, away_team, match_date, home_team_espn_id, away_team_espn_id')
+    .select('id, home_team, away_team, match_date, external_api_id, home_team_espn_id, away_team_espn_id')
     .eq('tournament_id', tournamentId)
 
-  const existingMap = new Map(
-    (existing ?? []).map((m: any) => [`${m.home_team}|${m.away_team}|${m.match_date}`, m]),
+  // Build lookup maps: prefer external_api_id, fall back to normalized date string
+  const byApiId = new Map((existing ?? []).filter((m: any) => m.external_api_id).map((m: any) => [m.external_api_id, m]))
+  const byDateKey = new Map(
+    (existing ?? []).map((m: any) => [
+      `${m.home_team}|${m.away_team}|${new Date(m.match_date).getTime()}`,
+      m,
+    ]),
   )
 
-  const newMatches = matches.filter(m => !existingMap.has(`${m.home_team}|${m.away_team}|${m.match_date}`))
+  const findExisting = (m: typeof matches[number]) => {
+    if (m.external_api_id) {
+      const byId = byApiId.get(m.external_api_id)
+      if (byId) return byId
+    }
+    return byDateKey.get(`${m.home_team}|${m.away_team}|${new Date(m.match_date).getTime()}`) ?? null
+  }
 
-  // Update ESPN IDs on existing matches that are missing them (fixes name-collision issues like Liverpool URU vs PL)
-  const toUpdate = matches.filter(m => {
-    const ex = existingMap.get(`${m.home_team}|${m.away_team}|${m.match_date}`)
-    return ex && (ex.home_team_espn_id == null || ex.away_team_espn_id == null) &&
-      (m.home_team_espn_id != null || m.away_team_espn_id != null)
+  const newMatches = matches.filter(m => findExisting(m) === null)
+
+  // Update ESPN IDs (and external_api_id if missing) on existing matches
+  const toUpdate = matches.flatMap(m => {
+    const ex = findExisting(m)
+    if (!ex) return []
+    const needsUpdate =
+      (ex.home_team_espn_id == null && m.home_team_espn_id != null) ||
+      (ex.away_team_espn_id == null && m.away_team_espn_id != null) ||
+      (!ex.external_api_id && m.external_api_id)
+    return needsUpdate ? [{ ex, m }] : []
   })
 
   if (toUpdate.length > 0) {
-    await Promise.all(toUpdate.map(m => {
-      const ex = existingMap.get(`${m.home_team}|${m.away_team}|${m.match_date}`)!
-      return supabaseAdmin.from('matches').update({
-        home_team_espn_id: m.home_team_espn_id,
-        away_team_espn_id: m.away_team_espn_id,
-      }).eq('id', ex.id)
-    }))
+    await Promise.all(toUpdate.map(({ ex, m }) =>
+      supabaseAdmin.from('matches').update({
+        ...(m.home_team_espn_id != null ? { home_team_espn_id: m.home_team_espn_id } : {}),
+        ...(m.away_team_espn_id != null ? { away_team_espn_id: m.away_team_espn_id } : {}),
+        ...(!ex.external_api_id && m.external_api_id ? { external_api_id: m.external_api_id } : {}),
+      }).eq('id', ex.id),
+    ))
   }
 
   if (newMatches.length === 0) {
