@@ -200,23 +200,41 @@ export async function POST(request: NextRequest) {
     }]
   })
 
-  // Filtrar duplicados contra lo que ya existe en la DB
+  // Separar partidos nuevos de existentes para insertar/actualizar ESPN IDs
   const { data: existing } = await supabaseAdmin
     .from('matches')
-    .select('home_team, away_team, match_date')
+    .select('id, home_team, away_team, match_date, home_team_espn_id, away_team_espn_id')
     .eq('tournament_id', tournamentId)
 
-  const existingKeys = new Set(
-    (existing ?? []).map((m: any) => `${m.home_team}|${m.away_team}|${m.match_date}`),
+  const existingMap = new Map(
+    (existing ?? []).map((m: any) => [`${m.home_team}|${m.away_team}|${m.match_date}`, m]),
   )
-  const newMatches = matches.filter(
-    m => !existingKeys.has(`${m.home_team}|${m.away_team}|${m.match_date}`),
-  )
+
+  const newMatches = matches.filter(m => !existingMap.has(`${m.home_team}|${m.away_team}|${m.match_date}`))
+
+  // Update ESPN IDs on existing matches that are missing them (fixes name-collision issues like Liverpool URU vs PL)
+  const toUpdate = matches.filter(m => {
+    const ex = existingMap.get(`${m.home_team}|${m.away_team}|${m.match_date}`)
+    return ex && (ex.home_team_espn_id == null || ex.away_team_espn_id == null) &&
+      (m.home_team_espn_id != null || m.away_team_espn_id != null)
+  })
+
+  if (toUpdate.length > 0) {
+    await Promise.all(toUpdate.map(m => {
+      const ex = existingMap.get(`${m.home_team}|${m.away_team}|${m.match_date}`)!
+      return supabaseAdmin.from('matches').update({
+        home_team_espn_id: m.home_team_espn_id,
+        away_team_espn_id: m.away_team_espn_id,
+      }).eq('id', ex.id)
+    }))
+  }
 
   if (newMatches.length === 0) {
     return NextResponse.json({
-      inserted: 0, total: matches.length,
-      message: `Todos los partidos encontrados (${matches.length}) ya estaban en la base de datos.`,
+      inserted: 0, updated: toUpdate.length, total: matches.length,
+      message: toUpdate.length > 0
+        ? `ESPN IDs actualizados en ${toUpdate.length} partido(s) existentes.`
+        : `Todos los partidos encontrados (${matches.length}) ya estaban en la base de datos.`,
     })
   }
 
@@ -225,5 +243,5 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: `Error al insertar: ${insertError.message}` }, { status: 500 })
   }
 
-  return NextResponse.json({ inserted: newMatches.length, total: espnEvents.length })
+  return NextResponse.json({ inserted: newMatches.length, updated: toUpdate.length, total: espnEvents.length })
 }
