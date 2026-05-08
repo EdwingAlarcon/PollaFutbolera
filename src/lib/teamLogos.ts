@@ -193,6 +193,8 @@ const CLUB_ESPN_IDS: Record<string, number> = {
   'Fortaleza FC': 4928,
   'Llaneros': 7915,
   'Patriotas Boyacá': 9773,
+  'Inter Bogotá': 7445,
+  'La Equidad': 7445,
 
   // ── MLS ──────────────────────────────────────────────────────────
   'Atlanta United': 18418,

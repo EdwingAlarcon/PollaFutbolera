@@ -189,7 +189,7 @@ export const TOURNAMENT_TEAMS: Record<string, string[]> = {
     'Atlético Nacional', 'Millonarios', 'Santa Fe', 'Junior',
     'Deportivo Cali', 'América de Cali', 'Once Caldas',
     'Deportes Tolima', 'Envigado', 'Rionegro Águilas',
-    'Boyacá Chicó', 'Deportivo Pasto', 'La Equidad',
+    'Boyacá Chicó', 'Deportivo Pasto', 'Inter Bogotá',
     'Patriotas Boyacá', 'Alianza FC', 'Independiente Medellín',
     'Jaguares de Córdoba', 'Deportivo Pereira',
     'Fortaleza FC', 'Llaneros',
