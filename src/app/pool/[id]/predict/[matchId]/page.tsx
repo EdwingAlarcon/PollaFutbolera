@@ -134,18 +134,22 @@ export default function PredictMatchPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-green-50 to-white flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
+      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="animate-spin rounded-full h-14 w-14 border-4 border-gray-700 border-t-green-500"></div>
+          <p className="text-gray-400 text-sm">Cargando partido...</p>
+        </div>
       </div>
     )
   }
 
   if (!match) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-green-50 to-white flex items-center justify-center">
+      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Partido no encontrado</h1>
-          <Link href={`/pool/${poolId}`} className="text-green-600 hover:underline">
+          <div className="text-6xl mb-4">😕</div>
+          <h1 className="text-2xl font-bold text-white mb-4">Partido no encontrado</h1>
+          <Link href={`/pool/${poolId}`} className="text-green-400 hover:text-green-300 underline">
             Volver a la polla
           </Link>
         </div>
@@ -154,101 +158,106 @@ export default function PredictMatchPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
-      <nav className="bg-white shadow-sm border-b">
+    <div className="min-h-screen bg-gray-950 text-white">
+      <nav className="bg-gray-900 border-b border-gray-800">
         <div className="container mx-auto px-4 py-4">
-          <Link href={`/pool/${poolId}`} className="text-green-600 hover:text-green-700 font-semibold">
+          <Link href={`/pool/${poolId}`} className="text-green-400 hover:text-green-300 font-semibold transition">
             ← Volver a la polla
           </Link>
         </div>
       </nav>
 
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-2xl mx-auto">
-          <div className="bg-white p-8 rounded-xl shadow-lg">
-            <h1 className="text-2xl font-bold text-gray-900 mb-2 text-center">
-              {prediction ? 'Editar Predicción' : 'Hacer Predicción'}
-            </h1>
-            <p className="text-gray-600 mb-6 text-center text-sm">
-              {new Date(match.match_date).toLocaleDateString('es-ES', {
-                weekday: 'long',
-                day: '2-digit',
-                month: 'long',
-                hour: '2-digit',
-                minute: '2-digit',
-              })}
-            </p>
+      <div className="container mx-auto px-4 py-10">
+        <div className="max-w-lg mx-auto">
+          <div className="bg-gray-900 rounded-2xl border border-gray-800 shadow-2xl overflow-hidden">
 
-            {error && (
-              <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-6">
-                {error}
-              </div>
-            )}
+            {/* Header */}
+            <div className="bg-gradient-to-r from-green-800 to-green-950 px-8 py-6 text-center">
+              <h1 className="text-2xl font-black text-white mb-1">
+                {prediction ? '✏️ Editar Predicción' : '🔮 Hacer Predicción'}
+              </h1>
+              <p className="text-green-200 text-sm capitalize">
+                {new Date(match.match_date).toLocaleDateString('es-ES', {
+                  weekday: 'long',
+                  day: '2-digit',
+                  month: 'long',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}
+              </p>
+            </div>
 
-            <div className="mb-8">
-              <div className="flex items-center justify-between gap-8">
-                {/* Equipo Local */}
+            <div className="p-8">
+              {error && (
+                <div className="bg-red-900/50 border border-red-700 text-red-300 px-4 py-3 rounded-xl mb-6 text-sm">
+                  ⚠️ {error}
+                </div>
+              )}
+
+              {/* Teams + Inputs */}
+              <div className="flex items-center justify-between gap-4 mb-8">
+                {/* Local */}
                 <div className="flex-1 text-center">
-                  <div className="text-6xl mb-4">{getTeamFlag(match.home_team)}</div>
-                  <h2 className="text-xl font-bold text-gray-900 mb-4">
-                    {match.home_team}
-                  </h2>
+                  <div className="text-7xl mb-3">{getTeamFlag(match.home_team)}</div>
+                  <p className="font-bold text-white text-sm mb-4 leading-tight">{match.home_team}</p>
                   <input
                     type="number"
                     min="0"
                     value={homeScore}
                     onChange={(e) => setHomeScore(e.target.value)}
-                    className="w-24 h-24 text-center text-4xl font-bold border-4 border-gray-300 rounded-lg focus:ring-4 focus:ring-green-500 focus:border-green-500 bg-white text-gray-900"
+                    className="w-20 h-20 text-center text-4xl font-black border-2 border-gray-700 rounded-xl focus:ring-4 focus:ring-green-500 focus:border-green-500 bg-gray-800 text-white outline-none block mx-auto"
                     placeholder="0"
                   />
                 </div>
 
-                {/* VS */}
-                <div className="text-gray-400 text-2xl font-bold">VS</div>
+                {/* Separador */}
+                <div className="text-gray-700 text-3xl font-black pb-4">—</div>
 
-                {/* Equipo Visitante */}
+                {/* Visitante */}
                 <div className="flex-1 text-center">
-                  <div className="text-6xl mb-4">{getTeamFlag(match.away_team)}</div>
-                  <h2 className="text-xl font-bold text-gray-900 mb-4">
-                    {match.away_team}
-                  </h2>
+                  <div className="text-7xl mb-3">{getTeamFlag(match.away_team)}</div>
+                  <p className="font-bold text-white text-sm mb-4 leading-tight">{match.away_team}</p>
                   <input
                     type="number"
                     min="0"
                     value={awayScore}
                     onChange={(e) => setAwayScore(e.target.value)}
-                    className="w-24 h-24 text-center text-4xl font-bold border-4 border-gray-300 rounded-lg focus:ring-4 focus:ring-green-500 focus:border-green-500 bg-white text-gray-900"
+                    className="w-20 h-20 text-center text-4xl font-black border-2 border-gray-700 rounded-xl focus:ring-4 focus:ring-green-500 focus:border-green-500 bg-gray-800 text-white outline-none block mx-auto"
                     placeholder="0"
                   />
                 </div>
               </div>
-            </div>
 
-            {/* Reglas de puntuación */}
-            <div className="bg-blue-50 p-4 rounded-lg mb-6">
-              <h3 className="font-semibold text-blue-900 mb-2 text-sm">
-                Sistema de Puntuación:
-              </h3>
-              <div className="text-xs text-blue-800 space-y-1">
-                <div>• Resultado exacto: <strong>{pool?.scoring_rules?.exactScore || 5} puntos</strong></div>
-                <div>• Diferencia correcta: <strong>{pool?.scoring_rules?.correctDifference || 3} puntos</strong></div>
-                <div>• Ganador correcto: <strong>{pool?.scoring_rules?.correctResult || 1} punto</strong></div>
+              {/* Sistema de puntos */}
+              <div className="grid grid-cols-3 gap-2 mb-8">
+                <div className="bg-yellow-900/30 border border-yellow-700/40 rounded-xl p-3 text-center">
+                  <div className="text-yellow-400 font-black text-xl">{pool?.scoring_rules?.exactScore || 5}</div>
+                  <div className="text-yellow-200/60 text-xs mt-0.5">pts exacto</div>
+                </div>
+                <div className="bg-blue-900/30 border border-blue-700/40 rounded-xl p-3 text-center">
+                  <div className="text-blue-400 font-black text-xl">{pool?.scoring_rules?.correctDifference || 3}</div>
+                  <div className="text-blue-200/60 text-xs mt-0.5">pts diferencia</div>
+                </div>
+                <div className="bg-purple-900/30 border border-purple-700/40 rounded-xl p-3 text-center">
+                  <div className="text-purple-400 font-black text-xl">{pool?.scoring_rules?.correctResult || 1}</div>
+                  <div className="text-purple-200/60 text-xs mt-0.5">pt ganador</div>
+                </div>
               </div>
+
+              <button
+                onClick={handleSave}
+                disabled={saving || !homeScore || !awayScore}
+                className="w-full bg-green-600 hover:bg-green-500 disabled:bg-gray-800 disabled:text-gray-600 disabled:cursor-not-allowed text-white font-black py-4 rounded-xl transition text-lg"
+              >
+                {saving ? '⏳ Guardando...' : prediction ? '✅ Actualizar Predicción' : '🚀 Guardar Predicción'}
+              </button>
+
+              {prediction && (
+                <p className="text-center text-xs text-gray-600 mt-4">
+                  Puedes editar tu predicción hasta que comience el partido
+                </p>
+              )}
             </div>
-
-            <button
-              onClick={handleSave}
-              disabled={saving || !homeScore || !awayScore}
-              className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-6 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {saving ? 'Guardando...' : prediction ? 'Actualizar Predicción' : 'Guardar Predicción'}
-            </button>
-
-            {prediction && (
-              <p className="text-center text-sm text-gray-600 mt-4">
-                Puedes editar tu predicción hasta que comience el partido
-              </p>
-            )}
           </div>
         </div>
       </div>
