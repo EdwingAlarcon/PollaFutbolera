@@ -21,6 +21,7 @@ export type Pool = {
   admin_id: string
   tournament_id: string
   scoring_rules: ScoringRules
+  prizes?: { position: string; prize: string }[]
   created_at: string
 }
 

@@ -16,7 +16,8 @@ export default function DashboardPage() {
   const [rankings, setRankings] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [editingPool, setEditingPool] = useState<Pool | null>(null)
-  const [editName, setEditName] = useState('')
+  const [editRules, setEditRules] = useState({ exactScore: 5, correctDifference: 3, correctResult: 1 })
+  const [editPrizes, setEditPrizes] = useState([{ position: '\uD83E\uDD47 1er Lugar', prize: '' }, { position: '\uD83E\uDD48 2do Lugar', prize: '' }, { position: '\uD83E\uDD49 3er Lugar', prize: '' }])
   const [saving, setSaving] = useState(false)
 
   useEffect(() => {
@@ -71,6 +72,8 @@ export default function DashboardPage() {
           name,
           invite_code,
           tournament_id,
+          scoring_rules,
+          prizes,
           created_at
         )
       `)
@@ -105,18 +108,35 @@ export default function DashboardPage() {
     }
   }
 
+  const openEdit = (pool: Pool) => {
+    setEditingPool(pool)
+    setEditRules(pool.scoring_rules ?? { exactScore: 5, correctDifference: 3, correctResult: 1 })
+    const base = [{ position: '\uD83E\uDD47 1er Lugar', prize: '' }, { position: '\uD83E\uDD48 2do Lugar', prize: '' }, { position: '\uD83E\uDD49 3er Lugar', prize: '' }]
+    if (pool.prizes?.length) {
+      setEditPrizes(base.map((b, i) => pool.prizes![i] ? { ...pool.prizes![i] } : b))
+    } else {
+      setEditPrizes(base)
+    }
+  }
+
   const handleEditSave = async () => {
-    if (!editingPool || !editName.trim()) return
+    if (!editingPool) return
     setSaving(true)
+    const prizes = editPrizes.filter(p => p.prize.trim()).map(p => ({ position: p.position, prize: p.prize.trim() }))
     const { error } = await supabase
       .from('pools')
-      .update({ name: editName.trim() })
+      .update({
+        scoring_rules: editRules,
+        prizes: prizes.length ? prizes : null,
+      })
       .eq('id', editingPool.id)
     setSaving(false)
     if (error) {
       alert('Error al guardar: ' + error.message)
     } else {
-      setPools(prev => prev.map(p => p.id === editingPool.id ? { ...p, name: editName.trim() } : p))
+      setPools(prev => prev.map(p => p.id === editingPool.id
+        ? { ...p, scoring_rules: editRules, prizes: prizes.length ? prizes : undefined }
+        : p))
       setEditingPool(null)
     }
   }
@@ -139,30 +159,54 @@ export default function DashboardPage() {
       {/* Edit Modal */}
       {editingPool && (
         <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center px-4" onClick={() => setEditingPool(null)}>
-          <div className="bg-gray-900 border border-gray-700 rounded-2xl p-6 w-full max-w-md shadow-2xl" onClick={e => e.stopPropagation()}>
-            <h2 className="text-lg font-black text-white mb-4">✏️ Editar Polla</h2>
-            <label className="block text-xs text-gray-400 mb-1 uppercase tracking-wider">Nombre</label>
-            <input
-              type="text"
-              value={editName}
-              onChange={e => setEditName(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && handleEditSave()}
-              className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-green-500 mb-5"
-              autoFocus
-            />
+          <div className="bg-gray-900 border border-gray-700 rounded-2xl p-6 w-full max-w-lg shadow-2xl overflow-y-auto max-h-[90vh]" onClick={e => e.stopPropagation()}>
+            <h2 className="text-lg font-black text-white mb-1">✏️ Editar Polla</h2>
+            <p className="text-xs text-gray-500 mb-5">{editingPool.name}</p>
+
+            {/* Scoring rules */}
+            <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Sistema de Puntuación</p>
+            <div className="grid grid-cols-3 gap-3 mb-6">
+              {([
+                { key: 'exactScore', label: 'Marcador Exacto' },
+                { key: 'correctDifference', label: 'Diferencia Correcta' },
+                { key: 'correctResult', label: 'Resultado Correcto' },
+              ] as const).map(({ key, label }) => (
+                <div key={key} className="bg-gray-800 rounded-xl p-3">
+                  <label className="block text-xs text-gray-400 mb-2 leading-tight">{label}</label>
+                  <div className="flex items-center gap-2">
+                    <button onClick={() => setEditRules(r => ({ ...r, [key]: Math.max(0, r[key] - 1) }))} className="w-7 h-7 rounded-lg bg-gray-700 hover:bg-gray-600 text-white font-bold text-sm flex items-center justify-center transition">-</button>
+                    <span className="flex-1 text-center font-black text-green-400 text-lg">{editRules[key]}</span>
+                    <button onClick={() => setEditRules(r => ({ ...r, [key]: r[key] + 1 }))} className="w-7 h-7 rounded-lg bg-gray-700 hover:bg-gray-600 text-white font-bold text-sm flex items-center justify-center transition">+</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Prizes */}
+            <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Premios (opcional)</p>
+            <div className="space-y-2 mb-6">
+              {editPrizes.map((p, i) => (
+                <div key={i} className="flex items-center gap-3">
+                  <span className="text-sm w-28 text-gray-300 flex-shrink-0">{p.position}</span>
+                  <input
+                    type="text"
+                    value={p.prize}
+                    onChange={e => setEditPrizes(prev => prev.map((x, j) => j === i ? { ...x, prize: e.target.value } : x))}
+                    placeholder="ej: $50.000"
+                    className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-green-500"
+                  />
+                </div>
+              ))}
+            </div>
+
             <div className="flex gap-3 justify-end">
-              <button
-                onClick={() => setEditingPool(null)}
-                className="text-sm text-gray-400 hover:text-white transition px-4 py-2"
-              >
-                Cancelar
-              </button>
+              <button onClick={() => setEditingPool(null)} className="text-sm text-gray-400 hover:text-white transition px-4 py-2">Cancelar</button>
               <button
                 onClick={handleEditSave}
-                disabled={saving || !editName.trim()}
+                disabled={saving}
                 className="bg-green-600 hover:bg-green-500 disabled:opacity-50 text-white font-bold py-2 px-5 rounded-xl text-sm transition"
               >
-                {saving ? 'Guardando...' : 'Guardar'}
+                {saving ? 'Guardando...' : 'Guardar cambios'}
               </button>
             </div>
           </div>
@@ -273,7 +317,7 @@ export default function DashboardPage() {
                       {isAdmin && (
                         <>
                           <button
-                            onClick={() => { setEditingPool(pool); setEditName(pool.name) }}
+                            onClick={() => openEdit(pool)}
                             className="bg-blue-700 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-xl text-sm transition"
                           >
                             ✏️ Editar
@@ -336,7 +380,7 @@ export default function DashboardPage() {
                         {isAdmin && (
                           <>
                             <button
-                              onClick={() => { setEditingPool(pool); setEditName(pool.name) }}
+                              onClick={() => openEdit(pool)}
                               className="bg-blue-700 hover:bg-blue-600 text-white font-bold py-2 px-3 rounded-lg text-xs transition"
                               title="Editar polla"
                             >
