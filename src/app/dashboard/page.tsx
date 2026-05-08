@@ -169,16 +169,16 @@ export default function DashboardPage() {
             <div className="text-7xl mb-4">🎯</div>
             <h2 className="text-2xl font-bold text-white mb-2">No tienes pollas aún</h2>
             <p className="text-gray-500 mb-8">Crea tu primera polla o únete a una con un código de invitación</p>
-            <div className="flex gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/pool/create"
-                className="bg-green-600 hover:bg-green-500 text-white font-bold py-3 px-8 rounded-xl transition"
+                className="bg-green-600 hover:bg-green-500 text-white font-bold py-3 px-8 rounded-xl transition text-center"
               >
                 Crear Polla
               </Link>
               <Link
                 href="/pool/join"
-                className="bg-gray-800 hover:bg-gray-700 text-white font-bold py-3 px-8 rounded-xl border border-gray-700 transition"
+                className="bg-gray-800 hover:bg-gray-700 text-white font-bold py-3 px-8 rounded-xl border border-gray-700 transition text-center"
               >
                 Unirme con Código
               </Link>
@@ -186,51 +186,77 @@ export default function DashboardPage() {
           </div>
         ) : (
           <div className="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden">
-            {/* Table header */}
-            <div className="grid grid-cols-[1fr_180px_80px_80px_100px] gap-2 px-6 py-3 bg-gray-800/60 text-xs font-bold text-gray-500 uppercase tracking-wider border-b border-gray-700">
-              <div>Nombre</div>
-              <div>Torneo</div>
-              <div className="text-center">Pos</div>
-              <div className="text-center">Ptje</div>
-              <div className="text-center">Acciones</div>
-            </div>
-            <div className="divide-y divide-gray-800">
+            {/* Mobile cards (hidden on md+) */}
+            <div className="md:hidden divide-y divide-gray-800">
               {pools.map((pool) => {
                 const myRanking = rankings.find(r => r.pool_id === pool.id)
                 return (
-                  <div
-                    key={pool.id}
-                    className="grid grid-cols-[1fr_180px_80px_80px_100px] gap-2 px-6 py-4 items-center hover:bg-gray-800/30 transition"
-                  >
-                    <div>
-                      <div className="font-bold text-white">{pool.name}</div>
-                      <div className="text-xs text-gray-500 font-mono mt-0.5">{pool.invite_code}</div>
+                  <div key={pool.id} className="px-4 py-4 flex items-center gap-3 hover:bg-gray-800/30 transition">
+                    <div className="flex-1 min-w-0">
+                      <div className="font-bold text-white text-sm leading-tight truncate">{pool.name}</div>
+                      <div className="text-xs text-gray-500 font-mono mt-0.5 truncate">{pool.tournament_id}</div>
+                      <div className="flex items-center gap-3 mt-1.5">
+                        <span className="text-xs text-gray-500">Pos: <span className="text-white font-bold">{myRanking?.rank || '-'}</span></span>
+                        <span className="text-xs text-gray-500">Pts: <span className="text-green-400 font-black">{myRanking?.total_points || 0}</span></span>
+                      </div>
                     </div>
-                    <div className="text-gray-400 text-sm truncate">{pool.tournament_id}</div>
-                    <div className="text-center">
-                      {myRanking ? (
-                        <span className="font-bold text-white text-lg">{myRanking.rank || '-'}</span>
-                      ) : (
-                        <span className="text-gray-600">0</span>
-                      )}
-                    </div>
-                    <div className="text-center">
-                      <span className="font-black text-green-400 text-lg">
-                        {myRanking?.total_points || 0}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-center gap-2">
-                      <Link
-                        href={`/pool/${pool.id}`}
-                        className="bg-green-600 hover:bg-green-500 text-white font-bold py-1.5 px-3 rounded-lg text-xs transition"
-                        title="Ver pronósticos"
-                      >
-                        📋 Ver
-                      </Link>
-                    </div>
+                    <Link
+                      href={`/pool/${pool.id}`}
+                      className="flex-shrink-0 bg-green-600 hover:bg-green-500 text-white font-bold py-2.5 px-4 rounded-xl text-sm transition"
+                    >
+                      📋 Ver
+                    </Link>
                   </div>
                 )
               })}
+            </div>
+            {/* Desktop table (hidden on mobile) */}
+            <div className="hidden md:block">
+              <div className="grid grid-cols-[1fr_180px_80px_80px_100px] gap-2 px-6 py-3 bg-gray-800/60 text-xs font-bold text-gray-500 uppercase tracking-wider border-b border-gray-700">
+                <div>Nombre</div>
+                <div>Torneo</div>
+                <div className="text-center">Pos</div>
+                <div className="text-center">Ptje</div>
+                <div className="text-center">Acciones</div>
+              </div>
+              <div className="divide-y divide-gray-800">
+                {pools.map((pool) => {
+                  const myRanking = rankings.find(r => r.pool_id === pool.id)
+                  return (
+                    <div
+                      key={pool.id}
+                      className="grid grid-cols-[1fr_180px_80px_80px_100px] gap-2 px-6 py-4 items-center hover:bg-gray-800/30 transition"
+                    >
+                      <div>
+                        <div className="font-bold text-white">{pool.name}</div>
+                        <div className="text-xs text-gray-500 font-mono mt-0.5">{pool.invite_code}</div>
+                      </div>
+                      <div className="text-gray-400 text-sm truncate">{pool.tournament_id}</div>
+                      <div className="text-center">
+                        {myRanking ? (
+                          <span className="font-bold text-white text-lg">{myRanking.rank || '-'}</span>
+                        ) : (
+                          <span className="text-gray-600">0</span>
+                        )}
+                      </div>
+                      <div className="text-center">
+                        <span className="font-black text-green-400 text-lg">
+                          {myRanking?.total_points || 0}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-center gap-2">
+                        <Link
+                          href={`/pool/${pool.id}`}
+                          className="bg-green-600 hover:bg-green-500 text-white font-bold py-2 px-3 rounded-lg text-xs transition"
+                          title="Ver pronósticos"
+                        >
+                          📋 Ver
+                        </Link>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
             </div>
           </div>
         )}

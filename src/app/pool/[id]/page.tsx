@@ -493,7 +493,7 @@ export default function PoolDetailPage() {
                                     type="number" min="0" max="99"
                                     value={local?.home ?? ''}
                                     onChange={e => updateScore(match.id, 'home', e.target.value)}
-                                    className="w-10 h-10 text-center font-black text-lg bg-gray-800 border-2 border-gray-700 focus:border-green-500 rounded-lg text-white outline-none"
+                                    className="w-12 h-12 text-center font-black text-lg bg-gray-800 border-2 border-gray-700 focus:border-green-500 rounded-lg text-white outline-none"
                                     placeholder="-"
                                   />
                                   <span className="text-gray-600 font-black">:</span>
@@ -501,7 +501,7 @@ export default function PoolDetailPage() {
                                     type="number" min="0" max="99"
                                     value={local?.away ?? ''}
                                     onChange={e => updateScore(match.id, 'away', e.target.value)}
-                                    className="w-10 h-10 text-center font-black text-lg bg-gray-800 border-2 border-gray-700 focus:border-green-500 rounded-lg text-white outline-none"
+                                    className="w-12 h-12 text-center font-black text-lg bg-gray-800 border-2 border-gray-700 focus:border-green-500 rounded-lg text-white outline-none"
                                     placeholder="-"
                                   />
                                 </div>

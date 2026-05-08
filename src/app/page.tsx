@@ -5,13 +5,13 @@ export default function Home() {
     <main className="min-h-screen bg-gradient-to-b from-green-50 to-white">
       <div className="container mx-auto px-4 py-16">
         <div className="text-center mb-12">
-          <h1 className="text-6xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-4">
             ⚽ Polla Futbolera
           </h1>
-          <p className="text-xl text-gray-600 mb-8">
+          <p className="text-lg md:text-xl text-gray-600 mb-8">
             Crea predicciones de fútbol y compite con tus amigos
           </p>
-          <div className="flex gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Link
               href="/register"
               className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg transition"

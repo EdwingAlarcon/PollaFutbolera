@@ -418,7 +418,7 @@ export default function AdminMatchesPage() {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-8">
           {[
             { label: 'Total', value: stats.total, color: 'text-white' },
             { label: 'Finalizados', value: stats.finished, color: 'text-green-400' },
@@ -441,7 +441,7 @@ export default function AdminMatchesPage() {
             onChange={e => setSearch(e.target.value)}
             className="flex-1 bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-green-600"
           />
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             {(['all', 'scheduled', 'live', 'finished'] as const).map(f => (
               <button
                 key={f}

@@ -176,7 +176,7 @@ export default function CreatePoolPage() {
             ))}
           </div>
 
-          <div className="p-8">
+          <div className="p-5 sm:p-8">
             {error && (
               <div className="bg-red-900/50 border border-red-700 text-red-300 px-4 py-3 rounded-xl mb-6 text-sm">
                 ⚠️ {error}
