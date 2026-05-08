@@ -45,7 +45,7 @@ export default function CreatePoolPage() {
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [showTc, setShowTc] = useState(false)
+  const [showTc, setShowTc] = useState(true)
 
   const handleCreate = async () => {
     setLoading(true)

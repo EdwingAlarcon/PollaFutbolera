@@ -35,7 +35,7 @@ export default function PoolDetailPage() {
   const [user, setUser] = useState<any>(null)
   const [activeTab, setActiveTab] = useState<Tab>('predictions')
   const [copied, setCopied] = useState(false)
-  const [showTc, setShowTc] = useState(false)
+  const [showTc, setShowTc] = useState(true)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [deleting, setDeleting] = useState(false)
   const [deleteError, setDeleteError] = useState<string | null>(null)
