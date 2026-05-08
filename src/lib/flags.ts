@@ -112,6 +112,11 @@ export const teamCountryCodes: Record<string, string> = {
   'Malta': 'mt',
   'Moldavia': 'md',
   'San Marino': 'sm',
+  // Additional UEFA teams
+  'Cyprus': 'cy',
+  'Faroe Islands': 'fo',
+  'Israel': 'il',
+  'Lithuania': 'lt',
 
   // ── English name aliases (ESPN import stores English country names) ──
   // Europe
