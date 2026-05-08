@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { Resend } from 'resend'
 
-// ──────────────────────────────────────────────────────────────────────────────
 // CRON JOB: Envía recordatorios de pronósticos para partidos del día
 // Schedule: diariamente a las 12:00 UTC  →  vercel.json: "schedule": "0 12 * * *"
 //
@@ -16,9 +15,6 @@ import { Resend } from 'resend'
 //   CRON_SECRET                →  string aleatorio para proteger el endpoint
 //   NEXT_PUBLIC_APP_URL        →  https://polla-futbolera-five.vercel.app
 //   RESEND_FROM_EMAIL          →  (opcional) ej: recordatorio@tu-dominio.com
-// ──────────────────────────────────────────────────────────────────────────────
-
-const resend = new Resend(process.env.RESEND_API_KEY)
 
 function getSupabaseAdmin() {
   return createClient(
@@ -35,6 +31,8 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
+  // Inicializar clientes dentro del handler (no a nivel de módulo)
+  const resend = new Resend(process.env.RESEND_API_KEY)
   const supabase = getSupabaseAdmin()
   const now = new Date()
 
