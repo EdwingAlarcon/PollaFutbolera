@@ -232,12 +232,15 @@ const CLUB_ESPN_IDS: Record<string, number> = {
   'River Plate': 16,
   'Boca Juniors': 5,
   'Racing Club': 15,
+  'Rosario Central': 17,
   'San Lorenzo': 18,
   'Estudiantes': 8,
+  'Estudiantes de La Plata': 8,
   'Independiente': 11,
   'Vélez Sarsfield': 21,
   'Huracán': 10,
   'Talleres': 19,
+  'Talleres (Córdoba)': 19,
   'Lanús': 12,
   'Belgrano': 4,
   'Tigre': 7767,
@@ -247,6 +250,7 @@ const CLUB_ESPN_IDS: Record<string, number> = {
   'Colón': 7,
   'Unión': 20,
   'Argentinos Juniors': 3,
+  'Independiente Rivadavia': 9744,
   // Brasil
   'Flamengo': 819,
   'Palmeiras': 2029,
@@ -267,6 +271,7 @@ const CLUB_ESPN_IDS: Record<string, number> = {
   'Atlético Goianiense': 10357,
   // Chile
   'Colo-Colo': 2688,
+  'Colo Colo': 2688,
   'Universidad de Chile': 4139,
   'Universidad Católica': 885,
   'Huachipato': 4134,
@@ -298,6 +303,8 @@ const CLUB_ESPN_IDS: Record<string, number> = {
   // Venezuela
   'Caracas FC': 4811,
   'Deportivo Táchira': 4818,
+  'Carabobo': 6037,
+  'Universidad Central': 10094,
 
   // ── ESPN English name aliases (for auto-imported match data) ─────
   // Champions / Europa League (ESPN uses English names)
