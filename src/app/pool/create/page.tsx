@@ -45,6 +45,7 @@ export default function CreatePoolPage() {
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [showTc, setShowTc] = useState(false)
 
   const handleCreate = async () => {
     setLoading(true)
@@ -180,7 +181,36 @@ export default function CreatePoolPage() {
                     ))}
                   </select>
                 </div>
-                <div>
+                {/* Banner Premio WC2026 */}
+                {formData.tournament_id === 'world-cup-2026' && (
+                  <div className="bg-gradient-to-br from-yellow-900/30 to-amber-900/20 border border-yellow-600/40 rounded-2xl p-5">
+                    <div className="flex items-start gap-3">
+                      <span className="text-2xl flex-shrink-0">🏆</span>
+                      <div className="flex-1">
+                        <p className="text-yellow-300 font-black text-sm leading-snug">
+                          Premio al Ganador: Una (1) camiseta original de tu equipo favorito del torneo.
+                        </p>
+                        <p className="text-yellow-500/70 text-xs mt-1">(Aplican términos y condiciones)</p>
+                        <button
+                          type="button"
+                          onClick={() => setShowTc(v => !v)}
+                          className="mt-3 text-xs text-yellow-400/80 hover:text-yellow-300 underline underline-offset-2 transition"
+                        >
+                          {showTc ? '▲ Ocultar Términos y Condiciones' : '▼ Ver Términos y Condiciones'}
+                        </button>
+                        {showTc && (
+                          <div className="mt-3 space-y-2 text-xs text-yellow-200/60 leading-relaxed border-t border-yellow-700/30 pt-3">
+                            <p><strong className="text-yellow-300/80">Selección de Equipo:</strong> La camiseta debe ser de uno de los equipos que participan activamente en el torneo actual.</p>
+                            <p><strong className="text-yellow-300/80">Versión:</strong> Camiseta original en versión aficionado/hincha. No aplica para versiones Match/Jugador de alto rendimiento.</p>
+                            <p><strong className="text-yellow-300/80">Temporada:</strong> Primera o segunda equipación (local o visitante) de la temporada vigente. No aplican ediciones retro, conmemorativas o de años anteriores.</p>
+                            <p><strong className="text-yellow-300/80">Personalización:</strong> La prenda se entrega en estado comercial estándar. No incluye estampados de nombres, números ni parches adicionales.</p>
+                            <p><strong className="text-yellow-300/80">Disponibilidad:</strong> La entrega está sujeta a disponibilidad de inventario en tiendas oficiales o distribuidores autorizados a nivel nacional al finalizar el torneo. En caso de no haber stock, se acordará una alternativa de igual valor con el ganador.</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}                <div>
                   <label className="block text-sm font-semibold text-gray-300 mb-2">Nombre de la Polla *</label>
                   <input
                     type="text"
@@ -355,6 +385,30 @@ export default function CreatePoolPage() {
                     {loading ? '⏳ Creando...' : '⚽ CREAR GRUPO'}
                   </button>
                 </div>
+
+                {/* Términos WC2026 en resumen */}
+                {formData.tournament_id === 'world-cup-2026' && (
+                  <div className="border border-yellow-700/30 rounded-xl overflow-hidden">
+                    <button
+                      type="button"
+                      onClick={() => setShowTc(v => !v)}
+                      className="w-full flex items-center justify-between px-4 py-3 bg-yellow-900/20 hover:bg-yellow-900/30 transition text-left"
+                    >
+                      <span className="text-yellow-300 text-xs font-bold">🏆 Premio al Ganador &amp; Términos y Condiciones</span>
+                      <span className="text-yellow-500 text-xs">{showTc ? '▲' : '▼'}</span>
+                    </button>
+                    {showTc && (
+                      <div className="px-4 pb-4 pt-2 space-y-2 text-xs text-yellow-200/60 leading-relaxed bg-yellow-900/10">
+                        <p className="text-yellow-300 font-bold text-sm">🏆 Premio al Ganador: Una (1) camiseta original de tu equipo favorito del torneo. <span className="font-normal text-yellow-500/70">(Aplican términos y condiciones)</span></p>
+                        <p><strong className="text-yellow-300/80">Selección de Equipo:</strong> La camiseta debe ser de uno de los equipos que participan activamente en el torneo actual.</p>
+                        <p><strong className="text-yellow-300/80">Versión:</strong> Camiseta original en versión aficionado/hincha. No aplica para versiones Match/Jugador de alto rendimiento.</p>
+                        <p><strong className="text-yellow-300/80">Temporada:</strong> Primera o segunda equipación (local o visitante) de la temporada vigente. No aplican ediciones retro, conmemorativas o de años anteriores.</p>
+                        <p><strong className="text-yellow-300/80">Personalización:</strong> La prenda se entrega en estado comercial estándar. No incluye estampados de nombres, números ni parches adicionales.</p>
+                        <p><strong className="text-yellow-300/80">Disponibilidad:</strong> Sujeta a disponibilidad de inventario en tiendas oficiales o distribuidores autorizados a nivel nacional al finalizar el torneo. En caso de no haber stock, se acordará una alternativa de igual valor con el ganador.</p>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             )}
           </div>

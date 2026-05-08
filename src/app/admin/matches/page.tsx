@@ -203,7 +203,10 @@ export default function AdminMatchesPage() {
                   </li>
                   <li className="flex gap-3">
                     <span className="bg-red-900/60 text-red-300 font-black text-xs w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5">2</span>
-                    <span><strong className="text-white">Al comenzar</strong> — Cambia el estado a <span className="bg-red-600/50 text-red-300 px-1.5 py-0.5 rounded text-xs font-bold">En vivo</span> y guarda. Esto bloquea los pronósticos de los usuarios.</span>
+                    <div>
+                      <span><strong className="text-white">Al comenzar</strong> — El estado cambia a <span className="bg-red-600/50 text-red-300 px-1.5 py-0.5 rounded text-xs font-bold">En vivo</span> <strong className="text-green-400">automáticamente</strong> cuando llega la hora del partido (cron cada 10 min). Esto bloquea los pronósticos de los usuarios.</span>
+                      <p className="text-gray-600 text-xs mt-1">Si ves un partido que ya empezó pero aún aparece como Programado, puedes cambiarlo manualmente aquí.</p>
+                    </div>
                   </li>
                   <li className="flex gap-3">
                     <span className="bg-green-900/60 text-green-300 font-black text-xs w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5">3</span>
