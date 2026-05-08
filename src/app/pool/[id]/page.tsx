@@ -407,9 +407,17 @@ export default function PoolDetailPage() {
             })()}
 
             {matches.length === 0 ? (
-              <div className="text-center py-20 text-gray-500">
-                <div className="text-6xl mb-4">📅</div>
-                <p>No hay partidos disponibles para este torneo aún.</p>
+              <div className="text-center py-16 text-gray-500 space-y-3 px-4">
+                <div className="text-6xl">📅</div>
+                <p className="text-gray-300 font-bold text-base">Aún no hay partidos cargados para este torneo.</p>
+                <p className="text-gray-500 text-sm max-w-md mx-auto">
+                  Los partidos se agregan desde el Panel Admin. Una vez cargados, aparecerán aquí para que todos puedan ingresar sus pronósticos.
+                </p>
+                {user?.id === pool.admin_id && (
+                  <p className="text-yellow-400/80 text-xs mt-2 bg-yellow-900/20 border border-yellow-700/30 rounded-xl px-4 py-2 inline-block">
+                    ⚠️ Eres el admin de esta polla. Solicita al administrador del sistema que cargue los partidos del torneo <strong>{pool.tournament_id}</strong>.
+                  </p>
+                )}
               </div>
             ) : (
               <div className="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden">

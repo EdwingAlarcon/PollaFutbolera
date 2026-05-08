@@ -8,6 +8,25 @@ import Link from 'next/link'
 // ─── Configura aquí los emails que pueden acceder al panel admin ───
 const ADMIN_EMAILS = ['bdp.usf@gmail.com']
 
+const TOURNAMENTS = [
+  { id: 'world-cup-2026',        label: '🌍 Copa Mundial FIFA 2026' },
+  { id: 'champions-league-2526', label: '⭐ UEFA Champions League 2025-26' },
+  { id: 'europa-league-2526',    label: '🟠 UEFA Europa League 2025-26' },
+  { id: 'nations-league-2526',   label: '🏆 UEFA Nations League 2024-25' },
+  { id: 'libertadores-2026',     label: '🏆 Copa Libertadores 2026' },
+  { id: 'sudamericana-2026',     label: '🟠 Copa Sudamericana 2026' },
+  { id: 'copa-america-2028',     label: '🌎 Copa América 2028' },
+  { id: 'premier-league-2526',   label: '🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League 2025-26' },
+  { id: 'la-liga-2526',          label: '🇪🇸 La Liga 2025-26' },
+  { id: 'serie-a-2526',          label: '🇮🇹 Serie A 2025-26' },
+  { id: 'bundesliga-2526',       label: '🇩🇪 Bundesliga 2025-26' },
+  { id: 'ligue-1-2526',          label: '🇫🇷 Ligue 1 2025-26' },
+  { id: 'liga-mx-apertura-2026', label: '🇲🇽 Liga MX Apertura 2026' },
+  { id: 'liga-betplay-2026-1',   label: '🇨🇴 Liga BetPlay 2026-I' },
+  { id: 'mls-2026',              label: '🇺🇸 MLS 2026' },
+  { id: 'otro',                  label: '⚽ Otro torneo' },
+]
+
 const ROUND_CONFIG: Record<string, { label: string; emoji: string }> = {
   'group':        { label: 'Fase de Grupos',   emoji: '⚽' },
   'round-of-32':  { label: 'Ronda de 32',      emoji: '⚡' },
@@ -54,9 +73,10 @@ export default function AdminMatchesPage() {
   const [search, setSearch] = useState('')
   const [showHelp, setShowHelp] = useState(false)
   const [showAddForm, setShowAddForm] = useState(false)
-  const [newMatch, setNewMatch] = useState({ home_team: '', away_team: '', match_date: '', round: 'round-of-32' })
+  const [newMatch, setNewMatch] = useState({ home_team: '', away_team: '', match_date: '', round: 'group' })
   const [addingMatch, setAddingMatch] = useState(false)
   const [addError, setAddError] = useState<string | null>(null)
+  const [selectedTournament, setSelectedTournament] = useState('world-cup-2026')
 
   useEffect(() => {
     checkAccess()
@@ -69,15 +89,15 @@ export default function AdminMatchesPage() {
       return
     }
     setAuthorized(true)
-    await loadMatches()
+    await loadMatches('world-cup-2026')
     setLoading(false)
   }
 
-  const loadMatches = async () => {
+  const loadMatches = async (tournamentId: string) => {
     const { data } = await supabase
       .from('matches')
       .select('*')
-      .eq('tournament_id', 'world-cup-2026')
+      .eq('tournament_id', tournamentId)
       .order('match_date', { ascending: true })
 
     if (data) {
@@ -139,7 +159,7 @@ export default function AdminMatchesPage() {
     setAddingMatch(true)
     setAddError(null)
     const { error } = await supabase.from('matches').insert({
-      tournament_id: 'world-cup-2026',
+      tournament_id: selectedTournament,
       home_team: newMatch.home_team.trim(),
       away_team: newMatch.away_team.trim(),
       match_date: new Date(newMatch.match_date).toISOString(),
@@ -150,9 +170,9 @@ export default function AdminMatchesPage() {
     if (error) {
       setAddError(`Error: ${error.message}`)
     } else {
-      setNewMatch({ home_team: '', away_team: '', match_date: '', round: 'round-of-32' })
+      setNewMatch({ home_team: '', away_team: '', match_date: '', round: 'group' })
       setShowAddForm(false)
-      await loadMatches()
+      await loadMatches(selectedTournament)
     }
   }
 
@@ -317,6 +337,26 @@ export default function AdminMatchesPage() {
           </div>
         )}
 
+        {/* Selector de torneo */}
+        <div className="mb-6 flex flex-col sm:flex-row sm:items-center gap-3">
+          <label className="text-sm font-bold text-gray-400 whitespace-nowrap">⚽ Torneo activo:</label>
+          <select
+            value={selectedTournament}
+            onChange={e => {
+              setSelectedTournament(e.target.value)
+              setFilter('all')
+              setSearch('')
+              setShowAddForm(false)
+              loadMatches(e.target.value)
+            }}
+            className="flex-1 bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-green-500"
+          >
+            {TOURNAMENTS.map(t => (
+              <option key={t.id} value={t.id}>{t.label}</option>
+            ))}
+          </select>
+        </div>
+
         {/* Stats */}
         <div className="grid grid-cols-4 gap-4 mb-8">
           {[
@@ -373,7 +413,9 @@ export default function AdminMatchesPage() {
         {/* ── Formulario: agregar nuevo partido ── */}
         {showAddForm && (
           <div className="mb-6 bg-gray-900 border border-blue-700/50 rounded-2xl p-5">
-            <h3 className="text-white font-bold mb-4 text-sm flex items-center gap-2">➕ Nuevo partido — Copa Mundial 2026</h3>
+            <h3 className="text-white font-bold mb-4 text-sm flex items-center gap-2">
+              ➕ Nuevo partido — {TOURNAMENTS.find(t => t.id === selectedTournament)?.label ?? selectedTournament}
+            </h3>
             <div className="grid sm:grid-cols-2 gap-3 mb-3">
               <input
                 type="text"
