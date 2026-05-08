@@ -6,7 +6,7 @@ import { supabase, type User, type Pool } from '@/lib/supabase'
 import Link from 'next/link'
 
 // Emails con acceso al panel admin
-const ADMIN_EMAILS = ['edwingalarcon@gmail.com', 'edwinalarcon1992@gmail.com']
+const ADMIN_EMAILS = ['bdp.usf@gmail.com']
 
 export default function DashboardPage() {
   const router = useRouter()
