@@ -102,12 +102,15 @@ const CLUB_ESPN_IDS: Record<string, number> = {
   'Getafe': 2922,
   'Las Palmas': 98,
   'Leganés': 17534,
+  'Levante': 1538,
   'Mallorca': 84,
   'Osasuna': 97,
   'Rayo Vallecano': 101,
+  'Real Oviedo': 92,
   'Valencia': 94,
   'Valladolid': 95,
   'Alavés': 96,
+  'Elche': 3751,
 
   // ── Serie A ──────────────────────────────────────────────────────
   'Cagliari': 2925,
