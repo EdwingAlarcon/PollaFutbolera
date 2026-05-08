@@ -1,12 +1,22 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Fragment } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import TeamFlag from '@/components/TeamFlag'
 import Link from 'next/link'
 
 type Tab = 'predictions' | 'positions' | 'info'
+
+const ROUND_LABELS: Record<string, { label: string; emoji: string }> = {
+  'group':        { label: 'Fase de Grupos',   emoji: '⚽' },
+  'round-of-32':  { label: 'Ronda de 32',      emoji: '⚡' },
+  'round-of-16':  { label: 'Octavos de Final', emoji: '🔥' },
+  'quarterfinal': { label: 'Cuartos de Final', emoji: '💥' },
+  'semifinal':    { label: 'Semifinales',      emoji: '🌟' },
+  'third-place':  { label: 'Tercer Lugar',     emoji: '🥉' },
+  'final':        { label: 'Final',            emoji: '🏆' },
+}
 
 export default function PoolDetailPage() {
   const params = useParams()
@@ -372,17 +382,29 @@ export default function PoolDetailPage() {
                 </div>
 
                 <div className="divide-y divide-gray-800/80">
-                  {matches.map((match, idx) => {
-                    const prediction = predictions.find(p => p.match_id === match.id)
+                  {matches.map((match: any, idx: number) => {
+                    const round = match.round || 'group'
+                    const prevRound = idx > 0 ? ((matches as any[])[idx - 1].round || 'group') : null
+                    const showRoundHeader = round !== prevRound
+                    const prediction = predictions.find((p: any) => p.match_id === match.id)
                     const local = localPredictions[match.id]
                     const editable = canPredict(match)
                     const isLive = match.status === 'live'
                     const isFinished = match.status === 'finished'
 
                     return (
-                      <div
-                        key={match.id}
-                        className={`transition ${
+                      <Fragment key={match.id}>
+                        {showRoundHeader && (
+                          <div className="bg-gray-800/50 border-b border-gray-700/60 px-5 py-2.5 flex items-center gap-2.5">
+                            <span className="text-base">{ROUND_LABELS[round]?.emoji}</span>
+                            <span className="text-xs font-black text-gray-300 uppercase tracking-widest">{ROUND_LABELS[round]?.label}</span>
+                            <span className="ml-auto text-gray-600 text-xs">
+                              {(matches as any[]).filter((m: any) => (m.round || 'group') === round).length} partidos
+                            </span>
+                          </div>
+                        )}
+                        <div
+                          className={`transition ${
                           isLive
                             ? 'bg-red-950/20'
                             : isFinished && !prediction
@@ -534,6 +556,7 @@ export default function PoolDetailPage() {
                           </div>
                         </div>
                       </div>
+                      </Fragment>
                     )
                   })}
                 </div>

@@ -8,6 +8,16 @@ import Link from 'next/link'
 // ─── Configura aquí los emails que pueden acceder al panel admin ───
 const ADMIN_EMAILS = ['bdp.usf@gmail.com']
 
+const ROUND_CONFIG: Record<string, { label: string; emoji: string }> = {
+  'group':        { label: 'Fase de Grupos',   emoji: '⚽' },
+  'round-of-32':  { label: 'Ronda de 32',      emoji: '⚡' },
+  'round-of-16':  { label: 'Octavos de Final', emoji: '🔥' },
+  'quarterfinal': { label: 'Cuartos de Final', emoji: '💥' },
+  'semifinal':    { label: 'Semifinales',      emoji: '🌟' },
+  'third-place':  { label: 'Tercer Lugar',     emoji: '🥉' },
+  'final':        { label: 'Final',            emoji: '🏆' },
+}
+
 type Match = {
   id: string
   home_team: string
@@ -17,6 +27,7 @@ type Match = {
   home_score: number | null
   away_score: number | null
   tournament_id: string
+  round?: string
 }
 
 type EditState = {
@@ -42,6 +53,10 @@ export default function AdminMatchesPage() {
   const [filter, setFilter] = useState<'all' | 'scheduled' | 'live' | 'finished'>('all')
   const [search, setSearch] = useState('')
   const [showHelp, setShowHelp] = useState(false)
+  const [showAddForm, setShowAddForm] = useState(false)
+  const [newMatch, setNewMatch] = useState({ home_team: '', away_team: '', match_date: '', round: 'round-of-32' })
+  const [addingMatch, setAddingMatch] = useState(false)
+  const [addError, setAddError] = useState<string | null>(null)
 
   useEffect(() => {
     checkAccess()
@@ -113,6 +128,31 @@ export default function AdminMatchesPage() {
           ? { ...m, home_score: homeScore, away_score: awayScore, status }
           : m
       ))
+    }
+  }
+
+  const handleAddMatch = async () => {
+    if (!newMatch.home_team.trim() || !newMatch.away_team.trim() || !newMatch.match_date) {
+      setAddError('Completa todos los campos antes de agregar.')
+      return
+    }
+    setAddingMatch(true)
+    setAddError(null)
+    const { error } = await supabase.from('matches').insert({
+      tournament_id: 'world-cup-2026',
+      home_team: newMatch.home_team.trim(),
+      away_team: newMatch.away_team.trim(),
+      match_date: new Date(newMatch.match_date).toISOString(),
+      round: newMatch.round,
+      status: 'scheduled',
+    })
+    setAddingMatch(false)
+    if (error) {
+      setAddError(`Error: ${error.message}`)
+    } else {
+      setNewMatch({ home_team: '', away_team: '', match_date: '', round: 'round-of-32' })
+      setShowAddForm(false)
+      await loadMatches()
     }
   }
 
@@ -322,7 +362,68 @@ export default function AdminMatchesPage() {
           >
             ✅ Finalizar con marcador
           </button>
+          <button
+            onClick={() => { setShowAddForm(s => !s); setAddError(null) }}
+            className="bg-blue-700 hover:bg-blue-600 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition whitespace-nowrap"
+          >
+            {showAddForm ? '✕ Cancelar' : '➕ Agregar partido'}
+          </button>
         </div>
+
+        {/* ── Formulario: agregar nuevo partido ── */}
+        {showAddForm && (
+          <div className="mb-6 bg-gray-900 border border-blue-700/50 rounded-2xl p-5">
+            <h3 className="text-white font-bold mb-4 text-sm flex items-center gap-2">➕ Nuevo partido — Copa Mundial 2026</h3>
+            <div className="grid sm:grid-cols-2 gap-3 mb-3">
+              <input
+                type="text"
+                placeholder="Equipo local (ej: Argentina)"
+                value={newMatch.home_team}
+                onChange={e => setNewMatch(p => ({ ...p, home_team: e.target.value }))}
+                className="bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-blue-500"
+              />
+              <input
+                type="text"
+                placeholder="Equipo visitante (ej: Francia)"
+                value={newMatch.away_team}
+                onChange={e => setNewMatch(p => ({ ...p, away_team: e.target.value }))}
+                className="bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-blue-500"
+              />
+              <div className="flex flex-col gap-1">
+                <label className="text-xs text-gray-500">Fecha y hora (hora local)</label>
+                <input
+                  type="datetime-local"
+                  value={newMatch.match_date}
+                  onChange={e => setNewMatch(p => ({ ...p, match_date: e.target.value }))}
+                  className="bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-xs text-gray-500">Fase / Ronda</label>
+                <select
+                  value={newMatch.round}
+                  onChange={e => setNewMatch(p => ({ ...p, round: e.target.value }))}
+                  className="bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500"
+                >
+                  {Object.entries(ROUND_CONFIG).map(([val, cfg]) => (
+                    <option key={val} value={val}>{cfg.emoji} {cfg.label}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            {addError && (
+              <p className="text-red-400 text-xs mb-3">{addError}</p>
+            )}
+            <button
+              onClick={handleAddMatch}
+              disabled={addingMatch}
+              className="bg-blue-600 hover:bg-blue-500 disabled:bg-gray-700 text-white font-bold px-6 py-2.5 rounded-xl text-sm transition"
+            >
+              {addingMatch ? 'Guardando...' : '➕ Agregar partido'}
+            </button>
+            <p className="text-gray-600 text-xs mt-3">El partido se creará con estado Programado. Puedes editar el resultado desde la lista una vez que termine.</p>
+          </div>
+        )}
 
         {/* Lista de partidos */}
         <div className="space-y-3">
@@ -347,12 +448,19 @@ export default function AdminMatchesPage() {
                     : 'border-gray-800'
                 }`}
               >
-                {/* Fecha */}
-                <div className="text-xs text-gray-600 mb-3">
-                  {new Date(match.match_date).toLocaleString('es-ES', {
-                    weekday: 'short', day: '2-digit', month: 'short',
-                    hour: '2-digit', minute: '2-digit', timeZoneName: 'short',
-                  })}
+                {/* Fecha + Ronda */}
+                <div className="flex items-center gap-2 mb-3 flex-wrap">
+                  <span className="text-xs text-gray-600">
+                    {new Date(match.match_date).toLocaleString('es-ES', {
+                      weekday: 'short', day: '2-digit', month: 'short',
+                      hour: '2-digit', minute: '2-digit', timeZoneName: 'short',
+                    })}
+                  </span>
+                  {match.round && match.round !== 'group' && (
+                    <span className="text-xs bg-blue-900/50 border border-blue-700/40 text-blue-300 px-2 py-0.5 rounded-full font-bold">
+                      {ROUND_CONFIG[match.round]?.emoji} {ROUND_CONFIG[match.round]?.label}
+                    </span>
+                  )}
                 </div>
 
                 <div className="flex flex-col sm:flex-row items-center gap-4">
