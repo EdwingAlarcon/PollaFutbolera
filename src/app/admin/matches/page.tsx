@@ -22,7 +22,6 @@ const TOURNAMENTS = [
   { id: 'serie-a-2526',          label: '🇮🇹 Serie A 2025-26' },
   { id: 'bundesliga-2526',       label: '🇩🇪 Bundesliga 2025-26' },
   { id: 'ligue-1-2526',          label: '🇫🇷 Ligue 1 2025-26' },
-  { id: 'liga-mx-clausura-2026',  label: '🇲🇽 Liga MX Clausura 2026' },
   { id: 'liga-mx-apertura-2026', label: '🇲🇽 Liga MX Apertura 2026' },
   { id: 'liga-betplay-2026-1',   label: '🇨🇴 Liga BetPlay 2026-I' },
   { id: 'mls-2026',              label: '🇺🇸 MLS 2026' },
