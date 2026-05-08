@@ -41,6 +41,7 @@ export default function AdminMatchesPage() {
   const [saved, setSaved] = useState<Record<string, boolean>>({})
   const [filter, setFilter] = useState<'all' | 'scheduled' | 'live' | 'finished'>('all')
   const [search, setSearch] = useState('')
+  const [showHelp, setShowHelp] = useState(false)
 
   useEffect(() => {
     checkAccess()
@@ -172,10 +173,94 @@ export default function AdminMatchesPage() {
           <span className="text-xs bg-red-900/60 border border-red-700/50 text-red-300 px-3 py-1 rounded-full font-bold">
             🔒 ADMIN
           </span>
+          <button
+            onClick={() => setShowHelp(h => !h)}
+            className="text-xs bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 px-3 py-1 rounded-full font-bold transition"
+          >
+            {showHelp ? '✕ Cerrar ayuda' : '? Ayuda'}
+          </button>
         </div>
       </nav>
 
       <div className="container mx-auto px-4 py-8 max-w-5xl">
+
+        {/* ── PANEL DE AYUDA ── */}
+        {showHelp && (
+          <div className="mb-8 bg-gray-900 border border-blue-800/50 rounded-2xl overflow-hidden">
+            <div className="px-6 py-4 bg-blue-950/40 border-b border-blue-800/40 flex items-center gap-2">
+              <span className="text-blue-400 text-lg">📖</span>
+              <h2 className="text-white font-bold text-base">¿Cómo funciona el Panel Admin?</h2>
+            </div>
+            <div className="p-6 grid md:grid-cols-2 gap-6 text-sm">
+
+              {/* Flujo de trabajo */}
+              <div>
+                <h3 className="text-green-400 font-bold mb-3 flex items-center gap-2">⚽ Flujo de trabajo por partido</h3>
+                <ol className="space-y-2.5 text-gray-300">
+                  <li className="flex gap-3">
+                    <span className="bg-blue-900/60 text-blue-300 font-black text-xs w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5">1</span>
+                    <span><strong className="text-white">Antes del partido</strong> — El partido aparece en estado <span className="bg-blue-900/50 text-blue-300 px-1.5 py-0.5 rounded text-xs font-bold">Programado</span>. Los usuarios pueden ingresar su pronóstico hasta que empiece.</span>
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="bg-red-900/60 text-red-300 font-black text-xs w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5">2</span>
+                    <span><strong className="text-white">Al comenzar</strong> — Cambia el estado a <span className="bg-red-600/50 text-red-300 px-1.5 py-0.5 rounded text-xs font-bold">En vivo</span> y guarda. Esto bloquea los pronósticos de los usuarios.</span>
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="bg-green-900/60 text-green-300 font-black text-xs w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5">3</span>
+                    <span><strong className="text-white">Al terminar</strong> — Ingresa el marcador final (solo 90 min, sin tiempo extra ni penales), cambia a <span className="bg-gray-700 text-gray-300 px-1.5 py-0.5 rounded text-xs font-bold">Finalizado</span> y guarda.</span>
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="bg-yellow-900/60 text-yellow-300 font-black text-xs w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5">✓</span>
+                    <span><strong className="text-white">Automático</strong> — Al guardar como Finalizado, Supabase calcula los puntos de cada usuario automáticamente y actualiza la tabla de posiciones.</span>
+                  </li>
+                </ol>
+              </div>
+
+              {/* Sistema de puntos */}
+              <div>
+                <h3 className="text-yellow-400 font-bold mb-3 flex items-center gap-2">🏆 Cálculo de puntos (automático)</h3>
+                <div className="space-y-2 mb-4">
+                  <div className="flex items-center justify-between bg-yellow-900/20 border border-yellow-700/30 rounded-lg px-3 py-2">
+                    <span className="text-gray-300">🎯 Resultado exacto</span>
+                    <span className="text-yellow-400 font-black">5 pts <span className="text-gray-600 font-normal text-xs">(por defecto)</span></span>
+                  </div>
+                  <div className="flex items-center justify-between bg-blue-900/20 border border-blue-700/30 rounded-lg px-3 py-2">
+                    <span className="text-gray-300">📊 Diferencia correcta</span>
+                    <span className="text-blue-400 font-black">3 pts <span className="text-gray-600 font-normal text-xs">(por defecto)</span></span>
+                  </div>
+                  <div className="flex items-center justify-between bg-purple-900/20 border border-purple-700/30 rounded-lg px-3 py-2">
+                    <span className="text-gray-300">✅ Ganador / empate</span>
+                    <span className="text-purple-400 font-black">1 pt <span className="text-gray-600 font-normal text-xs">(por defecto)</span></span>
+                  </div>
+                </div>
+                <p className="text-gray-500 text-xs leading-relaxed">
+                  Cada polla puede tener su propio sistema de puntos configurado al crearla. El cálculo usa el trigger <code className="bg-gray-800 px-1 rounded">calculate_points</code> en Supabase.
+                </p>
+              </div>
+
+              {/* Botón bulk */}
+              <div className="md:col-span-2 border-t border-gray-800 pt-5">
+                <h3 className="text-orange-400 font-bold mb-3 flex items-center gap-2">⚡ Botón "Finalizar con marcador"</h3>
+                <p className="text-gray-300 leading-relaxed">
+                  Toma <strong className="text-white">todos los partidos que tienen marcador ingresado</strong> y que aún no están en estado Finalizado, y los finaliza en lote de una vez.
+                  Útil al final de una jornada con varios partidos. Siempre pide confirmación antes de ejecutar.
+                </p>
+              </div>
+
+              {/* Notas */}
+              <div className="md:col-span-2 bg-orange-900/15 border border-orange-700/30 rounded-xl p-4">
+                <p className="text-orange-300 font-bold text-xs mb-2">⚠️ Reglas importantes</p>
+                <ul className="text-gray-400 text-xs space-y-1 leading-relaxed">
+                  <li>• Solo se cuentan los <strong className="text-gray-200">90 minutos reglamentarios</strong> (sin tiempo extra ni penales).</li>
+                  <li>• Si un partido va a penales, el marcador a ingresar es el de los 90 min (ej: 1-1 aunque gane 4-3 en penales).</li>
+                  <li>• Cambiar un partido de Finalizado a otro estado <strong className="text-gray-200">no recalcula los puntos</strong> automáticamente — solo la transición a Finalizado los dispara.</li>
+                  <li>• El panel actualmente muestra solo partidos del torneo <strong className="text-gray-200">Copa Mundial FIFA 2026</strong>.</li>
+                </ul>
+              </div>
+
+            </div>
+          </div>
+        )}
 
         {/* Stats */}
         <div className="grid grid-cols-4 gap-4 mb-8">
