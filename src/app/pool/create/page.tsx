@@ -39,6 +39,9 @@ export default function CreatePoolPage() {
     exactScore: 5,
     correctDifference: 3,
     correctResult: 1,
+    prize1: '',
+    prize2: '',
+    prize3: '',
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -50,6 +53,12 @@ export default function CreatePoolPage() {
     try {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error('No autenticado')
+
+      const prizesRaw = [
+        { position: '🥇 1er Lugar', prize: formData.prize1.trim() },
+        { position: '🥈 2do Lugar', prize: formData.prize2.trim() },
+        { position: '🥉 3er Lugar', prize: formData.prize3.trim() },
+      ].filter(p => p.prize)
 
       const { data: pool, error: poolError } = await supabase
         .from('pools')
@@ -63,6 +72,7 @@ export default function CreatePoolPage() {
             correctDifference: formData.correctDifference,
             correctResult: formData.correctResult,
           },
+          prizes: prizesRaw.length > 0 ? prizesRaw : null,
         })
         .select()
         .single()
@@ -237,6 +247,28 @@ export default function CreatePoolPage() {
                   </div>
                 ))}
 
+                {/* Premios */}
+                <div className="space-y-3">
+                  <p className="text-gray-400 text-sm font-semibold">🏆 Premios <span className="text-gray-600 font-normal">(opcional)</span></p>
+                  {[
+                    { key: 'prize1', label: '🥇 1er Lugar', placeholder: 'Ej: $50.000 o Camiseta oficial' },
+                    { key: 'prize2', label: '🥈 2do Lugar', placeholder: 'Ej: $20.000' },
+                    { key: 'prize3', label: '🥉 3er Lugar', placeholder: 'Ej: $10.000' },
+                  ].map(p => (
+                    <div key={p.key} className="flex items-center gap-3">
+                      <span className="text-sm font-semibold text-gray-400 w-24 shrink-0">{p.label}</span>
+                      <input
+                        type="text"
+                        value={(formData as any)[p.key]}
+                        onChange={e => setFormData(prev => ({ ...prev, [p.key]: e.target.value }))}
+                        maxLength={80}
+                        className="flex-1 px-3 py-2 bg-gray-800 border border-gray-700 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent text-white outline-none placeholder-gray-600 text-sm"
+                        placeholder={p.placeholder}
+                      />
+                    </div>
+                  ))}
+                </div>
+
                 <div className="flex gap-3 mt-6">
                   <button
                     onClick={() => setStep(1)}
@@ -271,6 +303,24 @@ export default function CreatePoolPage() {
                     </div>
                   ))}
                 </div>
+
+                {(formData.prize1 || formData.prize2 || formData.prize3) && (
+                  <div>
+                    <p className="text-gray-500 text-sm mb-3">Premios:</p>
+                    <div className="space-y-2">
+                      {[
+                        { label: '🥇 1er Lugar', val: formData.prize1 },
+                        { label: '🥈 2do Lugar', val: formData.prize2 },
+                        { label: '🥉 3er Lugar', val: formData.prize3 },
+                      ].filter(p => p.val).map(p => (
+                        <div key={p.label} className="flex justify-between items-center px-4 py-2 bg-yellow-900/20 border border-yellow-700/30 rounded-xl">
+                          <span className="text-gray-400 text-sm">{p.label}</span>
+                          <span className="text-yellow-300 font-semibold text-sm">{p.val}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 <div>
                   <p className="text-gray-500 text-sm mb-3">Puntuación:</p>

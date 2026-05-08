@@ -591,6 +591,20 @@ export default function PoolDetailPage() {
               </div>
             </div>
 
+            {pool.prizes && pool.prizes.length > 0 && (
+              <div className="bg-gray-900 rounded-2xl border border-yellow-700/40 p-6">
+                <h2 className="text-lg font-bold text-white mb-4">🏆 Premios</h2>
+                <div className="space-y-3">
+                  {pool.prizes.map((p: { position: string; prize: string }, i: number) => (
+                    <div key={i} className="flex items-center justify-between px-4 py-3 bg-yellow-900/20 border border-yellow-700/30 rounded-xl">
+                      <span className="text-gray-300 font-semibold text-sm">{p.position}</span>
+                      <span className="text-yellow-300 font-black text-base">{p.prize}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <div className="bg-gray-900 rounded-2xl border border-gray-800 p-6">
               <h2 className="text-lg font-bold text-white mb-4">Sistema de Puntuación</h2>
               <div className="grid grid-cols-3 gap-3">
