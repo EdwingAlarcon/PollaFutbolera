@@ -426,7 +426,20 @@ const CLUB_ESPN_IDS: Record<string, number> = {
   'San Diego FC': 22529,
 }
 
-export function getClubLogoUrl(teamName: string): string {
+// Teams that share a display name but are different clubs in different tournaments.
+// keyed by tournament_id → team display name → ESPN team ID.
+const TOURNAMENT_OVERRIDES: Record<string, Record<string, number>> = {
+  'libertadores-2026': { 'Liverpool': 5492 },
+  'sudamericana-2026': { 'Liverpool': 5492 },
+}
+
+export function getClubLogoUrl(teamName: string, tournamentId?: string): string {
+  if (tournamentId) {
+    const override = TOURNAMENT_OVERRIDES[tournamentId]?.[teamName]
+    if (override !== undefined) {
+      return `https://a.espncdn.com/i/teamlogos/soccer/500/${override}.png`
+    }
+  }
   const id = CLUB_ESPN_IDS[teamName]
   if (!id) return ''
   return `https://a.espncdn.com/i/teamlogos/soccer/500/${id}.png`

@@ -484,7 +484,7 @@ export default function PoolDetailPage() {
                           <div className="flex items-center justify-between gap-2">
                             <div className="flex items-center gap-2 flex-1 justify-end">
                               <span className="text-white font-semibold text-sm text-right leading-tight">{match.home_team}</span>
-                              <TeamFlag team={match.home_team} espnId={match.home_team_espn_id} size="sm" />
+                              <TeamFlag team={match.home_team} espnId={match.home_team_espn_id} tournamentId={match.tournament_id} size="sm" />
                             </div>
                             <div className="flex items-center justify-center min-w-[84px]">
                               {editable ? (
@@ -517,7 +517,7 @@ export default function PoolDetailPage() {
                               )}
                             </div>
                             <div className="flex items-center gap-2 flex-1">
-                              <TeamFlag team={match.away_team} espnId={match.away_team_espn_id} size="sm" />
+                              <TeamFlag team={match.away_team} espnId={match.away_team_espn_id} tournamentId={match.tournament_id} size="sm" />
                               <span className="text-white font-semibold text-sm leading-tight">{match.away_team}</span>
                             </div>
                           </div>
@@ -548,7 +548,7 @@ export default function PoolDetailPage() {
                           </div>
                           <div className="flex items-center justify-end gap-2 pr-2">
                             <span className="text-white font-semibold text-sm text-right leading-tight">{match.home_team}</span>
-                            <TeamFlag team={match.home_team} espnId={match.home_team_espn_id} size="md" />
+                            <TeamFlag team={match.home_team} espnId={match.home_team_espn_id} tournamentId={match.tournament_id} size="md" />
                           </div>
                           <div className="flex items-center justify-center min-w-[110px]">
                             {editable ? (
@@ -581,7 +581,7 @@ export default function PoolDetailPage() {
                             )}
                           </div>
                           <div className="flex items-center gap-2 pl-2">
-                            <TeamFlag team={match.away_team} espnId={match.away_team_espn_id} size="md" />
+                            <TeamFlag team={match.away_team} espnId={match.away_team_espn_id} tournamentId={match.tournament_id} size="md" />
                             <span className="text-white font-semibold text-sm leading-tight">{match.away_team}</span>
                           </div>
                           <div className="text-center">
