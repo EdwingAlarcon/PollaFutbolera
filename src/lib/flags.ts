@@ -87,6 +87,31 @@ export const teamCountryCodes: Record<string, string> = {
   // Caribe / Insulares
   'Curaçao': 'cw',
   'Cabo Verde': 'cv',
+  'Cuba': 'cu',
+  'Guatemala': 'gt',
+  'Surinam': 'sr',
+  'Guyana': 'gy',
+  'Nicaragua': 'ni',
+  // Europa adicional (UEFA Nations League)
+  'Rumanía': 'ro',
+  'Islandia': 'is',
+  'Montenegro': 'me',
+  'Kazajistán': 'kz',
+  'Azerbaiyán': 'az',
+  'Kosovo': 'xk',
+  'Armenia': 'am',
+  'Bielorrusia': 'by',
+  'Macedonia del Norte': 'mk',
+  'Lituania': 'lt',
+  'Letonia': 'lv',
+  'Estonia': 'ee',
+  'Andorra': 'ad',
+  'Gibraltar': 'gi',
+  'Liechtenstein': 'li',
+  'Luxemburgo': 'lu',
+  'Malta': 'mt',
+  'Moldavia': 'md',
+  'San Marino': 'sm',
 }
 
 // Retorna la URL de la imagen de bandera (flagcdn.com)
