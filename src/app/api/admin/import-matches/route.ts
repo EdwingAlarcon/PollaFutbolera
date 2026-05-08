@@ -29,11 +29,14 @@ const ESPN_CONFIGS: Record<string, { slug: string; start: string; end: string }>
   'bundesliga-2526':       { slug: 'ger.1',                  start: '20250823', end: '20260516' },
   'ligue-1-2526':          { slug: 'fra.1',                  start: '20250816', end: '20260517' },
   'liga-mx-apertura-2026': { slug: 'mex.1',                  start: '20260702', end: '20261215' },
+  'liga-betplay-2026-1':   { slug: 'col.1',                  start: '20260120', end: '20260630' },
   'mls-2026':              { slug: 'usa.1',                  start: '20260228', end: '20261107' },
+  'copa-america-2028':     { slug: 'conmebol.america',       start: '20280601', end: '20280731' },
 }
 
 // Para estas ligas, todos los partidos son fase regular → round = 'group'
-const LEAGUE_SLUGS = new Set(['eng.1', 'esp.1', 'ita.1', 'ger.1', 'fra.1', 'mex.1', 'usa.1'])
+// col.1 = Liga BetPlay: torneo doméstico, todos los partidos son fase regular
+const LEAGUE_SLUGS = new Set(['eng.1', 'esp.1', 'ita.1', 'ger.1', 'fra.1', 'mex.1', 'usa.1', 'col.1'])
 
 function yyyymmddToDate(s: string): Date {
   return new Date(
