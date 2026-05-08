@@ -28,6 +28,7 @@ const ESPN_CONFIGS: Record<string, { slug: string; start: string; end: string }>
   'serie-a-2526':          { slug: 'ita.1',                  start: '20250823', end: '20260525' },
   'bundesliga-2526':       { slug: 'ger.1',                  start: '20250823', end: '20260516' },
   'ligue-1-2526':          { slug: 'fra.1',                  start: '20250816', end: '20260517' },
+  'liga-mx-clausura-2026':  { slug: 'mex.1',                  start: '20260110', end: '20260630' },
   'liga-mx-apertura-2026': { slug: 'mex.1',                  start: '20260702', end: '20261215' },
   'liga-betplay-2026-1':   { slug: 'col.1',                  start: '20260120', end: '20260630' },
   'mls-2026':              { slug: 'usa.1',                  start: '20260228', end: '20261107' },
