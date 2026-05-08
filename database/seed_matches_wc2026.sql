@@ -7,6 +7,9 @@
 -- EJECUTAR EN: Supabase → SQL Editor
 -- ============================================================
 
+-- Limpiar partidos anteriores (ejemplos u duplicados)
+DELETE FROM matches WHERE tournament_id = 'world-cup-2026';
+
 INSERT INTO matches (tournament_id, home_team, away_team, match_date, status) VALUES
 
 -- ══════════════════════════════════════════════

@@ -1,0 +1,344 @@
+'use client'
+
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { supabase } from '@/lib/supabase'
+import Link from 'next/link'
+
+// ─── Configura aquí los emails que pueden acceder al panel admin ───
+const ADMIN_EMAILS = ['edwingalarcon@gmail.com', 'edwinalarcon1992@gmail.com']
+
+type Match = {
+  id: string
+  home_team: string
+  away_team: string
+  match_date: string
+  status: 'scheduled' | 'live' | 'finished'
+  home_score: number | null
+  away_score: number | null
+  tournament_id: string
+}
+
+type EditState = {
+  home_score: string
+  away_score: string
+  status: 'scheduled' | 'live' | 'finished'
+}
+
+const STATUS_LABELS = {
+  scheduled: { label: 'Programado', color: 'bg-blue-900 text-blue-300' },
+  live: { label: 'En vivo', color: 'bg-red-600 text-white' },
+  finished: { label: 'Finalizado', color: 'bg-gray-700 text-gray-300' },
+}
+
+export default function AdminMatchesPage() {
+  const router = useRouter()
+  const [authorized, setAuthorized] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [matches, setMatches] = useState<Match[]>([])
+  const [edits, setEdits] = useState<Record<string, EditState>>({})
+  const [saving, setSaving] = useState<Record<string, boolean>>({})
+  const [saved, setSaved] = useState<Record<string, boolean>>({})
+  const [filter, setFilter] = useState<'all' | 'scheduled' | 'live' | 'finished'>('all')
+  const [search, setSearch] = useState('')
+
+  useEffect(() => {
+    checkAccess()
+  }, [])
+
+  const checkAccess = async () => {
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user || !ADMIN_EMAILS.includes(user.email ?? '')) {
+      router.push('/dashboard')
+      return
+    }
+    setAuthorized(true)
+    await loadMatches()
+    setLoading(false)
+  }
+
+  const loadMatches = async () => {
+    const { data } = await supabase
+      .from('matches')
+      .select('*')
+      .eq('tournament_id', 'world-cup-2026')
+      .order('match_date', { ascending: true })
+
+    if (data) {
+      setMatches(data)
+      // Inicializar estado de edición con valores actuales
+      const initialEdits: Record<string, EditState> = {}
+      data.forEach((m: Match) => {
+        initialEdits[m.id] = {
+          home_score: m.home_score !== null ? String(m.home_score) : '',
+          away_score: m.away_score !== null ? String(m.away_score) : '',
+          status: m.status,
+        }
+      })
+      setEdits(initialEdits)
+    }
+  }
+
+  const handleSave = async (matchId: string) => {
+    const edit = edits[matchId]
+    if (!edit) return
+
+    setSaving(s => ({ ...s, [matchId]: true }))
+
+    const homeScore = edit.home_score !== '' ? parseInt(edit.home_score) : null
+    const awayScore = edit.away_score !== '' ? parseInt(edit.away_score) : null
+
+    // Si tiene marcador, forzar estado a finished o live
+    const status = edit.status
+
+    const { error } = await supabase
+      .from('matches')
+      .update({
+        home_score: homeScore,
+        away_score: awayScore,
+        status,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', matchId)
+
+    setSaving(s => ({ ...s, [matchId]: false }))
+
+    if (!error) {
+      setSaved(s => ({ ...s, [matchId]: true }))
+      setTimeout(() => setSaved(s => ({ ...s, [matchId]: false })), 2000)
+      // Actualizar estado local
+      setMatches(ms => ms.map(m =>
+        m.id === matchId
+          ? { ...m, home_score: homeScore, away_score: awayScore, status }
+          : m
+      ))
+    }
+  }
+
+  const handleBulkFinish = async () => {
+    // Marcar como finalizados todos los partidos con marcador ingresado
+    const toFinish = matches.filter(m => {
+      const e = edits[m.id]
+      return e && e.home_score !== '' && e.away_score !== '' && m.status !== 'finished'
+    })
+
+    if (toFinish.length === 0) return
+    if (!confirm(`¿Finalizar ${toFinish.length} partido(s) con marcador?`)) return
+
+    for (const m of toFinish) {
+      const e = edits[m.id]
+      setEdits(prev => ({ ...prev, [m.id]: { ...e, status: 'finished' } }))
+      await handleSave(m.id)
+    }
+  }
+
+  const filtered = matches.filter(m => {
+    const matchesFilter = filter === 'all' || m.status === filter
+    const matchesSearch = search === '' ||
+      m.home_team.toLowerCase().includes(search.toLowerCase()) ||
+      m.away_team.toLowerCase().includes(search.toLowerCase())
+    return matchesFilter && matchesSearch
+  })
+
+  const stats = {
+    total: matches.length,
+    finished: matches.filter(m => m.status === 'finished').length,
+    live: matches.filter(m => m.status === 'live').length,
+    scheduled: matches.filter(m => m.status === 'scheduled').length,
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-700 border-t-green-500"></div>
+      </div>
+    )
+  }
+
+  if (!authorized) return null
+
+  return (
+    <div className="min-h-screen bg-gray-950 text-white">
+      {/* Nav */}
+      <nav className="bg-gray-900 border-b border-gray-800 sticky top-0 z-10">
+        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+          <div className="flex items-center gap-3">
+            <Link href="/dashboard" className="text-green-400 hover:text-green-300 text-sm transition">
+              ← Dashboard
+            </Link>
+            <span className="text-gray-600">/</span>
+            <span className="text-white font-bold">Panel Admin — Resultados</span>
+          </div>
+          <span className="text-xs bg-red-900/60 border border-red-700/50 text-red-300 px-3 py-1 rounded-full font-bold">
+            🔒 ADMIN
+          </span>
+        </div>
+      </nav>
+
+      <div className="container mx-auto px-4 py-8 max-w-5xl">
+
+        {/* Stats */}
+        <div className="grid grid-cols-4 gap-4 mb-8">
+          {[
+            { label: 'Total', value: stats.total, color: 'text-white' },
+            { label: 'Finalizados', value: stats.finished, color: 'text-green-400' },
+            { label: 'En vivo', value: stats.live, color: 'text-red-400' },
+            { label: 'Pendientes', value: stats.scheduled, color: 'text-blue-400' },
+          ].map(s => (
+            <div key={s.label} className="bg-gray-900 border border-gray-800 rounded-xl p-4 text-center">
+              <div className={`text-3xl font-black ${s.color}`}>{s.value}</div>
+              <div className="text-gray-500 text-xs mt-1">{s.label}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Filtros */}
+        <div className="flex flex-col sm:flex-row gap-3 mb-6">
+          <input
+            type="text"
+            placeholder="Buscar equipo..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            className="flex-1 bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-green-600"
+          />
+          <div className="flex gap-2">
+            {(['all', 'scheduled', 'live', 'finished'] as const).map(f => (
+              <button
+                key={f}
+                onClick={() => setFilter(f)}
+                className={`px-4 py-2.5 rounded-xl text-sm font-bold transition ${
+                  filter === f
+                    ? 'bg-green-600 text-white'
+                    : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+                }`}
+              >
+                {f === 'all' ? 'Todos' : f === 'scheduled' ? 'Pendientes' : f === 'live' ? 'En vivo' : 'Finalizados'}
+              </button>
+            ))}
+          </div>
+          <button
+            onClick={handleBulkFinish}
+            className="bg-yellow-600 hover:bg-yellow-500 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition whitespace-nowrap"
+          >
+            ✅ Finalizar con marcador
+          </button>
+        </div>
+
+        {/* Lista de partidos */}
+        <div className="space-y-3">
+          {filtered.map(match => {
+            const edit = edits[match.id]
+            if (!edit) return null
+            const isSaving = saving[match.id]
+            const isSaved = saved[match.id]
+            const hasChanges =
+              String(match.home_score ?? '') !== edit.home_score ||
+              String(match.away_score ?? '') !== edit.away_score ||
+              match.status !== edit.status
+
+            return (
+              <div
+                key={match.id}
+                className={`bg-gray-900 border rounded-xl p-4 transition ${
+                  edit.status === 'live'
+                    ? 'border-red-600/60'
+                    : edit.status === 'finished'
+                    ? 'border-gray-700'
+                    : 'border-gray-800'
+                }`}
+              >
+                {/* Fecha */}
+                <div className="text-xs text-gray-600 mb-3">
+                  {new Date(match.match_date).toLocaleString('es-ES', {
+                    weekday: 'short', day: '2-digit', month: 'short',
+                    hour: '2-digit', minute: '2-digit', timeZoneName: 'short',
+                  })}
+                </div>
+
+                <div className="flex flex-col sm:flex-row items-center gap-4">
+                  {/* Equipos + marcador */}
+                  <div className="flex-1 flex items-center gap-3 w-full">
+                    {/* Local */}
+                    <span className="flex-1 font-bold text-white text-right text-sm sm:text-base truncate">
+                      {match.home_team}
+                    </span>
+
+                    {/* Marcador */}
+                    <div className="flex items-center gap-2 shrink-0">
+                      <input
+                        type="number"
+                        min="0"
+                        max="99"
+                        value={edit.home_score}
+                        onChange={e => setEdits(prev => ({
+                          ...prev,
+                          [match.id]: { ...prev[match.id], home_score: e.target.value }
+                        }))}
+                        className="w-14 text-center bg-gray-800 border border-gray-700 rounded-lg py-2 text-white font-black text-xl focus:outline-none focus:border-green-500"
+                        placeholder="–"
+                      />
+                      <span className="text-gray-600 font-black">:</span>
+                      <input
+                        type="number"
+                        min="0"
+                        max="99"
+                        value={edit.away_score}
+                        onChange={e => setEdits(prev => ({
+                          ...prev,
+                          [match.id]: { ...prev[match.id], away_score: e.target.value }
+                        }))}
+                        className="w-14 text-center bg-gray-800 border border-gray-700 rounded-lg py-2 text-white font-black text-xl focus:outline-none focus:border-green-500"
+                        placeholder="–"
+                      />
+                    </div>
+
+                    {/* Visitante */}
+                    <span className="flex-1 font-bold text-white text-left text-sm sm:text-base truncate">
+                      {match.away_team}
+                    </span>
+                  </div>
+
+                  {/* Estado + guardar */}
+                  <div className="flex items-center gap-2 w-full sm:w-auto">
+                    <select
+                      value={edit.status}
+                      onChange={e => setEdits(prev => ({
+                        ...prev,
+                        [match.id]: { ...prev[match.id], status: e.target.value as Match['status'] }
+                      }))}
+                      className="bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-green-500"
+                    >
+                      <option value="scheduled">Programado</option>
+                      <option value="live">En vivo</option>
+                      <option value="finished">Finalizado</option>
+                    </select>
+
+                    <button
+                      onClick={() => handleSave(match.id)}
+                      disabled={isSaving || !hasChanges}
+                      className={`px-5 py-2 rounded-lg font-bold text-sm transition ${
+                        isSaved
+                          ? 'bg-green-700 text-white'
+                          : hasChanges
+                          ? 'bg-green-600 hover:bg-green-500 text-white'
+                          : 'bg-gray-800 text-gray-600 cursor-default'
+                      }`}
+                    >
+                      {isSaving ? '...' : isSaved ? '✓' : 'Guardar'}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+
+        {filtered.length === 0 && (
+          <div className="text-center py-16 text-gray-600">
+            No hay partidos que coincidan con el filtro.
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}

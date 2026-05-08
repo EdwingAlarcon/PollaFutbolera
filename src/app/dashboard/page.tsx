@@ -5,9 +5,13 @@ import { useRouter } from 'next/navigation'
 import { supabase, type User, type Pool } from '@/lib/supabase'
 import Link from 'next/link'
 
+// Emails con acceso al panel admin
+const ADMIN_EMAILS = ['edwingalarcon@gmail.com', 'edwinalarcon1992@gmail.com']
+
 export default function DashboardPage() {
   const router = useRouter()
   const [user, setUser] = useState<User | null>(null)
+  const [authEmail, setAuthEmail] = useState<string>('')
   const [pools, setPools] = useState<Pool[]>([])
   const [rankings, setRankings] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
@@ -24,6 +28,8 @@ export default function DashboardPage() {
       router.push('/login')
       return
     }
+
+    setAuthEmail(authUser.email ?? '')
 
     const { data: profile } = await supabase
       .from('users')
@@ -113,7 +119,7 @@ export default function DashboardPage() {
             <h1 className="text-2xl font-black text-white">Grupos Activos</h1>
             <p className="text-gray-500 text-sm mt-1">{pools.length} polla(s) activa(s)</p>
           </div>
-          <div className="flex gap-3">
+          <div className="flex gap-3 flex-wrap">
             <Link
               href="/pool/create"
               className="bg-green-600 hover:bg-green-500 text-white font-bold py-2.5 px-5 rounded-xl transition text-sm flex items-center gap-2"
@@ -126,6 +132,14 @@ export default function DashboardPage() {
             >
               + Unirme con Código
             </Link>
+            {ADMIN_EMAILS.includes(authEmail) && (
+              <Link
+                href="/admin/matches"
+                className="bg-red-900/60 hover:bg-red-800/60 text-red-300 font-bold py-2.5 px-5 rounded-xl border border-red-700/50 transition text-sm"
+              >
+                🔒 Admin
+              </Link>
+            )}
           </div>
         </div>
 
