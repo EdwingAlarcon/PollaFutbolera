@@ -234,20 +234,36 @@ export default function PredictMatchPage() {
               </div>
 
               {/* Sistema de puntos */}
-              <div className="grid grid-cols-3 gap-2 mb-8">
-                <div className="bg-yellow-900/30 border border-yellow-700/40 rounded-xl p-3 text-center">
-                  <div className="text-yellow-400 font-black text-xl">{pool?.scoring_rules?.exactScore || 5}</div>
-                  <div className="text-yellow-200/60 text-xs mt-0.5">pts exacto</div>
-                </div>
-                <div className="bg-blue-900/30 border border-blue-700/40 rounded-xl p-3 text-center">
-                  <div className="text-blue-400 font-black text-xl">{pool?.scoring_rules?.correctDifference || 3}</div>
-                  <div className="text-blue-200/60 text-xs mt-0.5">pts diferencia</div>
-                </div>
-                <div className="bg-purple-900/30 border border-purple-700/40 rounded-xl p-3 text-center">
-                  <div className="text-purple-400 font-black text-xl">{pool?.scoring_rules?.correctResult || 1}</div>
-                  <div className="text-purple-200/60 text-xs mt-0.5">pt ganador</div>
-                </div>
-              </div>
+              {(() => {
+                const isKnockout = ['round-of-32','round-of-16','quarterfinal','semifinal','final'].includes(match?.round)
+                const mult = isKnockout ? 2 : 1
+                const exact = (pool?.scoring_rules?.exactScore || 5) * mult
+                const diff = (pool?.scoring_rules?.correctDifference || 3) * mult
+                const result = (pool?.scoring_rules?.correctResult || 1) * mult
+                return (
+                  <div className="mb-8">
+                    {isKnockout && (
+                      <div className="bg-green-900/20 border border-green-700/30 rounded-xl px-3 py-2 mb-3 text-center">
+                        <span className="text-green-400 text-xs font-bold">⚡ Fase eliminatoria — Puntos x2</span>
+                      </div>
+                    )}
+                    <div className="grid grid-cols-3 gap-2">
+                      <div className="bg-yellow-900/30 border border-yellow-700/40 rounded-xl p-3 text-center">
+                        <div className="text-yellow-400 font-black text-xl">{exact}</div>
+                        <div className="text-yellow-200/60 text-xs mt-0.5">pts exacto</div>
+                      </div>
+                      <div className="bg-blue-900/30 border border-blue-700/40 rounded-xl p-3 text-center">
+                        <div className="text-blue-400 font-black text-xl">{diff}</div>
+                        <div className="text-blue-200/60 text-xs mt-0.5">pts diferencia</div>
+                      </div>
+                      <div className="bg-purple-900/30 border border-purple-700/40 rounded-xl p-3 text-center">
+                        <div className="text-purple-400 font-black text-xl">{result}</div>
+                        <div className="text-purple-200/60 text-xs mt-0.5">pt ganador</div>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })()}
 
               <button
                 onClick={handleSave}

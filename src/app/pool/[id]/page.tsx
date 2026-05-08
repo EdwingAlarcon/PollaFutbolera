@@ -770,20 +770,92 @@ export default function PoolDetailPage() {
             )}
 
             <div className="bg-[#131A2E] rounded-2xl border border-white/5 p-6">
-              <h2 className="text-lg font-bold text-white mb-4">Sistema de Puntuación</h2>
-              <div className="grid grid-cols-3 gap-3">
-                <div className="bg-yellow-900/30 border border-yellow-700/40 rounded-xl p-4 text-center">
-                  <div className="text-yellow-400 font-black text-3xl">{pool.scoring_rules?.exactScore || 5}</div>
-                  <div className="text-yellow-200/60 text-xs mt-1">Resultado exacto</div>
-                </div>
-                <div className="bg-blue-900/30 border border-blue-700/40 rounded-xl p-4 text-center">
-                  <div className="text-blue-400 font-black text-3xl">{pool.scoring_rules?.correctDifference || 3}</div>
-                  <div className="text-blue-200/60 text-xs mt-1">Diferencia correcta</div>
-                </div>
-                <div className="bg-purple-900/30 border border-purple-700/40 rounded-xl p-4 text-center">
-                  <div className="text-purple-400 font-black text-3xl">{pool.scoring_rules?.correctResult || 1}</div>
-                  <div className="text-purple-200/60 text-xs mt-1">Ganador correcto</div>
-                </div>
+              <h2 className="text-lg font-bold text-white mb-1">📋 Reglamento de Puntuación</h2>
+              <p className="text-slate-500 text-xs mb-5">Los puntos se asignan automáticamente cuando finaliza cada partido.</p>
+
+              {/* Tabla de puntos por fase */}
+              <div className="overflow-x-auto mb-5">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-white/10">
+                      <th className="text-left text-slate-400 font-semibold pb-2 pr-4">Tipo de acierto</th>
+                      <th className="text-center text-slate-400 font-semibold pb-2 px-4">Fase de grupos</th>
+                      <th className="text-center text-green-400 font-semibold pb-2 pl-4">Eliminatorias ×2</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/5">
+                    <tr>
+                      <td className="py-3 pr-4">
+                        <span className="text-yellow-400 font-bold">🎯 Marcador exacto</span>
+                        <p className="text-slate-500 text-xs mt-0.5">Predices 2-1 y termina 2-1</p>
+                      </td>
+                      <td className="text-center py-3 px-4">
+                        <span className="text-yellow-400 font-black text-xl">{pool.scoring_rules?.exactScore || 5}</span>
+                        <span className="text-slate-500 text-xs ml-1">pts</span>
+                      </td>
+                      <td className="text-center py-3 pl-4">
+                        <span className="text-yellow-400 font-black text-xl">{(pool.scoring_rules?.exactScore || 5) * 2}</span>
+                        <span className="text-slate-500 text-xs ml-1">pts</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="py-3 pr-4">
+                        <span className="text-blue-400 font-bold">↔️ Diferencia correcta</span>
+                        <p className="text-slate-500 text-xs mt-0.5">Predices 3-1 y termina 2-0 (ambos ganan por 2)</p>
+                      </td>
+                      <td className="text-center py-3 px-4">
+                        <span className="text-blue-400 font-black text-xl">{pool.scoring_rules?.correctDifference || 3}</span>
+                        <span className="text-slate-500 text-xs ml-1">pts</span>
+                      </td>
+                      <td className="text-center py-3 pl-4">
+                        <span className="text-blue-400 font-black text-xl">{(pool.scoring_rules?.correctDifference || 3) * 2}</span>
+                        <span className="text-slate-500 text-xs ml-1">pts</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="py-3 pr-4">
+                        <span className="text-purple-400 font-bold">✅ Ganador correcto</span>
+                        <p className="text-slate-500 text-xs mt-0.5">Predices victoria local y gana local (cualquier marcador)</p>
+                      </td>
+                      <td className="text-center py-3 px-4">
+                        <span className="text-purple-400 font-black text-xl">{pool.scoring_rules?.correctResult || 1}</span>
+                        <span className="text-slate-500 text-xs ml-1">pts</span>
+                      </td>
+                      <td className="text-center py-3 pl-4">
+                        <span className="text-purple-400 font-black text-xl">{(pool.scoring_rules?.correctResult || 1) * 2}</span>
+                        <span className="text-slate-500 text-xs ml-1">pts</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                    <tr className="border-t border-white/10">
+                      <td className="pt-3 pr-4 text-slate-400 font-semibold text-xs uppercase tracking-wider">Máximo por partido</td>
+                      <td className="text-center pt-3 px-4">
+                        <span className="text-white font-black text-lg">{pool.scoring_rules?.exactScore || 5}</span>
+                        <span className="text-slate-500 text-xs ml-1">pts</span>
+                      </td>
+                      <td className="text-center pt-3 pl-4">
+                        <span className="text-green-400 font-black text-lg">{(pool.scoring_rules?.exactScore || 5) * 2}</span>
+                        <span className="text-slate-500 text-xs ml-1">pts</span>
+                      </td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+
+              {/* Nota eliminatorias */}
+              <div className="bg-green-900/20 border border-green-700/30 rounded-xl px-4 py-3 mb-5">
+                <p className="text-green-300 text-xs font-bold mb-1">⚡ Fases eliminatorias: octavos, cuartos, semifinales y final</p>
+                <p className="text-green-400/60 text-xs">Todos los puntos se duplican automáticamente. Un marcador exacto en la final vale {(pool.scoring_rules?.exactScore || 5) * 2} pts.</p>
+              </div>
+
+              {/* Reglas adicionales */}
+              <div className="space-y-2 text-xs text-slate-400">
+                <p className="font-bold text-slate-300 text-sm">Reglas generales</p>
+                <p>• <strong className="text-slate-200">Corte a los 90 minutos:</strong> Solo se cuentan los goles del tiempo reglamentario. Tiempo extra y penales no aplican.</p>
+                <p>• <strong className="text-slate-200">Solo el marcador exacto da los puntos completos</strong> — si aciertas el marcador, no se suman las otras categorías.</p>
+                <p>• <strong className="text-slate-200">Pronósticos en blanco</strong> no equivalen a 0-0. Deben ingresarse explícitamente.</p>
+                <p>• <strong className="text-slate-200">Cierre automático:</strong> Los campos se bloquean al inicio de cada partido.</p>
               </div>
             </div>
 
