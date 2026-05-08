@@ -324,6 +324,35 @@ export default function PoolDetailPage() {
               </div>
             )}
 
+            {/* ── Banner: partidos próximos sin pronóstico ── */}
+            {(() => {
+              const now = Date.now()
+              const soonMissed = matches.filter(m => {
+                const t = new Date(m.match_date).getTime()
+                return m.status === 'scheduled' && t > now && t < now + 60 * 60 * 1000
+                  && !predictions.find(p => p.match_id === m.id)
+              })
+              if (soonMissed.length === 0) return null
+              return (
+                <div className="mb-4 flex items-start gap-3 px-4 py-3 bg-orange-900/25 border border-orange-700/50 rounded-xl">
+                  <span className="text-xl flex-shrink-0 mt-0.5">⚠️</span>
+                  <div>
+                    <p className="text-orange-300 font-bold text-sm">
+                      {soonMissed.length === 1
+                        ? '¡1 partido comienza en menos de 1 hora y no tienes pronóstico!'
+                        : `¡${soonMissed.length} partidos comienzan en menos de 1 hora sin pronóstico!`}
+                    </p>
+                    <p className="text-orange-400/70 text-xs mt-1 leading-relaxed">
+                      {soonMissed.map(m => `${m.home_team} vs ${m.away_team}`).join(' · ')}
+                    </p>
+                    <p className="text-orange-500/60 text-xs mt-1">
+                      Los campos se bloquean automáticamente al inicio del partido.
+                    </p>
+                  </div>
+                </div>
+              )
+            })()}
+
             {matches.length === 0 ? (
               <div className="text-center py-20 text-gray-500">
                 <div className="text-6xl mb-4">📅</div>
@@ -356,6 +385,8 @@ export default function PoolDetailPage() {
                         className={`transition ${
                           isLive
                             ? 'bg-red-950/20'
+                            : isFinished && !prediction
+                            ? 'bg-red-950/10'
                             : isFinished
                             ? ''
                             : local?.home !== undefined && local?.home !== ''
@@ -382,24 +413,35 @@ export default function PoolDetailPage() {
                               <span className="text-white font-semibold text-sm text-right leading-tight">{match.home_team}</span>
                               <TeamFlag team={match.home_team} size="sm" />
                             </div>
-                            <div className="flex items-center gap-1">
-                              <input
-                                type="number" min="0" max="99"
-                                value={local?.home ?? ''}
-                                onChange={e => updateScore(match.id, 'home', e.target.value)}
-                                disabled={!editable}
-                                className="w-10 h-10 text-center font-black text-lg bg-gray-800 border-2 border-gray-700 focus:border-green-500 rounded-lg text-white outline-none disabled:opacity-30 disabled:cursor-not-allowed"
-                                placeholder="-"
-                              />
-                              <span className="text-gray-600 font-black">:</span>
-                              <input
-                                type="number" min="0" max="99"
-                                value={local?.away ?? ''}
-                                onChange={e => updateScore(match.id, 'away', e.target.value)}
-                                disabled={!editable}
-                                className="w-10 h-10 text-center font-black text-lg bg-gray-800 border-2 border-gray-700 focus:border-green-500 rounded-lg text-white outline-none disabled:opacity-30 disabled:cursor-not-allowed"
-                                placeholder="-"
-                              />
+                            <div className="flex items-center justify-center min-w-[84px]">
+                              {editable ? (
+                                <div className="flex items-center gap-1">
+                                  <input
+                                    type="number" min="0" max="99"
+                                    value={local?.home ?? ''}
+                                    onChange={e => updateScore(match.id, 'home', e.target.value)}
+                                    className="w-10 h-10 text-center font-black text-lg bg-gray-800 border-2 border-gray-700 focus:border-green-500 rounded-lg text-white outline-none"
+                                    placeholder="-"
+                                  />
+                                  <span className="text-gray-600 font-black">:</span>
+                                  <input
+                                    type="number" min="0" max="99"
+                                    value={local?.away ?? ''}
+                                    onChange={e => updateScore(match.id, 'away', e.target.value)}
+                                    className="w-10 h-10 text-center font-black text-lg bg-gray-800 border-2 border-gray-700 focus:border-green-500 rounded-lg text-white outline-none"
+                                    placeholder="-"
+                                  />
+                                </div>
+                              ) : prediction ? (
+                                <span className="bg-gray-700 border border-gray-600 text-white font-black text-base px-2.5 py-1.5 rounded-lg tabular-nums">
+                                  {prediction.predicted_home_score} : {prediction.predicted_away_score}
+                                </span>
+                              ) : (
+                                <span className="flex flex-col items-center gap-0.5 text-red-400/70">
+                                  <span className="text-base">🔒</span>
+                                  <span className="text-[10px] font-bold leading-tight text-center">Sin<br/>pronóstico</span>
+                                </span>
+                              )}
                             </div>
                             <div className="flex items-center gap-2 flex-1">
                               <TeamFlag team={match.away_team} size="sm" />
@@ -435,24 +477,35 @@ export default function PoolDetailPage() {
                             <span className="text-white font-semibold text-sm text-right leading-tight">{match.home_team}</span>
                             <TeamFlag team={match.home_team} size="md" />
                           </div>
-                          <div className="flex items-center justify-center gap-1">
-                            <input
-                              type="number" min="0" max="99"
-                              value={local?.home ?? ''}
-                              onChange={e => updateScore(match.id, 'home', e.target.value)}
-                              disabled={!editable}
-                              className="w-11 h-10 text-center font-black text-base bg-gray-800 border-2 border-gray-700 focus:border-green-500 rounded-lg text-white outline-none disabled:opacity-30 disabled:cursor-not-allowed"
-                              placeholder="-"
-                            />
-                            <span className="text-gray-600 font-black text-sm">:</span>
-                            <input
-                              type="number" min="0" max="99"
-                              value={local?.away ?? ''}
-                              onChange={e => updateScore(match.id, 'away', e.target.value)}
-                              disabled={!editable}
-                              className="w-11 h-10 text-center font-black text-base bg-gray-800 border-2 border-gray-700 focus:border-green-500 rounded-lg text-white outline-none disabled:opacity-30 disabled:cursor-not-allowed"
-                              placeholder="-"
-                            />
+                          <div className="flex items-center justify-center min-w-[110px]">
+                            {editable ? (
+                              <div className="flex items-center gap-1">
+                                <input
+                                  type="number" min="0" max="99"
+                                  value={local?.home ?? ''}
+                                  onChange={e => updateScore(match.id, 'home', e.target.value)}
+                                  className="w-11 h-10 text-center font-black text-base bg-gray-800 border-2 border-gray-700 focus:border-green-500 rounded-lg text-white outline-none"
+                                  placeholder="-"
+                                />
+                                <span className="text-gray-600 font-black text-sm">:</span>
+                                <input
+                                  type="number" min="0" max="99"
+                                  value={local?.away ?? ''}
+                                  onChange={e => updateScore(match.id, 'away', e.target.value)}
+                                  className="w-11 h-10 text-center font-black text-base bg-gray-800 border-2 border-gray-700 focus:border-green-500 rounded-lg text-white outline-none"
+                                  placeholder="-"
+                                />
+                              </div>
+                            ) : prediction ? (
+                              <span className="bg-gray-700 border border-gray-600 text-white font-black text-base px-3 py-2 rounded-lg tabular-nums tracking-wide">
+                                {prediction.predicted_home_score} : {prediction.predicted_away_score}
+                              </span>
+                            ) : (
+                              <span className="flex items-center gap-1.5 text-red-400/70">
+                                <span className="text-sm">🔒</span>
+                                <span className="text-xs font-bold">Sin pronóstico</span>
+                              </span>
+                            )}
                           </div>
                           <div className="flex items-center gap-2 pl-2">
                             <TeamFlag team={match.away_team} size="md" />
