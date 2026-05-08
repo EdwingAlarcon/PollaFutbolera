@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
-import { getTeamFlag } from '@/lib/flags'
+import { getTeamFlagUrl } from '@/lib/flags'
+import TeamFlag from '@/components/TeamFlag'
 import Link from 'next/link'
 
 export default function PoolDetailPage() {
@@ -322,7 +323,7 @@ export default function PoolDetailPage() {
                           <div className="flex items-center px-4 py-4 gap-2">
                             <div className="flex-1 flex items-center justify-end gap-2">
                               <span className="font-bold text-white text-sm text-right leading-tight">{match.home_team}</span>
-                              <span className="text-4xl">{getTeamFlag(match.home_team)}</span>
+                              <TeamFlag team={match.home_team} size="lg" />
                             </div>
                             <div className="px-3 text-center min-w-[72px]">
                               {isFinished ? (
@@ -332,7 +333,7 @@ export default function PoolDetailPage() {
                               )}
                             </div>
                             <div className="flex-1 flex items-center gap-2">
-                              <span className="text-4xl">{getTeamFlag(match.away_team)}</span>
+                              <TeamFlag team={match.away_team} size="lg" />
                               <span className="font-bold text-white text-sm leading-tight">{match.away_team}</span>
                             </div>
                           </div>

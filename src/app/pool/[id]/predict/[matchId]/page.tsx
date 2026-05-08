@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
-import { getTeamFlag } from '@/lib/flags'
+import { getTeamFlagUrl } from '@/lib/flags'
+import TeamFlag from '@/components/TeamFlag'
 import Link from 'next/link'
 
 export default function PredictMatchPage() {
@@ -198,7 +199,9 @@ export default function PredictMatchPage() {
               <div className="flex items-center justify-between gap-4 mb-8">
                 {/* Local */}
                 <div className="flex-1 text-center">
-                  <div className="text-7xl mb-3">{getTeamFlag(match.home_team)}</div>
+                  <div className="flex justify-center mb-3">
+                    <TeamFlag team={match.home_team} size="xl" />
+                  </div>
                   <p className="font-bold text-white text-sm mb-4 leading-tight">{match.home_team}</p>
                   <input
                     type="number"
@@ -215,7 +218,9 @@ export default function PredictMatchPage() {
 
                 {/* Visitante */}
                 <div className="flex-1 text-center">
-                  <div className="text-7xl mb-3">{getTeamFlag(match.away_team)}</div>
+                  <div className="flex justify-center mb-3">
+                    <TeamFlag team={match.away_team} size="xl" />
+                  </div>
                   <p className="font-bold text-white text-sm mb-4 leading-tight">{match.away_team}</p>
                   <input
                     type="number"
