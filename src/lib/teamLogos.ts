@@ -149,6 +149,7 @@ const CLUB_ESPN_IDS: Record<string, number> = {
   'Le Havre': 3236,
   'Lens': 175,
   'Lille': 166,
+  'Lorient': 273,
   'Metz': 177,
   'Montpellier': 274,
   'Nantes': 165,
