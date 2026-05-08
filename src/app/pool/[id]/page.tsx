@@ -225,10 +225,10 @@ export default function PoolDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
+      <div className="min-h-screen bg-[#0B1020] flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          <div className="animate-spin rounded-full h-14 w-14 border-4 border-gray-700 border-t-green-500"></div>
-          <p className="text-gray-400 text-sm">Cargando polla...</p>
+          <div className="animate-spin rounded-full h-14 w-14 border-4 border-white/10 border-t-green-500"></div>
+          <p className="text-slate-400 text-sm">Cargando polla...</p>
         </div>
       </div>
     )
@@ -236,7 +236,7 @@ export default function PoolDetailPage() {
 
   if (!pool) {
     return (
-      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
+      <div className="min-h-screen bg-[#0B1020] flex items-center justify-center">
         <div className="text-center">
           <div className="text-6xl mb-4">😕</div>
           <h1 className="text-2xl font-bold text-white mb-4">Polla no encontrada</h1>
@@ -255,16 +255,16 @@ export default function PoolDetailPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
+    <div className="min-h-screen bg-[#0B1020] text-white">
       {/* Nav */}
-      <nav className="bg-gray-900 border-b border-gray-800 sticky top-0 z-10">
+      <nav className="bg-[#0B1020]/90 backdrop-blur-xl border-b border-white/5 sticky top-0 z-10">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
           <Link href="/dashboard" className="text-green-400 hover:text-green-300 font-semibold transition text-sm">
             ← Dashboard
           </Link>
           <div className="font-bold text-white truncate max-w-[200px] text-sm">{pool.name}</div>
-          <div className="text-sm text-gray-500 hidden sm:block">
-            Admin: <span className="text-gray-300">{pool.users?.username}</span>
+          <div className="text-sm text-slate-500 hidden sm:block">
+            Admin: <span className="text-slate-300">{pool.users?.username}</span>
           </div>
         </div>
       </nav>
@@ -304,8 +304,8 @@ export default function PoolDetailPage() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`px-5 py-2.5 text-sm font-semibold rounded-t-lg border-b-2 transition ${
                   activeTab === tab.id
-                    ? 'border-green-400 text-green-400 bg-gray-950/40'
-                    : 'border-transparent text-gray-400 hover:text-gray-200 hover:bg-black/20'
+                    ? 'border-green-400 text-green-400 bg-[#0B1020]/40'
+                    : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-black/20'
                 }`}
               >
                 {tab.label}
@@ -420,9 +420,9 @@ export default function PoolDetailPage() {
                 )}
               </div>
             ) : (
-              <div className="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden">
+              <div className="bg-[#131A2E] rounded-2xl border border-white/5 overflow-hidden">
                 {/* Desktop header */}
-                <div className="hidden md:grid md:grid-cols-[48px_130px_1fr_110px_1fr_110px_64px] gap-2 px-4 py-3 bg-gray-800/80 text-xs font-bold text-gray-500 uppercase tracking-wider border-b border-gray-700">
+                <div className="hidden md:grid md:grid-cols-[48px_130px_1fr_110px_1fr_110px_64px] gap-2 px-4 py-3 bg-white/5 text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-white/5">
                   <div className="text-center">#</div>
                   <div>Horario</div>
                   <div className="text-right pr-2">Local</div>
@@ -432,7 +432,7 @@ export default function PoolDetailPage() {
                   <div className="text-center">Pts</div>
                 </div>
 
-                <div className="divide-y divide-gray-800/80">
+                <div className="divide-y divide-white/5">
                   {matches.map((match: any, idx: number) => {
                     const round = match.round || 'group'
                     const prevRound = idx > 0 ? ((matches as any[])[idx - 1].round || 'group') : null
@@ -446,10 +446,10 @@ export default function PoolDetailPage() {
                     return (
                       <Fragment key={match.id}>
                         {showRoundHeader && (
-                          <div className="bg-gray-800/50 border-b border-gray-700/60 px-5 py-2.5 flex items-center gap-2.5">
+                          <div className="bg-white/5 border-b border-white/8 px-5 py-2.5 flex items-center gap-2.5">
                             <span className="text-base">{ROUND_LABELS[round]?.emoji}</span>
-                            <span className="text-xs font-black text-gray-300 uppercase tracking-widest">{ROUND_LABELS[round]?.label}</span>
-                            <span className="ml-auto text-gray-600 text-xs">
+                            <span className="text-xs font-black text-slate-300 uppercase tracking-widest">{ROUND_LABELS[round]?.label}</span>
+                            <span className="ml-auto text-slate-600 text-xs">
                               {(matches as any[]).filter((m: any) => (m.round || 'group') === round).length} partidos
                             </span>
                           </div>
@@ -476,7 +476,7 @@ export default function PoolDetailPage() {
                               })}
                             </span>
                             <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${
-                              isLive ? 'bg-red-500 text-white' : isFinished ? 'bg-gray-700 text-gray-300' : 'bg-blue-900/60 text-blue-300'
+                              isLive ? 'bg-red-500 text-white' : isFinished ? 'bg-white/8 text-slate-300' : 'bg-blue-900/60 text-blue-300'
                             }`}>
                               {isLive ? '🔴 En vivo' : isFinished ? 'Finalizado' : 'Pendiente'}
                             </span>
@@ -493,20 +493,20 @@ export default function PoolDetailPage() {
                                     type="number" min="0" max="99"
                                     value={local?.home ?? ''}
                                     onChange={e => updateScore(match.id, 'home', e.target.value)}
-                                    className="w-12 h-12 text-center font-black text-lg bg-gray-800 border-2 border-gray-700 focus:border-green-500 rounded-lg text-white outline-none"
+                                    className="w-12 h-12 text-center font-black text-lg bg-white/5 border-2 border-white/10 focus:border-green-500 rounded-lg text-white outline-none"
                                     placeholder="-"
                                   />
-                                  <span className="text-gray-600 font-black">:</span>
+                                  <span className="text-slate-600 font-black">:</span>
                                   <input
                                     type="number" min="0" max="99"
                                     value={local?.away ?? ''}
                                     onChange={e => updateScore(match.id, 'away', e.target.value)}
-                                    className="w-12 h-12 text-center font-black text-lg bg-gray-800 border-2 border-gray-700 focus:border-green-500 rounded-lg text-white outline-none"
+                                    className="w-12 h-12 text-center font-black text-lg bg-white/5 border-2 border-white/10 focus:border-green-500 rounded-lg text-white outline-none"
                                     placeholder="-"
                                   />
                                 </div>
                               ) : prediction ? (
-                                <span className="bg-gray-700 border border-gray-600 text-white font-black text-base px-2.5 py-1.5 rounded-lg tabular-nums">
+                                <span className="bg-white/8 border border-white/12 text-white font-black text-base px-2.5 py-1.5 rounded-lg tabular-nums">
                                   {prediction.predicted_home_score} : {prediction.predicted_away_score}
                                 </span>
                               ) : (
@@ -523,7 +523,7 @@ export default function PoolDetailPage() {
                           </div>
                           {isFinished && (
                             <div className="mt-2 flex items-center justify-end gap-2">
-                              <span className="text-gray-400 text-xs">
+                              <span className="text-slate-400 text-xs">
                                 Resultado: <span className="text-white font-bold">{match.home_score} - {match.away_score}</span>
                               </span>
                               {prediction?.points_earned != null && (
@@ -557,20 +557,20 @@ export default function PoolDetailPage() {
                                   type="number" min="0" max="99"
                                   value={local?.home ?? ''}
                                   onChange={e => updateScore(match.id, 'home', e.target.value)}
-                                  className="w-11 h-10 text-center font-black text-base bg-gray-800 border-2 border-gray-700 focus:border-green-500 rounded-lg text-white outline-none"
-                                  placeholder="-"
-                                />
-                                <span className="text-gray-600 font-black text-sm">:</span>
-                                <input
-                                  type="number" min="0" max="99"
-                                  value={local?.away ?? ''}
-                                  onChange={e => updateScore(match.id, 'away', e.target.value)}
-                                  className="w-11 h-10 text-center font-black text-base bg-gray-800 border-2 border-gray-700 focus:border-green-500 rounded-lg text-white outline-none"
+                  className="w-11 h-10 text-center font-black text-base bg-white/5 border-2 border-white/10 focus:border-green-500 rounded-lg text-white outline-none"
+                                    placeholder="-"
+                                  />
+                                  <span className="text-slate-600 font-black text-sm">:</span>
+                                  <input
+                                    type="number" min="0" max="99"
+                                    value={local?.away ?? ''}
+                                    onChange={e => updateScore(match.id, 'away', e.target.value)}
+                                    className="w-11 h-10 text-center font-black text-base bg-white/5 border-2 border-white/10 focus:border-green-500 rounded-lg text-white outline-none"
                                   placeholder="-"
                                 />
                               </div>
                             ) : prediction ? (
-                              <span className="bg-gray-700 border border-gray-600 text-white font-black text-base px-3 py-2 rounded-lg tabular-nums tracking-wide">
+                              <span className="bg-white/8 border border-white/12 text-white font-black text-base px-3 py-2 rounded-lg tabular-nums tracking-wide">
                                 {prediction.predicted_home_score} : {prediction.predicted_away_score}
                               </span>
                             ) : (
@@ -630,25 +630,25 @@ export default function PoolDetailPage() {
 
         {/* ===== TAB: POSICIONES ===== */}
         {activeTab === 'positions' && (
-          <div className="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden">
-            <div className="px-6 py-4 border-b border-gray-800 flex items-center justify-between">
+          <div className="bg-[#131A2E] rounded-2xl border border-white/5 overflow-hidden">
+            <div className="px-6 py-4 border-b border-white/5 flex items-center justify-between">
               <h2 className="text-xl font-bold text-white">🏆 Tabla de Posiciones</h2>
-              <span className="text-sm text-gray-500">{members.length} participantes</span>
+              <span className="text-sm text-slate-500">{members.length} participantes</span>
             </div>
             {ranking.length === 0 ? (
               <div className="py-20 text-center">
                 <div className="text-6xl mb-4">📊</div>
-                <p className="text-gray-500 text-sm">El ranking aparecerá cuando haya partidos finalizados.</p>
+                <p className="text-slate-500 text-sm">El ranking aparecerá cuando haya partidos finalizados.</p>
               </div>
             ) : (
               <div>
-                <div className="grid grid-cols-[48px_1fr_110px_80px] gap-2 px-6 py-3 bg-gray-800/60 text-xs font-bold text-gray-500 uppercase tracking-wider border-b border-gray-700">
+                <div className="grid grid-cols-[48px_1fr_110px_80px] gap-2 px-6 py-3 bg-white/5 text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-white/5">
                   <div>Pos</div>
                   <div>Jugador</div>
                   <div className="text-center">Predicciones</div>
                   <div className="text-center">Puntos</div>
                 </div>
-                <div className="divide-y divide-gray-800">
+                <div className="divide-y divide-white/5">
                   {ranking.map((entry, index) => {
                     const medals = ['🥇', '🥈', '🥉']
                     const isMe = entry.user_id === user?.id
@@ -656,7 +656,7 @@ export default function PoolDetailPage() {
                       <div
                         key={entry.user_id}
                         className={`grid grid-cols-[48px_1fr_110px_80px] gap-2 px-6 py-4 items-center transition ${
-                          isMe ? 'bg-green-950/50' : 'hover:bg-gray-800/40'
+                          isMe ? 'bg-green-950/50' : 'hover:bg-white/[0.03]'
                         }`}
                       >
                         <div>
@@ -674,7 +674,7 @@ export default function PoolDetailPage() {
                             {isMe && <span className="ml-2 text-xs bg-green-600 text-white px-2 py-0.5 rounded-full">Tú</span>}
                           </div>
                         </div>
-                        <div className="text-center text-gray-400 text-sm">{entry.predictions_count || 0}</div>
+                        <div className="text-center text-slate-400 text-sm">{entry.predictions_count || 0}</div>
                         <div className="text-center font-black text-2xl text-green-400">{entry.total_points || 0}</div>
                       </div>
                     )
@@ -688,9 +688,9 @@ export default function PoolDetailPage() {
         {/* ===== TAB: INFO GENERAL ===== */}
         {activeTab === 'info' && (
           <div className="space-y-5">
-            <div className="bg-gray-900 rounded-2xl border border-gray-800 p-6">
+            <div className="bg-[#131A2E] rounded-2xl border border-white/5 p-6">
               <h2 className="text-lg font-bold text-white mb-4">Información de la Polla</h2>
-              <div className="divide-y divide-gray-800">
+              <div className="divide-y divide-white/5">
                 {[
                   { label: 'Nombre', value: pool.name },
                   { label: 'Torneo', value: pool.tournament_id },
@@ -699,12 +699,12 @@ export default function PoolDetailPage() {
                   { label: 'Partidos', value: `${matches.length} partidos` },
                 ].map(row => (
                   <div key={row.label} className="flex justify-between items-center py-3">
-                    <span className="text-gray-500 text-sm">{row.label}</span>
+                    <span className="text-slate-500 text-sm">{row.label}</span>
                     <span className="text-white font-semibold text-sm">{row.value}</span>
                   </div>
                 ))}
                 <div className="flex justify-between items-center py-3">
-                  <span className="text-gray-500 text-sm">Código de invitación</span>
+                  <span className="text-slate-500 text-sm">Código de invitación</span>
                   <div className="flex items-center gap-3">
                     <span className="font-mono font-black text-green-400 text-lg">{pool.invite_code}</span>
                     <button
@@ -719,7 +719,7 @@ export default function PoolDetailPage() {
             </div>
 
             {pool.prizes && pool.prizes.length > 0 && (
-              <div className="bg-gray-900 rounded-2xl border border-yellow-700/40 p-6">
+              <div className="bg-[#131A2E] rounded-2xl border border-yellow-700/40 p-6">
                 <h2 className="text-lg font-bold text-white mb-4">🏆 Premios</h2>
                 <div className="space-y-3">
                   {pool.prizes.map((p: { position: string; prize: string }, i: number) => (
@@ -734,7 +734,7 @@ export default function PoolDetailPage() {
 
             {/* T&C — visible en Info General para todos (admin y participantes) */}
             {pool.tournament_id === 'world-cup-2026' && (
-              <div className="bg-gray-900 rounded-2xl border border-yellow-700/30 overflow-hidden">
+              <div className="bg-[#131A2E] rounded-2xl border border-yellow-700/30 overflow-hidden">
                 <button
                   type="button"
                   onClick={() => setShowTc(v => !v)}
@@ -764,7 +764,7 @@ export default function PoolDetailPage() {
               </div>
             )}
 
-            <div className="bg-gray-900 rounded-2xl border border-gray-800 p-6">
+            <div className="bg-[#131A2E] rounded-2xl border border-white/5 p-6">
               <h2 className="text-lg font-bold text-white mb-4">Sistema de Puntuación</h2>
               <div className="grid grid-cols-3 gap-3">
                 <div className="bg-yellow-900/30 border border-yellow-700/40 rounded-xl p-4 text-center">
@@ -782,11 +782,11 @@ export default function PoolDetailPage() {
               </div>
             </div>
 
-            <div className="bg-gray-900 rounded-2xl border border-gray-800 p-6">
+            <div className="bg-[#131A2E] rounded-2xl border border-white/5 p-6">
               <h2 className="text-lg font-bold text-white mb-4">👥 Participantes ({members.length})</h2>
               <div className="space-y-2">
                 {members.map(member => (
-                  <div key={member.user_id} className="flex items-center gap-3 p-3 bg-gray-800/50 rounded-xl">
+                  <div key={member.user_id} className="flex items-center gap-3 p-3 bg-white/[0.04] rounded-xl">
                     <div className="w-9 h-9 rounded-full bg-green-700 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
                       {member.users?.username?.[0]?.toUpperCase() || '?'}
                     </div>
@@ -801,9 +801,9 @@ export default function PoolDetailPage() {
 
             {/* ── Zona peligrosa: solo visible para el admin de la polla ── */}
             {user?.id === pool.admin_id && (
-              <div className="bg-gray-900 rounded-2xl border border-red-800/40 p-6">
+              <div className="bg-[#131A2E] rounded-2xl border border-red-800/40 p-6">
                 <h2 className="text-lg font-bold text-red-400 mb-1">⚠️ Zona de Peligro</h2>
-                <p className="text-gray-500 text-xs mb-4">Estas acciones son irreversibles. Solo el administrador de la polla puede ejecutarlas.</p>
+                <p className="text-slate-500 text-xs mb-4">Estas acciones son irreversibles. Solo el administrador de la polla puede ejecutarlas.</p>
 
                 {!showDeleteConfirm ? (
                   <button
@@ -825,7 +825,7 @@ export default function PoolDetailPage() {
                       <button
                         onClick={() => { setShowDeleteConfirm(false); setDeleteError(null) }}
                         disabled={deleting}
-                        className="flex-1 bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 font-bold py-2.5 rounded-xl text-sm transition"
+                        className="flex-1 bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 font-bold py-2.5 rounded-xl text-sm transition"
                       >
                         Cancelar
                       </button>

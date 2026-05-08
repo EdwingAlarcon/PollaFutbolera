@@ -119,8 +119,8 @@ export default function CreatePoolPage() {
   const selectedTournament = TOURNAMENTS.find(t => t.id === formData.tournament_id)
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
-      <nav className="bg-gray-900 border-b border-gray-800">
+    <div className="min-h-screen bg-[#0B1020] text-white">
+      <nav className="bg-[#0B1020]/90 backdrop-blur-xl border-b border-white/5">
         <div className="container mx-auto px-4 py-3">
           <Link href="/dashboard" className="text-green-400 hover:text-green-300 font-semibold text-sm transition">
             ← Dashboard
@@ -141,7 +141,7 @@ export default function CreatePoolPage() {
                     ? 'bg-green-500 text-white'
                     : step > s.n
                     ? 'bg-green-800 text-green-300'
-                    : 'bg-gray-800 text-gray-500'
+                    : 'bg-white/5 text-slate-500'
                 }`}>
                   {step > s.n ? '✓' : s.n}
                 </div>
@@ -150,15 +150,15 @@ export default function CreatePoolPage() {
                 </span>
               </div>
               {i < steps.length - 1 && (
-                <div className={`w-16 h-0.5 mx-2 mb-4 ${step > s.n ? 'bg-green-700' : 'bg-gray-800'}`} />
+                <div className={`w-16 h-0.5 mx-2 mb-4 ${step > s.n ? 'bg-green-700' : 'bg-white/10'}`} />
               )}
             </div>
           ))}
         </div>
 
-        <div className="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden">
+        <div className="bg-[#131A2E] rounded-2xl border border-white/5 overflow-hidden">
           {/* Tab bar */}
-          <div className="flex border-b border-gray-800">
+          <div className="flex border-b border-white/5">
             {steps.map(s => (
               <div
                 key={s.n}
@@ -166,8 +166,8 @@ export default function CreatePoolPage() {
                   step === s.n
                     ? 'border-green-500 text-green-400'
                     : step > s.n
-                    ? 'border-green-800/40 text-gray-500 cursor-pointer hover:text-gray-300'
-                    : 'border-transparent text-gray-600'
+                    ? 'border-green-800/40 text-slate-500 cursor-pointer hover:text-slate-300'
+                    : 'border-transparent text-slate-600'
                 }`}
                 onClick={() => step > s.n && setStep(s.n)}
               >
@@ -191,7 +191,7 @@ export default function CreatePoolPage() {
                   <select
                     value={formData.tournament_id}
                     onChange={e => setFormData({ ...formData, tournament_id: e.target.value })}
-                    className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent text-white outline-none"
+                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent text-white outline-none"
                   >
                     {TOURNAMENTS.map(t => (
                       <option key={t.id} value={t.id}>{t.label}</option>
@@ -228,23 +228,23 @@ export default function CreatePoolPage() {
                     </div>
                   </div>
                 )}                <div>
-                  <label className="block text-sm font-semibold text-gray-300 mb-2">Nombre de la Polla *</label>
+                  <label className="block text-sm font-semibold text-slate-300 mb-2">Nombre de la Polla *</label>
                   <input
                     type="text"
                     value={formData.name}
                     onChange={e => setFormData({ ...formData, name: e.target.value })}
                     maxLength={100}
-                    className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent text-white outline-none placeholder-gray-600"
+                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent text-white outline-none placeholder-slate-600"
                     placeholder="Ej: POLLA FUTBOLERA MUNDIAL 2026"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-gray-300 mb-2">Descripción <span className="text-gray-600 font-normal">(opcional)</span></label>
+                  <label className="block text-sm font-semibold text-slate-300 mb-2">Descripción <span className="text-slate-600 font-normal">(opcional)</span></label>
                   <textarea
                     value={formData.description}
                     onChange={e => setFormData({ ...formData, description: e.target.value })}
                     rows={3}
-                    className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent text-white outline-none placeholder-gray-600 resize-none"
+                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent text-white outline-none placeholder-slate-600 resize-none"
                     placeholder="Descripción o reglas adicionales..."
                   />
                 </div>
@@ -280,14 +280,14 @@ export default function CreatePoolPage() {
                       <div className="flex items-center gap-2">
                         <button
                           onClick={() => setFormData(prev => ({ ...prev, [rule.key]: Math.max(0, (prev as any)[rule.key] - 1) }))}
-                          className="w-8 h-8 bg-gray-800 hover:bg-gray-700 rounded-lg font-bold text-white transition"
+                          className="w-8 h-8 bg-white/5 hover:bg-white/10 rounded-lg font-bold text-white transition"
                         >-</button>
                         <span className={`text-${rule.color}-400 font-black text-2xl w-10 text-center`}>
                           {(formData as any)[rule.key]}
                         </span>
                         <button
                           onClick={() => setFormData(prev => ({ ...prev, [rule.key]: (prev as any)[rule.key] + 1 }))}
-                          className="w-8 h-8 bg-gray-800 hover:bg-gray-700 rounded-lg font-bold text-white transition"
+                          className="w-8 h-8 bg-white/5 hover:bg-white/10 rounded-lg font-bold text-white transition"
                         >+</button>
                       </div>
                     </div>
@@ -309,7 +309,7 @@ export default function CreatePoolPage() {
                         value={(formData as any)[p.key]}
                         onChange={e => setFormData(prev => ({ ...prev, [p.key]: e.target.value }))}
                         maxLength={80}
-                        className="flex-1 px-3 py-2 bg-gray-800 border border-gray-700 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent text-white outline-none placeholder-gray-600 text-sm"
+                        className="flex-1 px-3 py-2 bg-white/5 border border-white/10 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent text-white outline-none placeholder-slate-600 text-sm"
                         placeholder={p.placeholder}
                       />
                     </div>
@@ -319,7 +319,7 @@ export default function CreatePoolPage() {
                 <div className="flex gap-3 mt-6">
                   <button
                     onClick={() => setStep(1)}
-                    className="flex-1 bg-gray-800 hover:bg-gray-700 text-white font-bold py-3 rounded-xl transition border border-gray-700"
+                    className="flex-1 bg-white/5 hover:bg-white/10 text-white font-bold py-3 rounded-xl transition border border-white/10"
                   >
                     ← ANTERIOR
                   </button>
@@ -338,7 +338,7 @@ export default function CreatePoolPage() {
               <div className="space-y-5">
                 <h3 className="text-lg font-bold text-white">Resumen</h3>
 
-                <div className="bg-gray-800/50 rounded-xl divide-y divide-gray-700">
+                <div className="bg-white/5 rounded-xl divide-y divide-white/8">
                   {[
                     { label: 'Torneo', value: selectedTournament?.label },
                     { label: 'Nombre', value: formData.name },
@@ -390,7 +390,7 @@ export default function CreatePoolPage() {
                 <div className="flex gap-3 pt-2">
                   <button
                     onClick={() => setStep(2)}
-                    className="flex-1 bg-gray-800 hover:bg-gray-700 text-white font-bold py-3 rounded-xl transition border border-gray-700"
+                    className="flex-1 bg-white/5 hover:bg-white/10 text-white font-bold py-3 rounded-xl transition border border-white/10"
                   >
                     ← ANTERIOR
                   </button>

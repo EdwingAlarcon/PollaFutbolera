@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import Link from 'next/link'
+import PFLogo from '@/components/PFLogo'
 
 export default function JoinPoolPage() {
   const router = useRouter()
@@ -107,8 +108,8 @@ export default function JoinPoolPage() {
           {/* Logo */}
           <div className="text-center mb-8">
             <div className="inline-flex items-center gap-2.5 mb-4">
-              <div className="w-9 h-9 rounded-xl bg-green-500 flex items-center justify-center shadow-lg shadow-green-500/40">
-                <span className="text-lg leading-none">⚽</span>
+              <div className="w-9 h-9 rounded-xl bg-[#0B1020] border border-green-500/40 flex items-center justify-center">
+                <PFLogo size={24} />
               </div>
               <span className="text-lg font-black text-white">Polla<span className="text-green-400">Futbolera</span></span>
             </div>

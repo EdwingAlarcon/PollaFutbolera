@@ -135,10 +135,10 @@ export default function PredictMatchPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
+      <div className="min-h-screen bg-[#0B1020] flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          <div className="animate-spin rounded-full h-14 w-14 border-4 border-gray-700 border-t-green-500"></div>
-          <p className="text-gray-400 text-sm">Cargando partido...</p>
+          <div className="animate-spin rounded-full h-14 w-14 border-4 border-white/10 border-t-green-500"></div>
+          <p className="text-slate-400 text-sm">Cargando partido...</p>
         </div>
       </div>
     )
@@ -146,7 +146,7 @@ export default function PredictMatchPage() {
 
   if (!match) {
     return (
-      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
+      <div className="min-h-screen bg-[#0B1020] flex items-center justify-center">
         <div className="text-center">
           <div className="text-6xl mb-4">😕</div>
           <h1 className="text-2xl font-bold text-white mb-4">Partido no encontrado</h1>
@@ -159,8 +159,8 @@ export default function PredictMatchPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
-      <nav className="bg-gray-900 border-b border-gray-800">
+    <div className="min-h-screen bg-[#0B1020] text-white">
+      <nav className="bg-[#0B1020]/90 backdrop-blur-xl border-b border-white/5">
         <div className="container mx-auto px-4 py-4">
           <Link href={`/pool/${poolId}`} className="text-green-400 hover:text-green-300 font-semibold transition">
             ← Volver a la polla
@@ -170,10 +170,10 @@ export default function PredictMatchPage() {
 
       <div className="container mx-auto px-4 py-10">
         <div className="max-w-lg mx-auto">
-          <div className="bg-gray-900 rounded-2xl border border-gray-800 shadow-2xl overflow-hidden">
+          <div className="bg-[#131A2E] rounded-2xl border border-white/8 shadow-2xl overflow-hidden">
 
             {/* Header */}
-            <div className="bg-gradient-to-r from-green-800 to-green-950 px-8 py-6 text-center">
+            <div className="bg-gradient-to-r from-green-900/60 to-[#0d1424] border-b border-green-800/30 px-8 py-6 text-center">
               <h1 className="text-2xl font-black text-white mb-1">
                 {prediction ? '✏️ Editar Predicción' : '🔮 Hacer Predicción'}
               </h1>
@@ -208,13 +208,13 @@ export default function PredictMatchPage() {
                     min="0"
                     value={homeScore}
                     onChange={(e) => setHomeScore(e.target.value)}
-                    className="w-20 h-20 text-center text-4xl font-black border-2 border-gray-700 rounded-xl focus:ring-4 focus:ring-green-500 focus:border-green-500 bg-gray-800 text-white outline-none block mx-auto"
+                    className="w-20 h-20 text-center text-4xl font-black border-2 border-white/10 rounded-xl focus:ring-4 focus:ring-green-500 focus:border-green-500 bg-white/5 text-white outline-none block mx-auto"
                     placeholder="0"
                   />
                 </div>
 
                 {/* Separador */}
-                <div className="text-gray-700 text-3xl font-black pb-4">—</div>
+                <div className="text-slate-700 text-3xl font-black pb-4">—</div>
 
                 {/* Visitante */}
                 <div className="flex-1 text-center">
@@ -227,7 +227,7 @@ export default function PredictMatchPage() {
                     min="0"
                     value={awayScore}
                     onChange={(e) => setAwayScore(e.target.value)}
-                    className="w-20 h-20 text-center text-4xl font-black border-2 border-gray-700 rounded-xl focus:ring-4 focus:ring-green-500 focus:border-green-500 bg-gray-800 text-white outline-none block mx-auto"
+                    className="w-20 h-20 text-center text-4xl font-black border-2 border-white/10 rounded-xl focus:ring-4 focus:ring-green-500 focus:border-green-500 bg-white/5 text-white outline-none block mx-auto"
                     placeholder="0"
                   />
                 </div>
@@ -252,7 +252,7 @@ export default function PredictMatchPage() {
               <button
                 onClick={handleSave}
                 disabled={saving || !homeScore || !awayScore}
-                className="w-full bg-green-600 hover:bg-green-500 disabled:bg-gray-800 disabled:text-gray-600 disabled:cursor-not-allowed text-white font-black py-4 rounded-xl transition text-lg"
+                className="w-full bg-green-600 hover:bg-green-500 disabled:bg-white/5 disabled:text-slate-600 disabled:cursor-not-allowed text-white font-black py-4 rounded-xl transition text-lg"
               >
                 {saving ? '⏳ Guardando...' : prediction ? '✅ Actualizar Predicción' : '🚀 Guardar Predicción'}
               </button>

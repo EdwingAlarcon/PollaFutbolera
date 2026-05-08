@@ -268,8 +268,8 @@ export default function AdminMatchesPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-700 border-t-green-500"></div>
+      <div className="min-h-screen bg-[#0B1020] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-white/10 border-t-green-500"></div>
       </div>
     )
   }
@@ -277,26 +277,28 @@ export default function AdminMatchesPage() {
   if (!authorized) return null
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
+    <div className="min-h-screen bg-[#0B1020] text-white">
       {/* Nav */}
-      <nav className="bg-gray-900 border-b border-gray-800 sticky top-0 z-10">
+      <nav className="bg-[#0B1020]/90 backdrop-blur-xl border-b border-white/5 sticky top-0 z-10">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
           <div className="flex items-center gap-3">
             <Link href="/dashboard" className="text-green-400 hover:text-green-300 text-sm transition">
               ← Dashboard
             </Link>
-            <span className="text-gray-600">/</span>
+            <span className="text-slate-600">/</span>
             <span className="text-white font-bold">Panel Admin — Resultados</span>
           </div>
-          <span className="text-xs bg-red-900/60 border border-red-700/50 text-red-300 px-3 py-1 rounded-full font-bold">
-            🔒 ADMIN
-          </span>
-          <button
-            onClick={() => setShowHelp(h => !h)}
-            className="text-xs bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 px-3 py-1 rounded-full font-bold transition"
-          >
-            {showHelp ? '✕ Cerrar ayuda' : '? Ayuda'}
-          </button>
+          <div className="flex items-center gap-2">
+            <span className="text-xs bg-red-900/60 border border-red-700/50 text-red-300 px-3 py-1 rounded-full font-bold">
+              🔒 ADMIN
+            </span>
+            <button
+              onClick={() => setShowHelp(h => !h)}
+              className="text-xs bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 px-3 py-1 rounded-full font-bold transition"
+            >
+              {showHelp ? '✕ Cerrar ayuda' : '? Ayuda'}
+            </button>
+          </div>
         </div>
       </nav>
 
@@ -304,7 +306,7 @@ export default function AdminMatchesPage() {
 
         {/* ── PANEL DE AYUDA ── */}
         {showHelp && (
-          <div className="mb-8 bg-gray-900 border border-blue-800/50 rounded-2xl overflow-hidden">
+          <div className="mb-8 bg-[#131A2E] border border-blue-800/50 rounded-2xl overflow-hidden">
             <div className="px-6 py-4 bg-blue-950/40 border-b border-blue-800/40 flex items-center gap-2">
               <span className="text-blue-400 text-lg">📖</span>
               <h2 className="text-white font-bold text-base">¿Cómo funciona el Panel Admin?</h2>
@@ -358,7 +360,7 @@ export default function AdminMatchesPage() {
                   </div>
                 </div>
                 <p className="text-gray-500 text-xs leading-relaxed">
-                  Cada polla puede tener su propio sistema de puntos configurado al crearla. El cálculo usa el trigger <code className="bg-gray-800 px-1 rounded">calculate_points</code> en Supabase.
+                  Cada polla puede tener su propio sistema de puntos configurado al crearla. El cálculo usa el trigger <code className="bg-white/10 px-1 rounded">calculate_points</code> en Supabase.
                 </p>
               </div>
 
@@ -409,7 +411,7 @@ export default function AdminMatchesPage() {
                 setImportResult(null)
                 loadMatches(e.target.value)
               }}
-              className="flex-1 bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-green-500"
+              className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-green-500"
             >
               {TOURNAMENTS.map(t => (
                 <option key={t.id} value={t.id}>{t.label}</option>
@@ -479,7 +481,7 @@ export default function AdminMatchesPage() {
             { label: 'En vivo', value: stats.live, color: 'text-red-400' },
             { label: 'Pendientes', value: stats.scheduled, color: 'text-blue-400' },
           ].map(s => (
-            <div key={s.label} className="bg-gray-900 border border-gray-800 rounded-xl p-4 text-center">
+            <div key={s.label} className="bg-[#131A2E] border border-white/5 rounded-xl p-4 text-center">
               <div className={`text-3xl font-black ${s.color}`}>{s.value}</div>
               <div className="text-gray-500 text-xs mt-1">{s.label}</div>
             </div>
@@ -493,7 +495,7 @@ export default function AdminMatchesPage() {
             placeholder="Buscar equipo..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="flex-1 bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-green-600"
+            className="flex-1 bg-[#131A2E] border border-white/8 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-green-600"
           />
           <div className="flex flex-wrap gap-2">
             {(['all', 'scheduled', 'live', 'finished'] as const).map(f => (
@@ -503,7 +505,7 @@ export default function AdminMatchesPage() {
                 className={`px-4 py-2.5 rounded-xl text-sm font-bold transition ${
                   filter === f
                     ? 'bg-green-600 text-white'
-                    : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+                    : 'bg-white/5 text-slate-400 hover:bg-white/10'
                 }`}
               >
                 {f === 'all' ? 'Todos' : f === 'scheduled' ? 'Pendientes' : f === 'live' ? 'En vivo' : 'Finalizados'}
@@ -526,7 +528,7 @@ export default function AdminMatchesPage() {
 
         {/* ── Formulario: agregar nuevo partido ── */}
         {showAddForm && (
-          <div className="mb-6 bg-gray-900 border border-blue-700/50 rounded-2xl p-5">
+          <div className="mb-6 bg-[#131A2E] border border-blue-700/50 rounded-2xl p-5">
             <h3 className="text-white font-bold mb-4 text-sm flex items-center gap-2">
               ➕ Nuevo partido — {TOURNAMENTS.find(t => t.id === selectedTournament)?.label ?? selectedTournament}
             </h3>
@@ -546,7 +548,7 @@ export default function AdminMatchesPage() {
                 placeholder="Equipo local (ej: Argentina)"
                 value={newMatch.home_team}
                 onChange={e => setNewMatch(p => ({ ...p, home_team: e.target.value }))}
-                className="bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-blue-500"
+                className="bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-blue-500"
               />
               <input
                 type="text"
@@ -554,23 +556,23 @@ export default function AdminMatchesPage() {
                 placeholder="Equipo visitante (ej: Francia)"
                 value={newMatch.away_team}
                 onChange={e => setNewMatch(p => ({ ...p, away_team: e.target.value }))}
-                className="bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-blue-500"
+                className="bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-blue-500"
               />
               <div className="flex flex-col gap-1">
-                <label className="text-xs text-gray-500">Fecha y hora (hora local)</label>
+                <label className="text-xs text-slate-500">Fecha y hora (hora local)</label>
                 <input
                   type="datetime-local"
                   value={newMatch.match_date}
                   onChange={e => setNewMatch(p => ({ ...p, match_date: e.target.value }))}
-                  className="bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500"
+                  className="bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500"
                 />
               </div>
               <div className="flex flex-col gap-1">
-                <label className="text-xs text-gray-500">Fase / Ronda</label>
+                <label className="text-xs text-slate-500">Fase / Ronda</label>
                 <select
                   value={newMatch.round}
                   onChange={e => setNewMatch(p => ({ ...p, round: e.target.value }))}
-                  className="bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500"
+                  className="bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500"
                 >
                   {Object.entries(ROUND_CONFIG).map(([val, cfg]) => (
                     <option key={val} value={val}>{cfg.emoji} {cfg.label}</option>
@@ -584,7 +586,7 @@ export default function AdminMatchesPage() {
             <button
               onClick={handleAddMatch}
               disabled={addingMatch}
-              className="bg-blue-600 hover:bg-blue-500 disabled:bg-gray-700 text-white font-bold px-6 py-2.5 rounded-xl text-sm transition"
+              className="bg-blue-600 hover:bg-blue-500 disabled:bg-white/5 text-white font-bold px-6 py-2.5 rounded-xl text-sm transition"
             >
               {addingMatch ? 'Guardando...' : '➕ Agregar partido'}
             </button>
@@ -607,12 +609,12 @@ export default function AdminMatchesPage() {
             return (
               <div
                 key={match.id}
-                className={`bg-gray-900 border rounded-xl p-4 transition ${
+                className={`bg-[#131A2E] border rounded-xl p-4 transition ${
                   edit.status === 'live'
                     ? 'border-red-600/60'
                     : edit.status === 'finished'
-                    ? 'border-gray-700'
-                    : 'border-gray-800'
+                    ? 'border-white/8'
+                    : 'border-white/5'
                 }`}
               >
                 {/* Fecha + Ronda */}
@@ -649,10 +651,10 @@ export default function AdminMatchesPage() {
                           ...prev,
                           [match.id]: { ...prev[match.id], home_score: e.target.value }
                         }))}
-                        className="w-14 text-center bg-gray-800 border border-gray-700 rounded-lg py-2 text-white font-black text-xl focus:outline-none focus:border-green-500"
+                        className="w-14 text-center bg-white/5 border border-white/10 rounded-lg py-2 text-white font-black text-xl focus:outline-none focus:border-green-500"
                         placeholder="–"
                       />
-                      <span className="text-gray-600 font-black">:</span>
+                      <span className="text-slate-600 font-black">:</span>
                       <input
                         type="number"
                         min="0"
@@ -662,7 +664,7 @@ export default function AdminMatchesPage() {
                           ...prev,
                           [match.id]: { ...prev[match.id], away_score: e.target.value }
                         }))}
-                        className="w-14 text-center bg-gray-800 border border-gray-700 rounded-lg py-2 text-white font-black text-xl focus:outline-none focus:border-green-500"
+                        className="w-14 text-center bg-white/5 border border-white/10 rounded-lg py-2 text-white font-black text-xl focus:outline-none focus:border-green-500"
                         placeholder="–"
                       />
                     </div>
@@ -681,7 +683,7 @@ export default function AdminMatchesPage() {
                         ...prev,
                         [match.id]: { ...prev[match.id], status: e.target.value as Match['status'] }
                       }))}
-                      className="bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-green-500"
+                      className="bg-white/5 border border-white/8 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-green-500"
                     >
                       <option value="scheduled">Programado</option>
                       <option value="live">En vivo</option>
@@ -696,7 +698,7 @@ export default function AdminMatchesPage() {
                           ? 'bg-green-700 text-white'
                           : hasChanges
                           ? 'bg-green-600 hover:bg-green-500 text-white'
-                          : 'bg-gray-800 text-gray-600 cursor-default'
+                          : 'bg-white/5 text-slate-600 cursor-default'
                       }`}
                     >
                       {isSaving ? '...' : isSaved ? '✓' : 'Guardar'}
@@ -709,7 +711,7 @@ export default function AdminMatchesPage() {
         </div>
 
         {filtered.length === 0 && (
-          <div className="text-center py-16 text-gray-600">
+          <div className="text-center py-16 text-slate-600">
             No hay partidos que coincidan con el filtro.
           </div>
         )}

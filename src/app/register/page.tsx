@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import PFLogo from '@/components/PFLogo'
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -106,8 +107,11 @@ export default function RegisterPage() {
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2.5 group mb-5">
-            <div className="w-10 h-10 rounded-xl bg-green-500 flex items-center justify-center shadow-lg shadow-green-500/40 group-hover:shadow-green-500/70 transition-all">
-              <span className="text-xl leading-none">⚽</span>
+            <div className="relative">
+              <div className="absolute inset-0 bg-green-500/30 rounded-xl blur-md group-hover:bg-green-500/50 transition-all duration-300" />
+              <div className="relative w-10 h-10 rounded-xl bg-[#0B1020] border border-green-500/40 flex items-center justify-center group-hover:border-green-400 transition-colors">
+                <PFLogo size={28} />
+              </div>
             </div>
             <span className="text-xl font-black text-white">Polla<span className="text-green-400">Futbolera</span></span>
           </Link>
