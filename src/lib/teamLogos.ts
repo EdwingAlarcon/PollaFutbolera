@@ -269,6 +269,29 @@ const CLUB_ESPN_IDS: Record<string, number> = {
   'RB Bragantino': 6079,
   'Cuiabá': 17313,
   'Atlético Goianiense': 10357,
+  // Ecuador
+  'Barcelona SC': 2686,
+  'El Nacional': 882,
+  'Liga de Quito': 4816,
+  'Independiente del Valle': 17086,
+  'Aucas': 6017,
+  // Venezuela
+  'Caracas FC': 4811,
+  'Deportivo Táchira': 4818,
+  'Carabobo': 6037,
+  'Universidad Central': 10094,
+  'Deportivo La Guaira': 17090,
+  // Bolivia
+  'Bolívar': 2681,
+  'Always Ready': 19425,
+  'Wilstermann': 6054,
+  'Nacional Potosí': 10311,
+  // Perú
+  'Universitario': 2685,
+  'Alianza Lima': 2680,
+  'Sporting Cristal': 2673,
+  'Melgar': 7312,
+  'Cusco FC': 11995,
   // Chile
   'Colo-Colo': 2688,
   'Colo Colo': 2688,
@@ -276,35 +299,24 @@ const CLUB_ESPN_IDS: Record<string, number> = {
   'Universidad Católica': 885,
   'Huachipato': 4134,
   'Palestino': 4422,
-  // Uruguay
-  'Peñarol': 2683,
-  'Nacional': 2684,
-  'Defensor Sporting': 1007,
+  "O'Higgins": 6072,
+  'Coquimbo Unido': 8186,
   // Paraguay
   'Olimpia': 2675,
   'Cerro Porteño': 2671,
   'Libertad': 2670,
   'Guaraní': 7385,
-  // Ecuador
-  'Barcelona SC': 2686,
-  'El Nacional': 882,
-  'Liga de Quito': 4816,
-  'Independiente del Valle': 17086,
-  'Aucas': 6017,
-  // Bolivia
-  'Bolívar': 2681,
-  'Always Ready': 19425,
-  'Wilstermann': 6054,
-  // Perú
-  'Universitario': 2685,
-  'Alianza Lima': 2680,
-  'Sporting Cristal': 2673,
-  'Melgar': 7312,
-  // Venezuela
-  'Caracas FC': 4811,
-  'Deportivo Táchira': 4818,
-  'Carabobo': 6037,
-  'Universidad Central': 10094,
+  'Guarani': 7385,
+  '2 de Mayo': 6097,
+  // Uruguay
+  'Peñarol': 2683,
+  'Nacional': 2684,
+  'Defensor Sporting': 1007,
+  // Note: 'Liverpool' (ID 5492, Uruguay) conflicts with Premier League Liverpool (ID 364).
+  // Premier League Liverpool takes priority. Uruguayan Liverpool shows initials fallback.
+  'Juventud': 8416,
+  // Brazil (Libertadores-specific teams)
+  'Mirassol': 9169,
 
   // ── ESPN English name aliases (for auto-imported match data) ─────
   // Champions / Europa League (ESPN uses English names)
