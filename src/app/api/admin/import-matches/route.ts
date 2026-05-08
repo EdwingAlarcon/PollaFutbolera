@@ -190,6 +190,8 @@ export async function POST(request: NextRequest) {
       tournament_id: tournamentId,
       home_team: home.team.displayName as string,
       away_team: away.team.displayName as string,
+      home_team_espn_id: home.team.id ? parseInt(home.team.id) : null,
+      away_team_espn_id: away.team.id ? parseInt(away.team.id) : null,
       match_date: event.date as string,
       status,
       home_score: status === 'scheduled' ? null : homeScore,

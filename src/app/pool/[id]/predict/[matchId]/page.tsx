@@ -200,7 +200,7 @@ export default function PredictMatchPage() {
                 {/* Local */}
                 <div className="flex-1 text-center">
                   <div className="flex justify-center mb-3">
-                    <TeamFlag team={match.home_team} size="xl" />
+                    <TeamFlag team={match.home_team} espnId={match.home_team_espn_id} size="xl" />
                   </div>
                   <p className="font-bold text-white text-sm mb-4 leading-tight">{match.home_team}</p>
                   <input
@@ -219,7 +219,7 @@ export default function PredictMatchPage() {
                 {/* Visitante */}
                 <div className="flex-1 text-center">
                   <div className="flex justify-center mb-3">
-                    <TeamFlag team={match.away_team} size="xl" />
+                    <TeamFlag team={match.away_team} espnId={match.away_team_espn_id} size="xl" />
                   </div>
                   <p className="font-bold text-white text-sm mb-4 leading-tight">{match.away_team}</p>
                   <input

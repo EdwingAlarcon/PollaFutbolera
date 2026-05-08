@@ -5,6 +5,7 @@ import { getClubLogoUrl } from '@/lib/teamLogos'
 
 interface TeamFlagProps {
   team: string
+  espnId?: number | null
   size?: 'sm' | 'md' | 'lg' | 'xl'
   className?: string
 }
@@ -16,10 +17,15 @@ const sizeMap = {
   xl: { px: 80, cdnSize: 80 as const },
 }
 
-export default function TeamFlag({ team, size = 'md', className = '' }: TeamFlagProps) {
+export default function TeamFlag({ team, espnId, size = 'md', className = '' }: TeamFlagProps) {
   const { px, cdnSize } = sizeMap[size]
 
-  const clubUrl = getClubLogoUrl(team)
+  // If we have an ESPN team ID, use the CDN URL directly — bypasses all name-mapping issues
+  const directEspnUrl = espnId
+    ? `https://a.espncdn.com/i/teamlogos/soccer/500/${espnId}.png`
+    : null
+
+  const clubUrl = directEspnUrl ?? getClubLogoUrl(team)
   const flagUrl = clubUrl ? '' : getTeamFlagUrl(team, cdnSize)
   const url = clubUrl || flagUrl
   const isClub = !!clubUrl
