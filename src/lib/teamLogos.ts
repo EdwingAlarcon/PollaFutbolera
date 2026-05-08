@@ -115,6 +115,7 @@ const CLUB_ESPN_IDS: Record<string, number> = {
   // ── Serie A ──────────────────────────────────────────────────────
   'Cagliari': 2925,
   'Como': 2572,
+  'Cremonese': 4050,
   'Empoli': 2574,
   'Fiorentina': 109,
   'Genoa': 3263,
@@ -123,6 +124,8 @@ const CLUB_ESPN_IDS: Record<string, number> = {
   'Monza': 4007,
   'Napoli': 114,
   'Parma': 115,
+  'Pisa': 3956,
+  'Sassuolo': 3997,
   'Torino': 239,
   'Udinese': 118,
   'Venezia': 17530,
