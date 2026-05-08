@@ -78,6 +78,8 @@ export default function AdminMatchesPage() {
   const [addingMatch, setAddingMatch] = useState(false)
   const [addError, setAddError] = useState<string | null>(null)
   const [selectedTournament, setSelectedTournament] = useState('world-cup-2026')
+  const [importing, setImporting] = useState(false)
+  const [importResult, setImportResult] = useState<{ inserted: number; total: number; message?: string } | null>(null)
 
   useEffect(() => {
     checkAccess()
@@ -149,6 +151,31 @@ export default function AdminMatchesPage() {
           ? { ...m, home_score: homeScore, away_score: awayScore, status }
           : m
       ))
+    }
+  }
+
+  const handleImport = async () => {
+    setImporting(true)
+    setImportResult(null)
+    setAddError(null)
+    try {
+      const { data: { session } } = await supabase.auth.getSession()
+      const res = await fetch('/api/admin/import-matches', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session?.access_token}`,
+        },
+        body: JSON.stringify({ tournamentId: selectedTournament }),
+      })
+      const result = await res.json()
+      if (!res.ok) throw new Error(result.error)
+      setImportResult(result)
+      if (result.inserted > 0) await loadMatches(selectedTournament)
+    } catch (err: any) {
+      setAddError(err.message)
+    } finally {
+      setImporting(false)
     }
   }
 
@@ -339,23 +366,55 @@ export default function AdminMatchesPage() {
         )}
 
         {/* Selector de torneo */}
-        <div className="mb-6 flex flex-col sm:flex-row sm:items-center gap-3">
-          <label className="text-sm font-bold text-gray-400 whitespace-nowrap">⚽ Torneo activo:</label>
-          <select
-            value={selectedTournament}
-            onChange={e => {
-              setSelectedTournament(e.target.value)
-              setFilter('all')
-              setSearch('')
-              setShowAddForm(false)
-              loadMatches(e.target.value)
-            }}
-            className="flex-1 bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-green-500"
-          >
-            {TOURNAMENTS.map(t => (
-              <option key={t.id} value={t.id}>{t.label}</option>
-            ))}
-          </select>
+        <div className="mb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+            <label className="text-sm font-bold text-gray-400 whitespace-nowrap">⚽ Torneo activo:</label>
+            <select
+              value={selectedTournament}
+              onChange={e => {
+                setSelectedTournament(e.target.value)
+                setFilter('all')
+                setSearch('')
+                setShowAddForm(false)
+                setImportResult(null)
+                loadMatches(e.target.value)
+              }}
+              className="flex-1 bg-gray-800 border border-gray-600 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-green-500"
+            >
+              {TOURNAMENTS.map(t => (
+                <option key={t.id} value={t.id}>{t.label}</option>
+              ))}
+            </select>
+            <button
+              onClick={handleImport}
+              disabled={importing || selectedTournament === 'otro'}
+              title={selectedTournament === 'otro' ? 'Importación no disponible para torneos personalizados' : 'Importar partidos desde ESPN API'}
+              className="flex items-center gap-2 bg-indigo-700 hover:bg-indigo-600 disabled:bg-gray-700 disabled:text-gray-500 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition whitespace-nowrap"
+            >
+              {importing ? (
+                <><span className="animate-spin">⏳</span> Importando...</>
+              ) : (
+                <>📥 Importar ESPN</>
+              )}
+            </button>
+          </div>
+          {importResult && (
+            <div className={`mt-2 text-sm rounded-xl px-4 py-2 border ${
+              importResult.inserted > 0
+                ? 'bg-green-900/30 border-green-700/50 text-green-300'
+                : 'bg-gray-800 border-gray-700 text-gray-400'
+            }`}>
+              {importResult.inserted > 0
+                ? `✅ ${importResult.inserted} partidos nuevos importados (de ${importResult.total} encontrados en ESPN)`
+                : `ℹ️ ${importResult.message ?? `0 partidos nuevos (${importResult.total} ya existían)`}`
+              }
+            </div>
+          )}
+          {addError && !showAddForm && (
+            <div className="mt-2 text-sm text-red-400 bg-red-900/20 border border-red-700/30 rounded-xl px-4 py-2">
+              ❌ {addError}
+            </div>
+          )}
         </div>
 
         {/* Stats */}
