@@ -73,7 +73,9 @@ const CLUB_ESPN_IDS: Record<string, number> = {
   'Qarabag': 10414,
   'Rangers': 257,
   'Midtjylland': 572,
+  'Rigas FS': 12030,
   'Sevilla': 243,
+  'Shamrock Rovers': 2564,
   'Villarreal': 102,
   'Nice': 2502,
   'Ludogorets': 13018,
@@ -103,6 +105,7 @@ const CLUB_ESPN_IDS: Record<string, number> = {
   'Mallorca': 84,
   'Osasuna': 97,
   'Rayo Vallecano': 101,
+  'Valencia': 94,
   'Valladolid': 95,
   'Alavés': 96,
 
@@ -167,6 +170,8 @@ const CLUB_ESPN_IDS: Record<string, number> = {
   'Toluca': 223,
   'Pumas UNAM': 233,
   'León': 228,
+  'Dorados': 3432,
+  'Mineros de Zacatecas': 17514,
 
   // ── Liga BetPlay ─────────────────────────────────────────────────
   'Atlético Nacional': 5264,
@@ -275,12 +280,14 @@ const CLUB_ESPN_IDS: Record<string, number> = {
   'Guaraní': 7385,
   // Ecuador
   'Barcelona SC': 2686,
+  'El Nacional': 882,
   'Liga de Quito': 4816,
   'Independiente del Valle': 17086,
   'Aucas': 6017,
   // Bolivia
   'Bolívar': 2681,
   'Always Ready': 19425,
+  'Wilstermann': 6054,
   // Perú
   'Universitario': 2685,
   'Alianza Lima': 2680,
