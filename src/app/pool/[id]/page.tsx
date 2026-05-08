@@ -36,6 +36,9 @@ export default function PoolDetailPage() {
   const [activeTab, setActiveTab] = useState<Tab>('predictions')
   const [copied, setCopied] = useState(false)
   const [showTc, setShowTc] = useState(false)
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [deleting, setDeleting] = useState(false)
+  const [deleteError, setDeleteError] = useState<string | null>(null)
 
   useEffect(() => {
     loadData()
@@ -129,6 +132,21 @@ export default function PoolDetailPage() {
     } catch (error) {
       console.error('Error loading pool:', error)
       setLoading(false)
+    }
+  }
+
+  const handleDeletePool = async () => {
+    setDeleting(true)
+    setDeleteError(null)
+    const { error } = await supabase
+      .from('pools')
+      .delete()
+      .eq('id', poolId)
+    if (error) {
+      setDeleteError(error.message)
+      setDeleting(false)
+    } else {
+      router.push('/dashboard')
     }
   }
 
@@ -772,6 +790,49 @@ export default function PoolDetailPage() {
                 ))}
               </div>
             </div>
+
+            {/* ── Zona peligrosa: solo visible para el admin de la polla ── */}
+            {user?.id === pool.admin_id && (
+              <div className="bg-gray-900 rounded-2xl border border-red-800/40 p-6">
+                <h2 className="text-lg font-bold text-red-400 mb-1">⚠️ Zona de Peligro</h2>
+                <p className="text-gray-500 text-xs mb-4">Estas acciones son irreversibles. Solo el administrador de la polla puede ejecutarlas.</p>
+
+                {!showDeleteConfirm ? (
+                  <button
+                    onClick={() => { setShowDeleteConfirm(true); setDeleteError(null) }}
+                    className="bg-red-900/40 hover:bg-red-900/70 border border-red-700/50 text-red-300 font-bold px-5 py-2.5 rounded-xl text-sm transition"
+                  >
+                    🗑️ Eliminar esta polla
+                  </button>
+                ) : (
+                  <div className="bg-red-900/20 border border-red-700/50 rounded-xl p-4 space-y-3">
+                    <p className="text-red-300 font-bold text-sm">¿Estás seguro que deseas eliminar <span className="text-white">"{pool.name}"</span>?</p>
+                    <p className="text-red-400/70 text-xs leading-relaxed">
+                      Se eliminarán permanentemente: la polla, todos los pronósticos de los participantes y el historial de puntos. Esta acción <strong className="text-red-300">no se puede deshacer</strong>.
+                    </p>
+                    {deleteError && (
+                      <p className="text-red-400 text-xs bg-red-950/50 border border-red-800 rounded-lg px-3 py-2">{deleteError}</p>
+                    )}
+                    <div className="flex gap-3">
+                      <button
+                        onClick={() => { setShowDeleteConfirm(false); setDeleteError(null) }}
+                        disabled={deleting}
+                        className="flex-1 bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 font-bold py-2.5 rounded-xl text-sm transition"
+                      >
+                        Cancelar
+                      </button>
+                      <button
+                        onClick={handleDeletePool}
+                        disabled={deleting}
+                        className="flex-1 bg-red-700 hover:bg-red-600 disabled:bg-gray-700 disabled:cursor-not-allowed text-white font-black py-2.5 rounded-xl text-sm transition"
+                      >
+                        {deleting ? '⏳ Eliminando...' : '🗑️ Sí, eliminar'}
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
       </div>
