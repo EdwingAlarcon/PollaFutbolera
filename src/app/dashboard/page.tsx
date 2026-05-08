@@ -15,6 +15,9 @@ export default function DashboardPage() {
   const [pools, setPools] = useState<Pool[]>([])
   const [rankings, setRankings] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const [editingPool, setEditingPool] = useState<Pool | null>(null)
+  const [editName, setEditName] = useState('')
+  const [saving, setSaving] = useState(false)
 
   useEffect(() => {
     checkUser()
@@ -92,6 +95,32 @@ export default function DashboardPage() {
     router.push('/')
   }
 
+  const handleDeletePool = async (pool: Pool) => {
+    if (!confirm(`¿Seguro que deseas eliminar la polla "${pool.name}"? Esta acción no se puede deshacer.`)) return
+    const { error } = await supabase.from('pools').delete().eq('id', pool.id)
+    if (error) {
+      alert('Error al eliminar: ' + error.message)
+    } else {
+      setPools(prev => prev.filter(p => p.id !== pool.id))
+    }
+  }
+
+  const handleEditSave = async () => {
+    if (!editingPool || !editName.trim()) return
+    setSaving(true)
+    const { error } = await supabase
+      .from('pools')
+      .update({ name: editName.trim() })
+      .eq('id', editingPool.id)
+    setSaving(false)
+    if (error) {
+      alert('Error al guardar: ' + error.message)
+    } else {
+      setPools(prev => prev.map(p => p.id === editingPool.id ? { ...p, name: editName.trim() } : p))
+      setEditingPool(null)
+    }
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-950 flex items-center justify-center">
@@ -103,8 +132,42 @@ export default function DashboardPage() {
     )
   }
 
+  const isAdmin = ADMIN_EMAILS.includes(authEmail)
+
   return (
     <div className="min-h-screen bg-gray-950 text-white">
+      {/* Edit Modal */}
+      {editingPool && (
+        <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center px-4" onClick={() => setEditingPool(null)}>
+          <div className="bg-gray-900 border border-gray-700 rounded-2xl p-6 w-full max-w-md shadow-2xl" onClick={e => e.stopPropagation()}>
+            <h2 className="text-lg font-black text-white mb-4">✏️ Editar Polla</h2>
+            <label className="block text-xs text-gray-400 mb-1 uppercase tracking-wider">Nombre</label>
+            <input
+              type="text"
+              value={editName}
+              onChange={e => setEditName(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && handleEditSave()}
+              className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-green-500 mb-5"
+              autoFocus
+            />
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={() => setEditingPool(null)}
+                className="text-sm text-gray-400 hover:text-white transition px-4 py-2"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleEditSave}
+                disabled={saving || !editName.trim()}
+                className="bg-green-600 hover:bg-green-500 disabled:opacity-50 text-white font-bold py-2 px-5 rounded-xl text-sm transition"
+              >
+                {saving ? 'Guardando...' : 'Guardar'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {/* Nav */}
       <nav className="bg-gray-900 border-b border-gray-800 sticky top-0 z-10">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -200,19 +263,37 @@ export default function DashboardPage() {
                         <span className="text-xs text-gray-500">Pts: <span className="text-green-400 font-black">{myRanking?.total_points || 0}</span></span>
                       </div>
                     </div>
-                    <Link
-                      href={`/pool/${pool.id}`}
-                      className="flex-shrink-0 bg-green-600 hover:bg-green-500 text-white font-bold py-2.5 px-4 rounded-xl text-sm transition"
-                    >
-                      📋 Ver
-                    </Link>
+                    <div className="flex flex-col gap-1.5 flex-shrink-0">
+                      <Link
+                        href={`/pool/${pool.id}`}
+                        className="bg-green-600 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-xl text-sm transition text-center"
+                      >
+                        📋 Ver
+                      </Link>
+                      {isAdmin && (
+                        <>
+                          <button
+                            onClick={() => { setEditingPool(pool); setEditName(pool.name) }}
+                            className="bg-blue-700 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-xl text-sm transition"
+                          >
+                            ✏️ Editar
+                          </button>
+                          <button
+                            onClick={() => handleDeletePool(pool)}
+                            className="bg-red-800 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-xl text-sm transition"
+                          >
+                            🗑️ Eliminar
+                          </button>
+                        </>
+                      )}
+                    </div>
                   </div>
                 )
               })}
             </div>
             {/* Desktop table (hidden on mobile) */}
             <div className="hidden md:block">
-              <div className="grid grid-cols-[1fr_180px_80px_80px_100px] gap-2 px-6 py-3 bg-gray-800/60 text-xs font-bold text-gray-500 uppercase tracking-wider border-b border-gray-700">
+              <div className={`grid ${isAdmin ? 'grid-cols-[1fr_180px_80px_80px_180px]' : 'grid-cols-[1fr_180px_80px_80px_100px]'} gap-2 px-6 py-3 bg-gray-800/60 text-xs font-bold text-gray-500 uppercase tracking-wider border-b border-gray-700`}>
                 <div>Nombre</div>
                 <div>Torneo</div>
                 <div className="text-center">Pos</div>
@@ -225,7 +306,7 @@ export default function DashboardPage() {
                   return (
                     <div
                       key={pool.id}
-                      className="grid grid-cols-[1fr_180px_80px_80px_100px] gap-2 px-6 py-4 items-center hover:bg-gray-800/30 transition"
+                      className={`grid ${isAdmin ? 'grid-cols-[1fr_180px_80px_80px_180px]' : 'grid-cols-[1fr_180px_80px_80px_100px]'} gap-2 px-6 py-4 items-center hover:bg-gray-800/30 transition`}
                     >
                       <div>
                         <div className="font-bold text-white">{pool.name}</div>
@@ -244,7 +325,7 @@ export default function DashboardPage() {
                           {myRanking?.total_points || 0}
                         </span>
                       </div>
-                      <div className="flex items-center justify-center gap-2">
+                      <div className="flex items-center justify-center gap-1.5">
                         <Link
                           href={`/pool/${pool.id}`}
                           className="bg-green-600 hover:bg-green-500 text-white font-bold py-2 px-3 rounded-lg text-xs transition"
@@ -252,6 +333,24 @@ export default function DashboardPage() {
                         >
                           📋 Ver
                         </Link>
+                        {isAdmin && (
+                          <>
+                            <button
+                              onClick={() => { setEditingPool(pool); setEditName(pool.name) }}
+                              className="bg-blue-700 hover:bg-blue-600 text-white font-bold py-2 px-3 rounded-lg text-xs transition"
+                              title="Editar polla"
+                            >
+                              ✏️
+                            </button>
+                            <button
+                              onClick={() => handleDeletePool(pool)}
+                              className="bg-red-800 hover:bg-red-700 text-white font-bold py-2 px-3 rounded-lg text-xs transition"
+                              title="Eliminar polla"
+                            >
+                              🗑️
+                            </button>
+                          </>
+                        )}
                       </div>
                     </div>
                   )
