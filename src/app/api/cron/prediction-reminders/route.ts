@@ -3,8 +3,12 @@ import { createClient } from '@supabase/supabase-js'
 import { Resend } from 'resend'
 
 // ──────────────────────────────────────────────────────────────────────────────
-// CRON JOB: Envía recordatorios de pronósticos 60-90 min antes de cada partido
-// Schedule: cada hora  →  vercel.json: "schedule": "0 * * * *"
+// CRON JOB: Envía recordatorios de pronósticos para partidos del día
+// Schedule: diariamente a las 12:00 UTC  →  vercel.json: "schedule": "0 12 * * *"
+//
+// ⚠️  Para recordatorios más frecuentes (ej: cada hora), usa cron-job.org
+//    (gratuito) apuntando a: https://polla-futbolera-five.vercel.app/api/cron/prediction-reminders
+//    con el header: Authorization: Bearer <CRON_SECRET>
 //
 // Variables de entorno requeridas en Vercel:
 //   SUPABASE_SERVICE_ROLE_KEY  →  Supabase → Project Settings → API → service_role secret
@@ -34,10 +38,10 @@ export async function GET(req: NextRequest) {
   const supabase = getSupabaseAdmin()
   const now = new Date()
 
-  // 2. Buscar partidos que empiecen en la ventana 60-90 min desde ahora
-  //    (cron cada 60 min → ventana de 30 min para evitar duplicados)
-  const windowStart = new Date(now.getTime() + 60 * 60 * 1000)  // +60 min
-  const windowEnd   = new Date(now.getTime() + 90 * 60 * 1000)  // +90 min
+  // 2. Buscar partidos que empiecen en las próximas 12 horas sin recordatorio
+  //    (cron diario a mediodía UTC cubre los partidos de la tarde/noche del mismo día)
+  const windowStart = now
+  const windowEnd   = new Date(now.getTime() + 12 * 60 * 60 * 1000)  // +12 horas
 
   const { data: upcomingMatches, error: matchError } = await supabase
     .from('matches')
