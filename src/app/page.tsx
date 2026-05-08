@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import PFLogo from '@/components/PFLogo'
+import TeamFlag from '@/components/TeamFlag'
 
 // ── Static data ───────────────────────────────────────────────────────────────
 
@@ -439,7 +440,9 @@ export default function Home() {
                   {/* Teams */}
                   <div className="flex items-center justify-between mb-5 py-1">
                     <div className="text-center flex-1">
-                      <div className="text-5xl mb-2">{m.home.flag}</div>
+                      <div className="flex justify-center mb-2">
+                        <TeamFlag team={m.home.name} tournamentId="world-cup-2026" size="lg" />
+                      </div>
                       <p className="text-sm font-black text-white leading-tight">{m.home.name}</p>
                     </div>
                     <div className="text-center px-3 flex-shrink-0">
@@ -453,7 +456,9 @@ export default function Home() {
                       )}
                     </div>
                     <div className="text-center flex-1">
-                      <div className="text-5xl mb-2">{m.away.flag}</div>
+                      <div className="flex justify-center mb-2">
+                        <TeamFlag team={m.away.name} tournamentId="world-cup-2026" size="lg" />
+                      </div>
                       <p className="text-sm font-black text-white leading-tight">{m.away.name}</p>
                     </div>
                   </div>
