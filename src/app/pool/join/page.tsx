@@ -90,80 +90,85 @@ export default function JoinPoolPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
-      <nav className="bg-white shadow-sm border-b">
-        <div className="container mx-auto px-4 py-4">
-          <Link href="/dashboard" className="text-2xl font-bold text-green-600">
-            ← Volver
+    <div className="min-h-screen bg-[#0B1020] text-slate-50 relative overflow-hidden">
+      {/* Background glow */}
+      <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 70% 50% at 50% 30%, rgba(34,197,94,0.07) 0%, transparent 60%)' }} />
+
+      <nav className="relative z-10 border-b border-white/5 bg-[#0B1020]/80 backdrop-blur">
+        <div className="container mx-auto px-4 py-3">
+          <Link href="/dashboard" className="text-green-400 hover:text-green-300 font-semibold text-sm transition">
+            ← Dashboard
           </Link>
         </div>
       </nav>
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="relative z-10 container mx-auto px-4 py-12">
         <div className="max-w-md mx-auto">
-          <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-            Unirse a una Polla
-          </h1>
+          {/* Logo */}
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center gap-2.5 mb-4">
+              <div className="w-9 h-9 rounded-xl bg-green-500 flex items-center justify-center shadow-lg shadow-green-500/40">
+                <span className="text-lg leading-none">⚽</span>
+              </div>
+              <span className="text-lg font-black text-white">Polla<span className="text-green-400">Futbolera</span></span>
+            </div>
+            <h1 className="text-3xl font-black text-white mb-2">Unirse a una Polla</h1>
+            <p className="text-slate-400 text-sm">Ingresa el código de invitación que te compartieron</p>
+          </div>
 
-          <div className="bg-white p-8 rounded-xl shadow-lg">
+          <div className="bg-[#131A2E] border border-white/8 rounded-2xl p-8 shadow-2xl shadow-black/50">
             {error && (
-              <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-6">
+              <div className="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-xl mb-5 text-sm">
                 {error}
               </div>
             )}
 
             {!poolInfo ? (
-              <>
-                <p className="text-gray-600 mb-6 text-center">
-                  Ingresa el código de invitación que te compartieron
-                </p>
-
-                <div className="space-y-4">
-                  <input
-                    type="text"
-                    value={inviteCode}
-                    onChange={(e) => setInviteCode(e.target.value.toUpperCase())}
-                    maxLength={10}
-                    className="w-full px-4 py-3 text-center text-xl font-mono font-bold border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent uppercase bg-white text-gray-900"
-                    placeholder="ABC123"
-                  />
-
-                  <button
-                    onClick={handleVerifyCode}
-                    disabled={loading || !inviteCode}
-                    className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition disabled:opacity-50"
-                  >
-                    {loading ? 'Verificando...' : 'Verificar Código'}
-                  </button>
-                </div>
-              </>
+              <div className="space-y-4">
+                <input
+                  type="text"
+                  value={inviteCode}
+                  onChange={(e) => setInviteCode(e.target.value.toUpperCase())}
+                  maxLength={10}
+                  className="w-full px-4 py-4 text-center text-2xl font-mono font-black bg-white/5 border-2 border-white/10 focus:border-green-500 rounded-xl text-white outline-none uppercase tracking-widest transition"
+                  placeholder="ABC123"
+                />
+                <button
+                  onClick={handleVerifyCode}
+                  disabled={loading || !inviteCode}
+                  className="w-full bg-green-500 hover:bg-green-400 disabled:opacity-50 text-black font-black py-3.5 px-4 rounded-xl transition-all duration-200 shadow-lg shadow-green-500/20 hover:shadow-green-500/40 hover:-translate-y-px"
+                >
+                  {loading ? 'Verificando...' : 'Verificar Código →'}
+                </button>
+              </div>
             ) : (
-              <>
+              <div>
                 <div className="text-center mb-6">
-                  <div className="text-4xl mb-4">🎉</div>
-                  <h2 className="text-xl font-bold text-gray-900 mb-2">
-                    ¡Polla encontrada!
-                  </h2>
+                  <div className="text-5xl mb-3">🎉</div>
+                  <h2 className="text-xl font-black text-white mb-1">¡Polla encontrada!</h2>
+                  <p className="text-slate-400 text-sm">Confirma que quieres unirte</p>
                 </div>
 
-                <div className="bg-gray-50 p-6 rounded-lg mb-6">
-                  <h3 className="font-bold text-lg text-gray-900 mb-2">
-                    {poolInfo.name}
-                  </h3>
-                  <p className="text-sm text-gray-600">
-                    Creada por: {poolInfo.users?.username}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    Torneo: {poolInfo.tournament_id}
-                  </p>
+                <div className="bg-white/5 border border-white/10 rounded-xl p-5 mb-6">
+                  <h3 className="font-black text-lg text-white mb-3">{poolInfo.name}</h3>
+                  <div className="space-y-1.5">
+                    <p className="text-sm text-slate-400">
+                      <span className="text-slate-500">Creada por: </span>
+                      <span className="text-slate-300 font-semibold">{poolInfo.users?.username}</span>
+                    </p>
+                    <p className="text-sm text-slate-400">
+                      <span className="text-slate-500">Torneo: </span>
+                      <span className="text-slate-300 font-semibold">{poolInfo.tournament_id}</span>
+                    </p>
+                  </div>
                 </div>
 
                 <button
                   onClick={handleJoin}
                   disabled={loading}
-                  className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition disabled:opacity-50"
+                  className="w-full bg-green-500 hover:bg-green-400 disabled:opacity-50 text-black font-black py-3.5 px-4 rounded-xl transition-all duration-200 shadow-lg shadow-green-500/20 hover:shadow-green-500/40 mb-3"
                 >
-                  {loading ? 'Uniéndose...' : 'Unirme a esta Polla'}
+                  {loading ? 'Uniéndose...' : 'Unirme a esta Polla →'}
                 </button>
 
                 <button
@@ -172,11 +177,11 @@ export default function JoinPoolPage() {
                     setInviteCode('')
                     setError(null)
                   }}
-                  className="w-full mt-3 text-gray-600 hover:text-gray-800 text-sm"
+                  className="w-full text-slate-500 hover:text-slate-300 text-sm py-2 transition-colors"
                 >
                   Probar otro código
                 </button>
-              </>
+              </div>
             )}
           </div>
         </div>

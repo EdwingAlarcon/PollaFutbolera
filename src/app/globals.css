@@ -2,22 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Forzar modo claro en toda la app */
 body {
-  @apply bg-white text-gray-900;
+  @apply bg-[#0B1020] text-slate-50;
 }
 
-/* Estilos globales para mejorar contraste */
-input,
-select,
-textarea {
-  @apply bg-white text-gray-900;
-}
-
-/* Placeholders más visibles */
+/* Placeholders */
 input::placeholder,
 textarea::placeholder {
-  @apply text-gray-500 opacity-100;
+  @apply text-slate-500 opacity-100;
 }
 
 @layer utilities {
