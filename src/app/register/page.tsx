@@ -14,6 +14,7 @@ export default function RegisterPage() {
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [emailSent, setEmailSent] = useState(false)
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -21,7 +22,8 @@ export default function RegisterPage() {
     setError(null)
 
     try {
-      // 1. Crear cuenta en Supabase Auth
+      // Crear cuenta en Supabase Auth
+      // El perfil en public.users se crea automáticamente via trigger (SECURITY DEFINER)
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
@@ -29,6 +31,7 @@ export default function RegisterPage() {
           data: {
             username: formData.username,
           },
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
         },
       })
 
@@ -38,41 +41,30 @@ export default function RegisterPage() {
         throw new Error('No se pudo crear el usuario')
       }
 
-      // 2. Crear perfil en la tabla users
-      const { error: profileError } = await supabase.from('users').insert({
-        id: authData.user.id,
-        username: formData.username,
-        email: formData.email,
-      })
-
-      if (profileError) throw profileError
-
-      // 3. Verificar si hay invitación pendiente
-      const pendingInvite = localStorage.getItem('pendingInvite')
-
-      if (pendingInvite) {
-        // Obtener la polla
-        const { data: pool } = await supabase
-          .from('pools')
-          .select('id')
-          .eq('invite_code', pendingInvite)
-          .single()
-
-        if (pool) {
-          // Unir automáticamente
-          await supabase.from('pool_members').insert({
-            pool_id: pool.id,
-            user_id: authData.user.id,
-          })
-
-          localStorage.removeItem('pendingInvite')
-          router.push(`/pool/${pool.id}`)
-          return
+      // Si la sesión viene de inmediato, la verificación está desactivada
+      if (authData.session) {
+        const pendingInvite = localStorage.getItem('pendingInvite')
+        if (pendingInvite) {
+          const { data: pool } = await supabase
+            .from('pools')
+            .select('id')
+            .eq('invite_code', pendingInvite)
+            .single()
+          if (pool) {
+            await supabase.from('pool_members').insert({
+              pool_id: pool.id,
+              user_id: authData.user.id,
+            })
+            localStorage.removeItem('pendingInvite')
+            router.push(`/pool/${pool.id}`)
+            return
+          }
         }
+        router.push('/dashboard')
+      } else {
+        // Verificación de email activa — mostrar pantalla de confirmación
+        setEmailSent(true)
       }
-
-      // Si no hay invitación, ir al dashboard
-      router.push('/dashboard')
     } catch (err: any) {
       setError(err.message || 'Error al registrarse')
     } finally {
@@ -80,7 +72,31 @@ export default function RegisterPage() {
     }
   }
 
-
+  if (emailSent) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-green-50 to-white flex items-center justify-center px-4">
+        <div className="max-w-md w-full text-center">
+          <div className="bg-white p-8 rounded-xl shadow-lg">
+            <div className="text-6xl mb-4">📧</div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">Revisa tu email</h2>
+            <p className="text-gray-600 mb-2">
+              Te enviamos un enlace de verificación a:
+            </p>
+            <p className="font-bold text-green-600 mb-6">{formData.email}</p>
+            <p className="text-sm text-gray-500 mb-6">
+              Haz clic en el enlace del email para activar tu cuenta. Puede tardar unos minutos.
+            </p>
+            <Link
+              href="/login"
+              className="block w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition text-center"
+            >
+              Ir al inicio de sesión
+            </Link>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white flex items-center justify-center px-4">
@@ -98,8 +114,6 @@ export default function RegisterPage() {
               {error}
             </div>
           )}
-
-
 
           <form onSubmit={handleRegister} className="space-y-4">
             <div>
