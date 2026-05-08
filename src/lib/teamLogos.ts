@@ -251,6 +251,8 @@ const CLUB_ESPN_IDS: Record<string, number> = {
   'Unión': 20,
   'Argentinos Juniors': 3,
   'Independiente Rivadavia': 9744,
+  'Barracas Central': 10060,
+  'Deportivo Riestra': 17702,
   // Brasil
   'Flamengo': 819,
   'Palmeiras': 2029,
@@ -267,31 +269,48 @@ const CLUB_ESPN_IDS: Record<string, number> = {
   'Vasco da Gama': 3454,
   'Bahia': 9967,
   'RB Bragantino': 6079,
+  'Red Bull Bragantino': 6079,
+  'Santos': 2674,
   'Cuiabá': 17313,
   'Atlético Goianiense': 10357,
+  'Atlético-MG': 7632,
   // Ecuador
   'Barcelona SC': 2686,
   'El Nacional': 882,
   'Liga de Quito': 4816,
   'Independiente del Valle': 17086,
   'Aucas': 6017,
+  'Deportivo Cuenca': 4812,
+  'Libertad (Ecuador)': 21843,
+  'Macará': 18439,
+  'Orense': 20695,
   // Venezuela
   'Caracas FC': 4811,
   'Deportivo Táchira': 4818,
   'Carabobo': 6037,
   'Universidad Central': 10094,
   'Deportivo La Guaira': 17090,
+  'Academia Puerto Cabello': 18995,
+  'Metropolitanos FC': 13481,
+  'Monagas SC': 6041,
   // Bolivia
   'Bolívar': 2681,
   'Always Ready': 19425,
   'Wilstermann': 6054,
   'Nacional Potosí': 10311,
+  'Blooming': 6047,
+  'Guabirá': 9497,
+  'Independiente Petrolero': 20889,
+  'San Antonio Bulo Bulo': 22137,
   // Perú
   'Universitario': 2685,
   'Alianza Lima': 2680,
   'Sporting Cristal': 2673,
   'Melgar': 7312,
   'Cusco FC': 11995,
+  'Alianza Atlético': 5267,
+  'Cienciano del Cusco': 3372,
+  'Deportivo Garcilaso': 21819,
   // Chile
   'Colo-Colo': 2688,
   'Colo Colo': 2688,
@@ -301,6 +320,9 @@ const CLUB_ESPN_IDS: Record<string, number> = {
   'Palestino': 4422,
   "O'Higgins": 6072,
   'Coquimbo Unido': 8186,
+  'Audax Italiano': 4138,
+  'Cobresal': 4133,
+  'Deportivo Recoleta': 22517,
   // Paraguay
   'Olimpia': 2675,
   'Cerro Porteño': 2671,
@@ -308,6 +330,8 @@ const CLUB_ESPN_IDS: Record<string, number> = {
   'Guaraní': 7385,
   'Guarani': 7385,
   '2 de Mayo': 6097,
+  'Trinidense': 7466,
+  'Club Olimpia': 2675,
   // Uruguay
   'Peñarol': 2683,
   'Nacional': 2684,
@@ -315,6 +339,9 @@ const CLUB_ESPN_IDS: Record<string, number> = {
   // Note: 'Liverpool' (ID 5492, Uruguay) conflicts with Premier League Liverpool (ID 364).
   // Premier League Liverpool takes priority. Uruguayan Liverpool shows initials fallback.
   'Juventud': 8416,
+  'Boston River': 9999,
+  'Montevideo City Torque': 19002,
+  'Racing (Montevideo)': 9903,
   // Brazil (Libertadores-specific teams)
   'Mirassol': 9169,
 
@@ -398,7 +425,6 @@ const CLUB_ESPN_IDS: Record<string, number> = {
   'Paris FC': 6851,
   // Liga MX (ESPN names)
   'Guadalajara': 219,
-  'Santos': 225,
   'Tigres UANL': 232,
   'FC Juarez': 17851,
   'Mazatlán FC': 20702,
