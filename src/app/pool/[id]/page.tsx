@@ -13,6 +13,8 @@ export default function PoolDetailPage() {
   const [pool, setPool] = useState<any>(null)
   const [members, setMembers] = useState<any[]>([])
   const [matches, setMatches] = useState<any[]>([])
+  const [ranking, setRanking] = useState<any[]>([])
+  const [predictions, setPredictions] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [user, setUser] = useState<any>(null)
 
@@ -71,6 +73,28 @@ export default function PoolDetailPage() {
 
       if (matchesData) {
         setMatches(matchesData)
+      }
+
+      // Obtener ranking
+      const { data: rankingData } = await supabase
+        .from('pool_rankings')
+        .select('*')
+        .eq('pool_id', poolId)
+        .order('total_points', { ascending: false })
+
+      if (rankingData) {
+        setRanking(rankingData)
+      }
+
+      // Obtener predicciones del usuario actual
+      const { data: predictionsData } = await supabase
+        .from('predictions')
+        .select('*')
+        .eq('user_id', authUser.id)
+        .eq('pool_id', poolId)
+
+      if (predictionsData) {
+        setPredictions(predictionsData)
       }
 
       setLoading(false)
@@ -160,6 +184,63 @@ export default function PoolDetailPage() {
             </div>
           </div>
 
+          {/* Ranking */}
+          <div className="bg-white p-6 rounded-xl shadow-lg mb-8">
+            <h2 className="text-xl font-bold text-gray-900 mb-4">
+              🏆 Tabla de Posiciones
+            </h2>
+            {ranking.length === 0 ? (
+              <p className="text-gray-600 text-center py-8">
+                El ranking aparecerá cuando los participantes hagan predicciones.
+              </p>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b-2 border-gray-200">
+                      <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Pos</th>
+                      <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Jugador</th>
+                      <th className="px-4 py-3 text-center text-sm font-semibold text-gray-700">Predicciones</th>
+                      <th className="px-4 py-3 text-center text-sm font-semibold text-gray-700">Puntos</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {ranking.map((entry, index) => (
+                      <tr
+                        key={entry.user_id}
+                        className={`border-b border-gray-100 ${
+                          entry.user_id === user?.id ? 'bg-green-50' : ''
+                        }`}
+                      >
+                        <td className="px-4 py-3">
+                          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 text-gray-900 font-bold text-sm">
+                            {index < 3 ? ['🥇', '🥈', '🥉'][index] : index + 1}
+                          </div>
+                        </td>
+                        <td className="px-4 py-3">
+                          <div className="font-semibold text-gray-900">
+                            {entry.username}
+                            {entry.user_id === user?.id && (
+                              <span className="ml-2 text-xs text-green-600">(Tú)</span>
+                            )}
+                          </div>
+                        </td>
+                        <td className="px-4 py-3 text-center text-gray-700">
+                          {entry.predictions_count || 0}
+                        </td>
+                        <td className="px-4 py-3 text-center">
+                          <span className="font-bold text-lg text-green-600">
+                            {entry.total_points || 0}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+
           <div className="grid md:grid-cols-3 gap-8">
             {/* Miembros */}
             <div className="md:col-span-1">
@@ -199,58 +280,87 @@ export default function PoolDetailPage() {
                   </p>
                 ) : (
                   <div className="space-y-4">
-                    {matches.map((match) => (
-                      <div
-                        key={match.id}
-                        className="p-4 border border-gray-200 rounded-lg hover:border-green-300 transition"
-                      >
-                        <div className="flex justify-between items-center mb-2">
-                          <div className="text-sm text-gray-600">
-                            {new Date(match.match_date).toLocaleDateString('es-ES', {
-                              day: '2-digit',
-                              month: 'short',
-                              hour: '2-digit',
-                              minute: '2-digit',
-                            })}
+                    {matches.map((match) => {
+                      const prediction = predictions.find(p => p.match_id === match.id)
+                      
+                      return (
+                        <div
+                          key={match.id}
+                          className="p-4 border border-gray-200 rounded-lg hover:border-green-300 transition"
+                        >
+                          <div className="flex justify-between items-center mb-2">
+                            <div className="text-sm text-gray-600">
+                              {new Date(match.match_date).toLocaleDateString('es-ES', {
+                                day: '2-digit',
+                                month: 'short',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              })}
+                            </div>
+                            <div className="text-sm">
+                              <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                                match.status === 'finished'
+                                  ? 'bg-gray-200 text-gray-700'
+                                  : match.status === 'live'
+                                  ? 'bg-red-100 text-red-700'
+                                  : 'bg-blue-100 text-blue-700'
+                              }`}>
+                                {match.status === 'finished' ? 'Finalizado' : match.status === 'live' ? 'En vivo' : 'Programado'}
+                              </span>
+                            </div>
                           </div>
-                          <div className="text-sm">
-                            <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                              match.status === 'finished'
-                                ? 'bg-gray-200 text-gray-700'
-                                : match.status === 'live'
-                                ? 'bg-red-100 text-red-700'
-                                : 'bg-blue-100 text-blue-700'
-                            }`}>
-                              {match.status === 'finished' ? 'Finalizado' : match.status === 'live' ? 'En vivo' : 'Programado'}
-                            </span>
+                          <div className="flex items-center justify-between">
+                            <div className="flex-1 text-right font-semibold text-gray-900">
+                              {match.home_team}
+                            </div>
+                            <div className="px-6 text-center">
+                              {match.status === 'finished' ? (
+                                <div className="text-2xl font-bold text-gray-900">
+                                  {match.home_score} - {match.away_score}
+                                </div>
+                              ) : (
+                                <div className="text-gray-400 text-sm">vs</div>
+                              )}
+                            </div>
+                            <div className="flex-1 font-semibold text-gray-900">
+                              {match.away_team}
+                            </div>
                           </div>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <div className="flex-1 text-right font-semibold text-gray-900">
-                            {match.home_team}
-                          </div>
-                          <div className="px-6 text-center">
-                            {match.status === 'finished' ? (
-                              <div className="text-2xl font-bold text-gray-900">
-                                {match.home_score} - {match.away_score}
+                          
+                          {/* Mostrar predicción del usuario */}
+                          {prediction && (
+                            <div className="mt-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                              <div className="flex items-center justify-between">
+                                <span className="text-sm text-blue-900 font-semibold">
+                                  Tu predicción:
+                                </span>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-lg font-bold text-blue-900">
+                                    {prediction.predicted_home_score} - {prediction.predicted_away_score}
+                                  </span>
+                                  {match.status === 'finished' && prediction.points_earned !== null && (
+                                    <span className="ml-2 px-2 py-1 bg-green-600 text-white rounded-full text-xs font-bold">
+                                      +{prediction.points_earned} pts
+                                    </span>
+                                  )}
+                                </div>
                               </div>
-                            ) : (
-                              <div className="text-gray-400 text-sm">vs</div>
-                            )}
-                          </div>
-                          <div className="flex-1 font-semibold text-gray-900">
-                            {match.away_team}
-                          </div>
+                            </div>
+                          )}
+
+                          {match.status === 'scheduled' && (
+                            <div className="mt-3">
+                              <Link
+                                href={`/pool/${poolId}/predict/${match.id}`}
+                                className="block w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg text-sm transition text-center"
+                              >
+                                {prediction ? 'Editar predicción' : 'Hacer predicción'}
+                              </Link>
+                            </div>
+                          )}
                         </div>
-                        {match.status === 'scheduled' && (
-                          <div className="mt-3">
-                            <button className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg text-sm transition">
-                              Hacer predicción
-                            </button>
-                          </div>
-                        )}
-                      </div>
-                    ))}
+                      )
+                    })}
                   </div>
                 )}
               </div>
