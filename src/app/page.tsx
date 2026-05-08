@@ -145,13 +145,19 @@ export default function Home() {
 
           {/* Nav links */}
           <div className="hidden lg:flex items-center gap-8 text-sm font-medium text-slate-400">
-            {['Inicio', 'Rankings', 'Jornadas', 'Cómo funciona', 'Ligas'].map(l => (
+            {([
+              { label: 'Inicio',        href: '#hero'         },
+              { label: 'Rankings',      href: '#rankings'     },
+              { label: 'Jornadas',      href: '#jornadas'     },
+              { label: 'Cómo funciona', href: '#como-funciona' },
+              { label: 'Ligas',         href: '#ligas'        },
+            ] as const).map(({ label, href }) => (
               <a
-                key={l}
-                href="#"
+                key={label}
+                href={href}
                 className="hover:text-green-400 transition-colors duration-200 hover:-translate-y-px"
               >
-                {l}
+                {label}
               </a>
             ))}
           </div>
@@ -175,7 +181,7 @@ export default function Home() {
       </nav>
 
       {/* ── HERO ────────────────────────────────────────────────────────────── */}
-      <section className="relative min-h-screen flex items-center pt-24 pb-16 overflow-hidden">
+      <section id="hero" className="relative min-h-screen flex items-center pt-24 pb-16 overflow-hidden">
         {/* Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#0B1020] via-[#0d1628] to-[#0B1020]" />
         <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse 80% 60% at 20% 50%, rgba(34,197,94,0.07) 0%, transparent 60%)' }} />
@@ -355,7 +361,7 @@ export default function Home() {
       </section>
 
       {/* ── HOW IT WORKS ────────────────────────────────────────────────────── */}
-      <section className="py-24">
+      <section id="como-funciona" className="py-24">
         <div className="container mx-auto px-5 max-w-7xl">
           <div className="text-center mb-16">
             <p className="text-green-400 text-xs font-bold uppercase tracking-widest mb-4">Simple y directo</p>
@@ -380,7 +386,7 @@ export default function Home() {
       </section>
 
       {/* ── FEATURED MATCHES ────────────────────────────────────────────────── */}
-      <section className="py-24 bg-[#0d1424] relative">
+      <section id="jornadas" className="py-24 bg-[#0d1424] relative">
         <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse 60% 40% at 50% 0%, rgba(34,197,94,0.05) 0%, transparent 60%)' }} />
         <div className="container mx-auto px-5 max-w-7xl relative z-10">
           <div className="flex items-end justify-between mb-12">
@@ -460,7 +466,7 @@ export default function Home() {
       </section>
 
       {/* ── LEADERBOARD ─────────────────────────────────────────────────────── */}
-      <section className="py-24">
+      <section id="rankings" className="py-24">
         <div className="container mx-auto px-5 max-w-7xl">
           <div className="text-center mb-16">
             <p className="text-amber-400 text-xs font-bold uppercase tracking-widest mb-4">Competencia real</p>
@@ -530,7 +536,7 @@ export default function Home() {
       </section>
 
       {/* ── FEATURES ────────────────────────────────────────────────────────── */}
-      <section className="py-24 bg-[#0d1424]">
+      <section id="ligas" className="py-24 bg-[#0d1424]">
         <div className="container mx-auto px-5 max-w-7xl">
           <div className="text-center mb-16">
             <p className="text-green-400 text-xs font-bold uppercase tracking-widest mb-4">Todo incluido</p>
