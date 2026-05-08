@@ -142,19 +142,68 @@ function getSupabaseAdmin() {
   )
 }
 
-export async function POST(request: NextRequest) {
+async function verifyAdmin(request: NextRequest) {
   const supabaseAdmin = getSupabaseAdmin()
-
-  // Verificar que el request viene de un admin autenticado
   const authHeader = request.headers.get('authorization')
-  if (!authHeader?.startsWith('Bearer ')) {
-    return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
-  }
+  if (!authHeader?.startsWith('Bearer ')) return { error: 'No autorizado', supabaseAdmin: null, user: null }
   const token = authHeader.slice(7)
   const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token)
-  if (authError || !user || !ADMIN_EMAILS.includes(user.email ?? '')) {
-    return NextResponse.json({ error: 'Acceso denegado' }, { status: 403 })
+  if (authError || !user || !ADMIN_EMAILS.includes(user.email ?? '')) return { error: 'Acceso denegado', supabaseAdmin: null, user: null }
+  return { error: null, supabaseAdmin, user }
+}
+
+// DELETE /api/admin/import-matches  — removes duplicate matches for a tournament,
+// keeping the copy that has the most data (scores > external_api_id > oldest created_at).
+export async function DELETE(request: NextRequest) {
+  const { error, supabaseAdmin } = await verifyAdmin(request)
+  if (error || !supabaseAdmin) return NextResponse.json({ error }, { status: 401 })
+
+  const { tournamentId } = (await request.json()) as { tournamentId: string }
+
+  // Fetch all matches for this tournament, ordered so the "best" row comes first
+  const { data: all, error: fetchErr } = await supabaseAdmin
+    .from('matches')
+    .select('id, home_team, away_team, match_date, home_score, away_score, external_api_id, created_at')
+    .eq('tournament_id', tournamentId)
+    .order('created_at', { ascending: true })
+
+  if (fetchErr || !all) return NextResponse.json({ error: fetchErr?.message ?? 'fetch failed' }, { status: 500 })
+
+  // Group by normalised key: team names + UTC ms
+  const groups = new Map<string, typeof all>()
+  for (const m of all) {
+    const key = `${m.home_team}|${m.away_team}|${new Date(m.match_date).getTime()}`
+    if (!groups.has(key)) groups.set(key, [])
+    groups.get(key)!.push(m)
   }
+
+  // For each group with > 1 row: keep the "best" one, delete the rest
+  const toDelete: string[] = []
+  for (const rows of groups.values()) {
+    if (rows.length <= 1) continue
+    // Score: prefer row with scores > row with external_api_id > fallback to first inserted
+    const scored = rows.map(r => ({
+      r,
+      score: (r.home_score !== null ? 4 : 0) + (r.external_api_id ? 2 : 0),
+    }))
+    scored.sort((a, b) => b.score - a.score || a.r.created_at.localeCompare(b.r.created_at))
+    // Keep first, delete the rest
+    toDelete.push(...scored.slice(1).map(s => s.r.id))
+  }
+
+  if (toDelete.length === 0) {
+    return NextResponse.json({ deleted: 0, message: 'No se encontraron duplicados.' })
+  }
+
+  const { error: delErr } = await supabaseAdmin.from('matches').delete().in('id', toDelete)
+  if (delErr) return NextResponse.json({ error: delErr.message }, { status: 500 })
+
+  return NextResponse.json({ deleted: toDelete.length, groups: groups.size })
+}
+
+export async function POST(request: NextRequest) {
+  const { error, supabaseAdmin } = await verifyAdmin(request)
+  if (error || !supabaseAdmin) return NextResponse.json({ error }, { status: 401 })
 
   const { tournamentId } = (await request.json()) as { tournamentId: string }
   const config = ESPN_CONFIGS[tournamentId]

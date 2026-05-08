@@ -79,7 +79,9 @@ export default function AdminMatchesPage() {
   const [addError, setAddError] = useState<string | null>(null)
   const [selectedTournament, setSelectedTournament] = useState('world-cup-2026')
   const [importing, setImporting] = useState(false)
-  const [importResult, setImportResult] = useState<{ inserted: number; total: number; message?: string } | null>(null)
+  const [importResult, setImportResult] = useState<{ inserted: number; updated?: number; total: number; message?: string } | null>(null)
+  const [cleaning, setCleaning] = useState(false)
+  const [cleanResult, setCleanResult] = useState<{ deleted: number; message?: string } | null>(null)
 
   useEffect(() => {
     checkAccess()
@@ -157,6 +159,7 @@ export default function AdminMatchesPage() {
   const handleImport = async () => {
     setImporting(true)
     setImportResult(null)
+    setCleanResult(null)
     setAddError(null)
     try {
       const { data: { session } } = await supabase.auth.getSession()
@@ -171,11 +174,38 @@ export default function AdminMatchesPage() {
       const result = await res.json()
       if (!res.ok) throw new Error(result.error)
       setImportResult(result)
-      if (result.inserted > 0) await loadMatches(selectedTournament)
+      if (result.inserted > 0 || result.updated > 0) await loadMatches(selectedTournament)
     } catch (err: any) {
       setAddError(err.message)
     } finally {
       setImporting(false)
+    }
+  }
+
+  const handleCleanDuplicates = async () => {
+    if (!confirm(`¿Eliminar partidos duplicados de "${TOURNAMENTS.find(t => t.id === selectedTournament)?.label ?? selectedTournament}"? Se conservará el partido con más datos y se borrarán las copias.`)) return
+    setCleaning(true)
+    setCleanResult(null)
+    setImportResult(null)
+    setAddError(null)
+    try {
+      const { data: { session } } = await supabase.auth.getSession()
+      const res = await fetch('/api/admin/import-matches', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session?.access_token}`,
+        },
+        body: JSON.stringify({ tournamentId: selectedTournament }),
+      })
+      const result = await res.json()
+      if (!res.ok) throw new Error(result.error)
+      setCleanResult(result)
+      await loadMatches(selectedTournament)
+    } catch (err: any) {
+      setAddError(err.message)
+    } finally {
+      setCleaning(false)
     }
   }
 
@@ -397,6 +427,18 @@ export default function AdminMatchesPage() {
                 <>📥 Importar ESPN</>
               )}
             </button>
+            <button
+              onClick={handleCleanDuplicates}
+              disabled={cleaning}
+              title="Eliminar partidos duplicados del torneo seleccionado"
+              className="flex items-center gap-2 bg-orange-800 hover:bg-orange-700 disabled:bg-gray-700 disabled:text-gray-500 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition whitespace-nowrap"
+            >
+              {cleaning ? (
+                <><span className="animate-spin">⏳</span> Limpiando...</>
+              ) : (
+                <>🧹 Limpiar duplicados</>
+              )}
+            </button>
           </div>
           {importResult && (
             <div className={`mt-2 text-sm rounded-xl px-4 py-2 border ${
@@ -405,8 +447,20 @@ export default function AdminMatchesPage() {
                 : 'bg-gray-800 border-gray-700 text-gray-400'
             }`}>
               {importResult.inserted > 0
-                ? `✅ ${importResult.inserted} partidos nuevos importados (de ${importResult.total} encontrados en ESPN)`
+                ? `✅ ${importResult.inserted} partidos nuevos importados${importResult.updated ? `, ${importResult.updated} actualizados` : ''} (de ${importResult.total} encontrados en ESPN)`
                 : `ℹ️ ${importResult.message ?? `0 partidos nuevos (${importResult.total} ya existían)`}`
+              }
+            </div>
+          )}
+          {cleanResult && (
+            <div className={`mt-2 text-sm rounded-xl px-4 py-2 border ${
+              cleanResult.deleted > 0
+                ? 'bg-orange-900/30 border-orange-700/50 text-orange-300'
+                : 'bg-gray-800 border-gray-700 text-gray-400'
+            }`}>
+              {cleanResult.deleted > 0
+                ? `🧹 ${cleanResult.deleted} partido(s) duplicado(s) eliminados.`
+                : `ℹ️ ${cleanResult.message ?? 'No se encontraron duplicados.'}`
               }
             </div>
           )}
