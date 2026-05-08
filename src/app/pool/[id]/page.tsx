@@ -35,6 +35,7 @@ export default function PoolDetailPage() {
   const [user, setUser] = useState<any>(null)
   const [activeTab, setActiveTab] = useState<Tab>('predictions')
   const [copied, setCopied] = useState(false)
+  const [showTc, setShowTc] = useState(false)
 
   useEffect(() => {
     loadData()
@@ -331,6 +332,30 @@ export default function PoolDetailPage() {
                   : 'bg-red-900/50 border border-red-700 text-red-300'
               }`}>
                 {saveMsg}
+              </div>
+            )}
+
+            {/* ── T&C Copa Mundial 2026 (aviso colapsable para todos los participantes) ── */}
+            {pool.tournament_id === 'world-cup-2026' && (
+              <div className="mb-4 border border-yellow-700/30 rounded-xl overflow-hidden">
+                <button
+                  type="button"
+                  onClick={() => setShowTc(v => !v)}
+                  className="w-full flex items-center justify-between px-4 py-3 bg-yellow-900/15 hover:bg-yellow-900/25 transition text-left"
+                >
+                  <span className="text-yellow-300/80 text-xs font-bold">🏆 Premio al Ganador &amp; Términos y Condiciones</span>
+                  <span className="text-yellow-600 text-xs">{showTc ? '▲ Ocultar' : '▼ Ver'}</span>
+                </button>
+                {showTc && (
+                  <div className="px-4 pb-4 pt-2 space-y-2 text-xs text-yellow-200/60 leading-relaxed bg-yellow-900/10">
+                    <p className="text-yellow-300 font-bold text-sm">🏆 Premio al Ganador: Una (1) camiseta original de tu equipo favorito del torneo. <span className="font-normal text-yellow-500/70">(Aplican términos y condiciones)</span></p>
+                    <p><strong className="text-yellow-300/80">Selección de Equipo:</strong> La camiseta debe ser de uno de los equipos que participan activamente en el torneo actual.</p>
+                    <p><strong className="text-yellow-300/80">Versión:</strong> Camiseta original en versión aficionado/hincha. No aplica para versiones Match/Jugador de alto rendimiento.</p>
+                    <p><strong className="text-yellow-300/80">Temporada:</strong> Primera o segunda equipación (local o visitante) de la temporada vigente. No aplican ediciones retro, conmemorativas o de años anteriores.</p>
+                    <p><strong className="text-yellow-300/80">Personalización:</strong> La prenda se entrega en estado comercial estándar. No incluye estampados de nombres, números ni parches adicionales.</p>
+                    <p><strong className="text-yellow-300/80">Disponibilidad:</strong> Sujeta a disponibilidad de inventario en tiendas oficiales o distribuidores autorizados a nivel nacional al finalizar el torneo. En caso de no haber stock, se acordará una alternativa de igual valor con el ganador.</p>
+                  </div>
+                )}
               </div>
             )}
 
@@ -678,6 +703,38 @@ export default function PoolDetailPage() {
                     </div>
                   ))}
                 </div>
+              </div>
+            )}
+
+            {/* T&C — visible en Info General para todos (admin y participantes) */}
+            {pool.tournament_id === 'world-cup-2026' && (
+              <div className="bg-gray-900 rounded-2xl border border-yellow-700/30 overflow-hidden">
+                <button
+                  type="button"
+                  onClick={() => setShowTc(v => !v)}
+                  className="w-full flex items-center justify-between px-6 py-4 hover:bg-yellow-900/10 transition text-left"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="text-xl">📋</span>
+                    <div>
+                      <p className="text-yellow-300 font-bold text-sm">Términos y Condiciones del Premio</p>
+                      <p className="text-yellow-600/70 text-xs mt-0.5">Copa Mundial FIFA 2026 · Camiseta oficial al ganador</p>
+                    </div>
+                  </div>
+                  <span className="text-yellow-500 text-sm font-bold">{showTc ? '▲ Ocultar' : '▼ Leer'}</span>
+                </button>
+                {showTc && (
+                  <div className="px-6 pb-5 pt-1 border-t border-yellow-700/20 bg-yellow-900/10 space-y-3 text-xs text-yellow-200/60 leading-relaxed">
+                    <p className="text-yellow-300 font-bold text-sm pt-2">🏆 Premio al Ganador: Una (1) camiseta original de tu equipo favorito del torneo.</p>
+                    <div className="space-y-2">
+                      <p><strong className="text-yellow-300/80">Selección de Equipo:</strong> La camiseta debe ser de uno de los equipos que participan activamente en el torneo actual.</p>
+                      <p><strong className="text-yellow-300/80">Versión:</strong> Camiseta original en versión aficionado/hincha. No aplica para versiones Match/Jugador de alto rendimiento.</p>
+                      <p><strong className="text-yellow-300/80">Temporada:</strong> Primera o segunda equipación (local o visitante) de la temporada vigente. No aplican ediciones retro, conmemorativas o de años anteriores.</p>
+                      <p><strong className="text-yellow-300/80">Personalización:</strong> La prenda se entrega en estado comercial estándar. No incluye estampados de nombres, números ni parches adicionales.</p>
+                      <p><strong className="text-yellow-300/80">Disponibilidad:</strong> Sujeta a disponibilidad de inventario en tiendas oficiales o distribuidores autorizados a nivel nacional al finalizar el torneo. En caso de no haber stock, se acordará una alternativa de igual valor con el ganador.</p>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 
