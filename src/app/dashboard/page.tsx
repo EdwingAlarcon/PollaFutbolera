@@ -216,10 +216,8 @@ export default function DashboardPage() {
       {/* Nav */}
       <nav className="bg-[#0B1020]/90 backdrop-blur-xl border-b border-white/5 sticky top-0 z-10">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-8 h-8 rounded-xl bg-[#0B1020] border border-green-500/40 flex items-center justify-center group-hover:border-green-400 transition-colors">
-              <PFLogo size={22} />
-            </div>
+          <Link href="/" className="flex items-center gap-2 group">
+            <PFLogo size={40} className="group-hover:scale-105 transition-transform duration-300" />
             <span className="text-lg font-black text-white">Polla<span className="text-green-400">Futbolera</span></span>
           </Link>
           <div className="flex items-center gap-4">

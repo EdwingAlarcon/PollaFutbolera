@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import PFLogo from '@/components/PFLogo'
 
 // ── Static data ───────────────────────────────────────────────────────────────
 
@@ -104,23 +105,6 @@ const TESTIMONIALS = [
   },
 ]
 
-// ── Logo SVG ─────────────────────────────────────────────────────────────────
-
-function PFLogo({ size = 36 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 40 40" fill="none">
-      <path
-        d="M20 3 L34 9 L34 22 Q34 32 20 37 Q6 32 6 22 L6 9 Z"
-        fill="#22C55E" fillOpacity="0.2"
-        stroke="#22C55E" strokeWidth="1.5" strokeLinejoin="round"
-      />
-      <text x="20" y="26" textAnchor="middle" fill="white" fontSize="13" fontWeight="900">
-        PF
-      </text>
-    </svg>
-  )
-}
-
 // ── Activity feed data ────────────────────────────────────────────────────────
 
 const ACTIVITY = [
@@ -155,13 +139,8 @@ export default function Home() {
       >
         <div className="container mx-auto px-5 py-4 flex items-center justify-between max-w-7xl">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="relative">
-              <div className="absolute inset-0 bg-green-500/30 rounded-xl blur-md group-hover:bg-green-500/50 transition-all duration-300" />
-              <div className="relative w-9 h-9 rounded-xl bg-[#0B1020] border border-green-500/40 flex items-center justify-center group-hover:border-green-400 transition-colors">
-                <PFLogo size={26} />
-              </div>
-            </div>
+          <Link href="/" className="flex items-center gap-2 group">
+            <PFLogo size={44} className="group-hover:scale-105 transition-transform duration-300" />
             <span className="text-lg font-black tracking-tight">
               Polla<span className="text-green-400">Futbolera</span>
             </span>
@@ -771,10 +750,8 @@ export default function Home() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-12">
             {/* Brand */}
             <div className="col-span-2 md:col-span-1">
-              <div className="flex items-center gap-2.5 mb-4">
-                <div className="w-8 h-8 rounded-xl bg-[#0B1020] border border-green-500/40 flex items-center justify-center">
-                  <PFLogo size={22} />
-                </div>
+              <div className="flex items-center gap-2 mb-4">
+                <PFLogo size={40} />
                 <span className="font-black text-white">Polla<span className="text-green-400">Futbolera</span></span>
               </div>
               <p className="text-slate-500 text-sm leading-relaxed">

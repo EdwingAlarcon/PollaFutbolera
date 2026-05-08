@@ -106,13 +106,8 @@ export default function RegisterPage() {
       <div className="relative z-10 w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2.5 group mb-5">
-            <div className="relative">
-              <div className="absolute inset-0 bg-green-500/30 rounded-xl blur-md group-hover:bg-green-500/50 transition-all duration-300" />
-              <div className="relative w-10 h-10 rounded-xl bg-[#0B1020] border border-green-500/40 flex items-center justify-center group-hover:border-green-400 transition-colors">
-                <PFLogo size={28} />
-              </div>
-            </div>
+          <Link href="/" className="inline-flex items-center gap-2 group mb-5">
+            <PFLogo size={52} className="group-hover:scale-105 transition-transform duration-300" />
             <span className="text-xl font-black text-white">Polla<span className="text-green-400">Futbolera</span></span>
           </Link>
           <h1 className="text-3xl font-black text-white mb-2">Crea tu cuenta gratis</h1>
