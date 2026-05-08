@@ -6,10 +6,27 @@ import { supabase } from '@/lib/supabase'
 import Link from 'next/link'
 
 const TOURNAMENTS = [
-  { id: 'world-cup-2026', label: 'Copa Mundo 2026' },
-  { id: 'copa-america-2024', label: 'Copa América 2024' },
-  { id: 'euro-2024', label: 'Euro 2024' },
-  { id: 'champions-league', label: 'UEFA Champions League 2025-2026' },
+  // ── Internacionales ──────────────────────────────
+  { id: 'world-cup-2026',        label: '🌍 Copa Mundial FIFA 2026' },
+  { id: 'champions-league-2526', label: '⭐ UEFA Champions League 2025-26' },
+  { id: 'europa-league-2526',    label: '🟠 UEFA Europa League 2025-26' },
+  { id: 'nations-league-2526',   label: '🏆 UEFA Nations League 2024-25' },
+  // ── Sudamérica ───────────────────────────────────
+  { id: 'libertadores-2026',     label: '🏆 Copa Libertadores 2026' },
+  { id: 'sudamericana-2026',     label: '🟠 Copa Sudamericana 2026' },
+  { id: 'copa-america-2028',     label: '🌎 Copa América 2028' },
+  // ── Ligas Europa ────────────────────────────────
+  { id: 'premier-league-2526',   label: '🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League 2025-26' },
+  { id: 'la-liga-2526',          label: '🇪🇸 La Liga 2025-26' },
+  { id: 'serie-a-2526',          label: '🇮🇹 Serie A 2025-26' },
+  { id: 'bundesliga-2526',       label: '🇩🇪 Bundesliga 2025-26' },
+  { id: 'ligue-1-2526',          label: '🇫🇷 Ligue 1 2025-26' },
+  // ── Ligas América ───────────────────────────────
+  { id: 'liga-mx-apertura-2026', label: '🇲🇽 Liga MX Apertura 2026' },
+  { id: 'liga-betplay-2026-1',   label: '🇨🇴 Liga BetPlay 2026-I' },
+  { id: 'mls-2026',              label: '🇺🇸 MLS 2026' },
+  // ── Otro ────────────────────────────────────────
+  { id: 'otro',                  label: '⚽ Otro torneo' },
 ]
 
 export default function CreatePoolPage() {
