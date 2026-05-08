@@ -277,10 +277,10 @@ export default function PoolDetailPage() {
               <h1 className="text-2xl font-black text-white">{pool.name}</h1>
               <div className="flex items-center gap-2 mt-1 flex-wrap">
                 <span className="text-green-300 text-sm font-medium">{pool.tournament_id}</span>
-                <span className="text-gray-600">•</span>
-                <span className="text-gray-400 text-sm">{members.length} participantes</span>
-                <span className="text-gray-600">•</span>
-                <span className="text-gray-400 text-sm">{matches.length} partidos</span>
+                <span className="text-slate-600">•</span>
+                <span className="text-slate-400 text-sm">{members.length} participantes</span>
+                <span className="text-slate-600">•</span>
+                <span className="text-slate-400 text-sm">{matches.length} partidos</span>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -328,15 +328,15 @@ export default function PoolDetailPage() {
                 <p className="text-yellow-200/60 text-xs">• Se debe dar clic en GUARDAR para que queden registrados. Marcador en blanco no significa cero goles.</p>
               </div>
               <div className="flex items-center gap-3 flex-shrink-0">
-                <span className="text-sm text-gray-400">
+                <span className="text-sm text-slate-400">
                   <span className="text-white font-bold">{filledCount}</span>
-                  <span className="text-gray-600"> / </span>
+                  <span className="text-slate-600"> / </span>
                   <span>{matches.length}</span>
                 </span>
                 <button
                   onClick={handleSave}
                   disabled={saving}
-                  className="bg-green-600 hover:bg-green-500 disabled:bg-gray-700 disabled:cursor-not-allowed text-white font-black py-2.5 px-6 rounded-xl transition flex items-center gap-2 text-sm"
+                  className="bg-green-600 hover:bg-green-500 disabled:bg-white/5 disabled:cursor-not-allowed text-white font-black py-2.5 px-6 rounded-xl transition flex items-center gap-2 text-sm"
                 >
                   {saving ? <><span className="animate-spin inline-block">⏳</span> Guardando...</> : <>💾 GUARDAR</>}
                 </button>
@@ -407,10 +407,10 @@ export default function PoolDetailPage() {
             })()}
 
             {matches.length === 0 ? (
-              <div className="text-center py-16 text-gray-500 space-y-3 px-4">
+              <div className="text-center py-16 text-slate-500 space-y-3 px-4">
                 <div className="text-6xl">📅</div>
-                <p className="text-gray-300 font-bold text-base">Aún no hay partidos cargados para este torneo.</p>
-                <p className="text-gray-500 text-sm max-w-md mx-auto">
+                <p className="text-slate-300 font-bold text-base">Aún no hay partidos cargados para este torneo.</p>
+                <p className="text-slate-500 text-sm max-w-md mx-auto">
                   Los partidos se agregan desde el Panel Admin. Una vez cargados, aparecerán aquí para que todos puedan ingresar sus pronósticos.
                 </p>
                 {user?.id === pool.admin_id && (
@@ -470,7 +470,7 @@ export default function PoolDetailPage() {
                         {/* ── MOBILE ── */}
                         <div className="md:hidden px-4 py-3">
                           <div className="flex justify-between items-center mb-2">
-                            <span className="text-gray-500 text-xs">
+                            <span className="text-slate-500 text-xs">
                               {new Date(match.match_date).toLocaleDateString('es-ES', {
                                 day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit',
                               })}
@@ -527,7 +527,7 @@ export default function PoolDetailPage() {
                                 Resultado: <span className="text-white font-bold">{match.home_score} - {match.away_score}</span>
                               </span>
                               {prediction?.points_earned != null && (
-                                <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${prediction.points_earned > 0 ? 'bg-green-700 text-white' : 'bg-gray-700 text-gray-400'}`}>
+                                <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${prediction.points_earned > 0 ? 'bg-green-700 text-white' : 'bg-white/10 text-slate-400'}`}>
                                   +{prediction.points_earned} pts
                                 </span>
                               )}
@@ -537,12 +537,12 @@ export default function PoolDetailPage() {
 
                         {/* ── DESKTOP ── */}
                         <div className="hidden md:grid md:grid-cols-[48px_130px_1fr_110px_1fr_110px_64px] gap-2 px-4 py-3 items-center">
-                          <div className="text-gray-600 text-xs font-mono text-center">#{idx + 1}</div>
+                          <div className="text-slate-600 text-xs font-mono text-center">#{idx + 1}</div>
                           <div>
-                            <div className="text-gray-300 text-xs">
+                            <div className="text-slate-300 text-xs">
                               {new Date(match.match_date).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' })}
                             </div>
-                            <div className="text-gray-600 text-xs">
+                            <div className="text-slate-600 text-xs">
                               {new Date(match.match_date).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}
                             </div>
                           </div>

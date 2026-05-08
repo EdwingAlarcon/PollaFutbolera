@@ -59,7 +59,7 @@ type EditState = {
 const STATUS_LABELS = {
   scheduled: { label: 'Programado', color: 'bg-blue-900 text-blue-300' },
   live: { label: 'En vivo', color: 'bg-red-600 text-white' },
-  finished: { label: 'Finalizado', color: 'bg-gray-700 text-gray-300' },
+  finished: { label: 'Finalizado', color: 'bg-white/10 text-slate-300' },
 }
 
 export default function AdminMatchesPage() {
@@ -316,7 +316,7 @@ export default function AdminMatchesPage() {
               {/* Flujo de trabajo */}
               <div>
                 <h3 className="text-green-400 font-bold mb-3 flex items-center gap-2">⚽ Flujo de trabajo por partido</h3>
-                <ol className="space-y-2.5 text-gray-300">
+                <ol className="space-y-2.5 text-slate-300">
                   <li className="flex gap-3">
                     <span className="bg-blue-900/60 text-blue-300 font-black text-xs w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5">1</span>
                     <span><strong className="text-white">Antes del partido</strong> — Estado <span className="bg-blue-900/50 text-blue-300 px-1.5 py-0.5 rounded text-xs font-bold">Programado</span>. Los usuarios pueden ingresar su pronóstico hasta que empiece.</span>
@@ -325,14 +325,14 @@ export default function AdminMatchesPage() {
                     <span className="bg-red-900/60 text-red-300 font-black text-xs w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5">2</span>
                     <div>
                       <span><strong className="text-white">Al comenzar</strong> — Pasa a <span className="bg-red-600/50 text-red-300 px-1.5 py-0.5 rounded text-xs font-bold">En vivo</span> <strong className="text-green-400">✨ automáticamente</strong> cuando llega la hora del partido (cron cada 10 min).</span>
-                      <p className="text-gray-600 text-xs mt-1">Si ves un partido que ya empezó pero sigue como Programado, puedes cambiarlo manualmente.</p>
+                      <p className="text-slate-600 text-xs mt-1">Si ves un partido que ya empezó pero sigue como Programado, puedes cambiarlo manualmente.</p>
                     </div>
                   </li>
                   <li className="flex gap-3">
                     <span className="bg-green-900/60 text-green-300 font-black text-xs w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5">3</span>
                     <div>
-                      <span><strong className="text-white">Al terminar</strong> — Pasa a <span className="bg-gray-700 text-gray-300 px-1.5 py-0.5 rounded text-xs font-bold">Finalizado</span> con el marcador real <strong className="text-green-400">✨ automáticamente</strong> desde la API de ESPN.</span>
-                      <p className="text-gray-600 text-xs mt-1">Solo los 90 minutos reglamentarios (fase de grupos: sin tiempo extra ni penales).</p>
+                      <span><strong className="text-white">Al terminar</strong> — Pasa a <span className="bg-white/10 text-slate-300 px-1.5 py-0.5 rounded text-xs font-bold">Finalizado</span> con el marcador real <strong className="text-green-400">✨ automáticamente</strong> desde la API de ESPN.</span>
+                      <p className="text-slate-600 text-xs mt-1">Solo los 90 minutos reglamentarios (fase de grupos: sin tiempo extra ni penales).</p>
                     </div>
                   </li>
                   <li className="flex gap-3">
@@ -347,27 +347,27 @@ export default function AdminMatchesPage() {
                 <h3 className="text-yellow-400 font-bold mb-3 flex items-center gap-2">🏆 Cálculo de puntos (automático)</h3>
                 <div className="space-y-2 mb-4">
                   <div className="flex items-center justify-between bg-yellow-900/20 border border-yellow-700/30 rounded-lg px-3 py-2">
-                    <span className="text-gray-300">🎯 Resultado exacto</span>
-                    <span className="text-yellow-400 font-black">5 pts <span className="text-gray-600 font-normal text-xs">(por defecto)</span></span>
+                    <span className="text-slate-300">🎯 Resultado exacto</span>
+                    <span className="text-yellow-400 font-black">5 pts <span className="text-slate-600 font-normal text-xs">(por defecto)</span></span>
                   </div>
                   <div className="flex items-center justify-between bg-blue-900/20 border border-blue-700/30 rounded-lg px-3 py-2">
-                    <span className="text-gray-300">📊 Diferencia correcta</span>
-                    <span className="text-blue-400 font-black">3 pts <span className="text-gray-600 font-normal text-xs">(por defecto)</span></span>
+                    <span className="text-slate-300">📊 Diferencia correcta</span>
+                    <span className="text-blue-400 font-black">3 pts <span className="text-slate-600 font-normal text-xs">(por defecto)</span></span>
                   </div>
                   <div className="flex items-center justify-between bg-purple-900/20 border border-purple-700/30 rounded-lg px-3 py-2">
-                    <span className="text-gray-300">✅ Ganador / empate</span>
-                    <span className="text-purple-400 font-black">1 pt <span className="text-gray-600 font-normal text-xs">(por defecto)</span></span>
+                    <span className="text-slate-300">✅ Ganador / empate</span>
+                    <span className="text-purple-400 font-black">1 pt <span className="text-slate-600 font-normal text-xs">(por defecto)</span></span>
                   </div>
                 </div>
-                <p className="text-gray-500 text-xs leading-relaxed">
+                <p className="text-slate-500 text-xs leading-relaxed">
                   Cada polla puede tener su propio sistema de puntos configurado al crearla. El cálculo usa el trigger <code className="bg-white/10 px-1 rounded">calculate_points</code> en Supabase.
                 </p>
               </div>
 
               {/* Botón bulk */}
-              <div className="md:col-span-2 border-t border-gray-800 pt-5">
+              <div className="md:col-span-2 border-t border-white/8 pt-5">
                 <h3 className="text-orange-400 font-bold mb-3 flex items-center gap-2">⚡ Botón "Finalizar con marcador"</h3>
-                <p className="text-gray-300 leading-relaxed">
+                <p className="text-slate-300 leading-relaxed">
                   Toma <strong className="text-white">todos los partidos que tienen marcador ingresado</strong> y que aún no están en estado Finalizado, y los finaliza en lote de una vez.
                   Útil al final de una jornada con varios partidos. Siempre pide confirmación antes de ejecutar.
                 </p>
@@ -375,21 +375,21 @@ export default function AdminMatchesPage() {
 
               <div className="md:col-span-2 bg-green-900/15 border border-green-700/30 rounded-xl p-4">
                 <p className="text-green-300 font-bold text-xs mb-2">✨ Totalmente automático con ESPN</p>
-                <p className="text-gray-400 text-xs leading-relaxed">
-                  El cron de cron-job.org corre cada 10 min y consulta la <strong className="text-gray-200">API pública de ESPN</strong> (sin key, gratuita).
+                <p className="text-slate-400 text-xs leading-relaxed">
+                  El cron de cron-job.org corre cada 10 min y consulta la <strong className="text-slate-200">API pública de ESPN</strong> (sin key, gratuita).
                   Cuando ESPN reporta un partido como <em>Final</em>, actualiza el marcador en Supabase y dispara el cálculo de puntos automáticamente.
-                  Este panel sirve como <strong className="text-gray-200">respaldo manual</strong> en caso de que la API falle o si se necesita corregir un resultado.
+                  Este panel sirve como <strong className="text-slate-200">respaldo manual</strong> en caso de que la API falle o si se necesita corregir un resultado.
                 </p>
               </div>
 
               {/* Notas */}
               <div className="md:col-span-2 bg-orange-900/15 border border-orange-700/30 rounded-xl p-4">
                 <p className="text-orange-300 font-bold text-xs mb-2">⚠️ Reglas importantes</p>
-                <ul className="text-gray-400 text-xs space-y-1 leading-relaxed">
-                  <li>• Solo se cuentan los <strong className="text-gray-200">90 minutos reglamentarios</strong> (sin tiempo extra ni penales).</li>
+                <ul className="text-slate-400 text-xs space-y-1 leading-relaxed">
+                  <li>• Solo se cuentan los <strong className="text-slate-200">90 minutos reglamentarios</strong> (sin tiempo extra ni penales).</li>
                   <li>• Si un partido va a penales, el marcador a ingresar es el de los 90 min (ej: 1-1 aunque gane 4-3 en penales).</li>
-                  <li>• Cambiar un partido de Finalizado a otro estado <strong className="text-gray-200">no recalcula los puntos</strong> automáticamente — solo la transición a Finalizado los dispara.</li>
-                  <li>• El panel actualmente muestra solo partidos del torneo <strong className="text-gray-200">Copa Mundial FIFA 2026</strong>.</li>
+                  <li>• Cambiar un partido de Finalizado a otro estado <strong className="text-slate-200">no recalcula los puntos</strong> automáticamente — solo la transición a Finalizado los dispara.</li>
+                  <li>• El panel actualmente muestra solo partidos del torneo <strong className="text-slate-200">Copa Mundial FIFA 2026</strong>.</li>
                 </ul>
               </div>
 
@@ -400,7 +400,7 @@ export default function AdminMatchesPage() {
         {/* Selector de torneo */}
         <div className="mb-4">
           <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-            <label className="text-sm font-bold text-gray-400 whitespace-nowrap">⚽ Torneo activo:</label>
+            <label className="text-sm font-bold text-slate-400 whitespace-nowrap">⚽ Torneo activo:</label>
             <select
               value={selectedTournament}
               onChange={e => {
@@ -411,7 +411,7 @@ export default function AdminMatchesPage() {
                 setImportResult(null)
                 loadMatches(e.target.value)
               }}
-              className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-green-500"
+              className="flex-1 bg-[#131A2E] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-green-500 [color-scheme:dark]"
             >
               {TOURNAMENTS.map(t => (
                 <option key={t.id} value={t.id}>{t.label}</option>
@@ -421,7 +421,7 @@ export default function AdminMatchesPage() {
               onClick={handleImport}
               disabled={importing || selectedTournament === 'otro'}
               title={selectedTournament === 'otro' ? 'Importación no disponible para torneos personalizados' : 'Importar partidos desde ESPN API'}
-              className="flex items-center gap-2 bg-indigo-700 hover:bg-indigo-600 disabled:bg-gray-700 disabled:text-gray-500 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition whitespace-nowrap"
+              className="flex items-center gap-2 bg-indigo-700 hover:bg-indigo-600 disabled:bg-white/5 disabled:text-slate-600 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition whitespace-nowrap"
             >
               {importing ? (
                 <><span className="animate-spin">⏳</span> Importando...</>
@@ -433,7 +433,7 @@ export default function AdminMatchesPage() {
               onClick={handleCleanDuplicates}
               disabled={cleaning}
               title="Eliminar partidos duplicados del torneo seleccionado"
-              className="flex items-center gap-2 bg-orange-800 hover:bg-orange-700 disabled:bg-gray-700 disabled:text-gray-500 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition whitespace-nowrap"
+              className="flex items-center gap-2 bg-orange-800 hover:bg-orange-700 disabled:bg-white/5 disabled:text-slate-600 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition whitespace-nowrap"
             >
               {cleaning ? (
                 <><span className="animate-spin">⏳</span> Limpiando...</>
@@ -446,7 +446,7 @@ export default function AdminMatchesPage() {
             <div className={`mt-2 text-sm rounded-xl px-4 py-2 border ${
               importResult.inserted > 0
                 ? 'bg-green-900/30 border-green-700/50 text-green-300'
-                : 'bg-gray-800 border-gray-700 text-gray-400'
+                : 'bg-white/5 border-white/10 text-slate-400'
             }`}>
               {importResult.inserted > 0
                 ? `✅ ${importResult.inserted} partidos nuevos importados${importResult.updated ? `, ${importResult.updated} actualizados` : ''} (de ${importResult.total} encontrados en ESPN)`
@@ -458,7 +458,7 @@ export default function AdminMatchesPage() {
             <div className={`mt-2 text-sm rounded-xl px-4 py-2 border ${
               cleanResult.deleted > 0
                 ? 'bg-orange-900/30 border-orange-700/50 text-orange-300'
-                : 'bg-gray-800 border-gray-700 text-gray-400'
+                : 'bg-white/5 border-white/10 text-slate-400'
             }`}>
               {cleanResult.deleted > 0
                 ? `🧹 ${cleanResult.deleted} partido(s) duplicado(s) eliminados.`
@@ -483,7 +483,7 @@ export default function AdminMatchesPage() {
           ].map(s => (
             <div key={s.label} className="bg-[#131A2E] border border-white/5 rounded-xl p-4 text-center">
               <div className={`text-3xl font-black ${s.color}`}>{s.value}</div>
-              <div className="text-gray-500 text-xs mt-1">{s.label}</div>
+              <div className="text-slate-500 text-xs mt-1">{s.label}</div>
             </div>
           ))}
         </div>
@@ -564,7 +564,7 @@ export default function AdminMatchesPage() {
                   type="datetime-local"
                   value={newMatch.match_date}
                   onChange={e => setNewMatch(p => ({ ...p, match_date: e.target.value }))}
-                  className="bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500"
+                  className="bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 [color-scheme:dark]"
                 />
               </div>
               <div className="flex flex-col gap-1">
@@ -572,7 +572,7 @@ export default function AdminMatchesPage() {
                 <select
                   value={newMatch.round}
                   onChange={e => setNewMatch(p => ({ ...p, round: e.target.value }))}
-                  className="bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500"
+                  className="bg-[#131A2E] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 [color-scheme:dark]"
                 >
                   {Object.entries(ROUND_CONFIG).map(([val, cfg]) => (
                     <option key={val} value={val}>{cfg.emoji} {cfg.label}</option>
@@ -590,7 +590,7 @@ export default function AdminMatchesPage() {
             >
               {addingMatch ? 'Guardando...' : '➕ Agregar partido'}
             </button>
-            <p className="text-gray-600 text-xs mt-3">El partido se creará con estado Programado. Puedes editar el resultado desde la lista una vez que termine.</p>
+            <p className="text-slate-600 text-xs mt-3">El partido se creará con estado Programado. Puedes editar el resultado desde la lista una vez que termine.</p>
           </div>
         )}
 
@@ -619,7 +619,7 @@ export default function AdminMatchesPage() {
               >
                 {/* Fecha + Ronda */}
                 <div className="flex items-center gap-2 mb-3 flex-wrap">
-                  <span className="text-xs text-gray-600">
+                  <span className="text-xs text-slate-600">
                     {new Date(match.match_date).toLocaleString('es-ES', {
                       weekday: 'short', day: '2-digit', month: 'short',
                       hour: '2-digit', minute: '2-digit', timeZoneName: 'short',
@@ -683,7 +683,7 @@ export default function AdminMatchesPage() {
                         ...prev,
                         [match.id]: { ...prev[match.id], status: e.target.value as Match['status'] }
                       }))}
-                      className="bg-white/5 border border-white/8 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-green-500"
+                      className="bg-[#131A2E] border border-white/8 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-green-500 [color-scheme:dark]"
                     >
                       <option value="scheduled">Programado</option>
                       <option value="live">En vivo</option>

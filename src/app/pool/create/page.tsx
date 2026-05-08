@@ -145,7 +145,7 @@ export default function CreatePoolPage() {
                 }`}>
                   {step > s.n ? '✓' : s.n}
                 </div>
-                <span className={`text-xs mt-1 font-medium ${step === s.n ? 'text-green-400' : 'text-gray-600'}`}>
+                <span className={`text-xs mt-1 font-medium ${step === s.n ? 'text-green-400' : 'text-slate-600'}`}>
                   {s.label}
                 </span>
               </div>
@@ -187,11 +187,11 @@ export default function CreatePoolPage() {
             {step === 1 && (
               <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-300 mb-2">Torneo *</label>
+                  <label className="block text-sm font-semibold text-slate-300 mb-2">Torneo *</label>
                   <select
                     value={formData.tournament_id}
                     onChange={e => setFormData({ ...formData, tournament_id: e.target.value })}
-                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent text-white outline-none"
+                    className="w-full px-4 py-3 bg-[#131A2E] border border-white/10 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent text-white outline-none [color-scheme:dark]"
                   >
                     {TOURNAMENTS.map(t => (
                       <option key={t.id} value={t.id}>{t.label}</option>
@@ -264,7 +264,7 @@ export default function CreatePoolPage() {
             {/* ── PASO 2: PUNTUACIÓN ── */}
             {step === 2 && (
               <div className="space-y-6">
-                <p className="text-gray-400 text-sm">Personaliza cuántos puntos vale cada tipo de acierto:</p>
+                <p className="text-slate-400 text-sm">Personaliza cuántos puntos vale cada tipo de acierto:</p>
 
                 {[
                   { key: 'exactScore', label: 'Resultado exacto', desc: 'Ej: predices 2-1 y termina 2-1', color: 'yellow' },
@@ -275,7 +275,7 @@ export default function CreatePoolPage() {
                     <div className="flex items-center justify-between">
                       <div>
                         <p className={`text-${rule.color}-300 font-bold text-sm`}>{rule.label}</p>
-                        <p className="text-gray-500 text-xs mt-0.5">{rule.desc}</p>
+                        <p className="text-slate-500 text-xs mt-0.5">{rule.desc}</p>
                       </div>
                       <div className="flex items-center gap-2">
                         <button
@@ -296,14 +296,14 @@ export default function CreatePoolPage() {
 
                 {/* Premios */}
                 <div className="space-y-3">
-                  <p className="text-gray-400 text-sm font-semibold">🏆 Premios <span className="text-gray-600 font-normal">(opcional)</span></p>
+                  <p className="text-slate-400 text-sm font-semibold">🏆 Premios <span className="text-slate-600 font-normal">(opcional)</span></p>
                   {[
                     { key: 'prize1', label: '🥇 1er Lugar', placeholder: 'Ej: $50.000 o Camiseta oficial' },
                     { key: 'prize2', label: '🥈 2do Lugar', placeholder: 'Ej: $20.000' },
                     { key: 'prize3', label: '🥉 3er Lugar', placeholder: 'Ej: $10.000' },
                   ].map(p => (
                     <div key={p.key} className="flex items-center gap-3">
-                      <span className="text-sm font-semibold text-gray-400 w-24 shrink-0">{p.label}</span>
+                      <span className="text-sm font-semibold text-slate-400 w-24 shrink-0">{p.label}</span>
                       <input
                         type="text"
                         value={(formData as any)[p.key]}
@@ -345,7 +345,7 @@ export default function CreatePoolPage() {
                     { label: 'Descripción', value: formData.description || '-' },
                   ].map(row => (
                     <div key={row.label} className="flex justify-between items-center px-4 py-3">
-                      <span className="text-gray-500 text-sm">{row.label}</span>
+                      <span className="text-slate-500 text-sm">{row.label}</span>
                       <span className="text-white font-semibold text-sm text-right max-w-[60%]">{row.value}</span>
                     </div>
                   ))}
@@ -353,7 +353,7 @@ export default function CreatePoolPage() {
 
                 {(formData.prize1 || formData.prize2 || formData.prize3) && (
                   <div>
-                    <p className="text-gray-500 text-sm mb-3">Premios:</p>
+                    <p className="text-slate-500 text-sm mb-3">Premios:</p>
                     <div className="space-y-2">
                       {[
                         { label: '🥇 1er Lugar', val: formData.prize1 },
@@ -361,7 +361,7 @@ export default function CreatePoolPage() {
                         { label: '🥉 3er Lugar', val: formData.prize3 },
                       ].filter(p => p.val).map(p => (
                         <div key={p.label} className="flex justify-between items-center px-4 py-2 bg-yellow-900/20 border border-yellow-700/30 rounded-xl">
-                          <span className="text-gray-400 text-sm">{p.label}</span>
+                          <span className="text-slate-400 text-sm">{p.label}</span>
                           <span className="text-yellow-300 font-semibold text-sm">{p.val}</span>
                         </div>
                       ))}
@@ -370,7 +370,7 @@ export default function CreatePoolPage() {
                 )}
 
                 <div>
-                  <p className="text-gray-500 text-sm mb-3">Puntuación:</p>
+                  <p className="text-slate-500 text-sm mb-3">Puntuación:</p>
                   <div className="grid grid-cols-3 gap-2">
                     <div className="bg-yellow-900/30 border border-yellow-700/30 rounded-xl p-3 text-center">
                       <div className="text-yellow-400 font-black text-2xl">{formData.exactScore}</div>
