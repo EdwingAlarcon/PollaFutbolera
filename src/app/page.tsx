@@ -749,16 +749,18 @@ export default function Home() {
             Más de 1,200 jugadores ya están compitiendo. ¿Quién conoce mejor el fútbol?
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            href="/register"
-            className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-400 text-black font-black text-lg py-5 px-12 rounded-2xl transition-all duration-200 shadow-2xl shadow-green-500/30 hover:shadow-green-500/55 hover:-translate-y-1"
-          >
-            Crear cuenta gratis <span>→</span>
-          </Link>
-          <Link
-            href="/login"
-            className="inline-flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-white font-bold text-lg py-5 px-10 rounded-2xl transition-all duration-200"
-          >
-            Ya tengo cuenta
+            <Link
+              href="/register"
+              className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-400 text-black font-black text-lg py-5 px-12 rounded-2xl transition-all duration-200 shadow-2xl shadow-green-500/30 hover:shadow-green-500/55 hover:-translate-y-1"
+            >
+              Crear cuenta gratis <span>→</span>
+            </Link>
+            <Link
+              href="/login"
+              className="inline-flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-white font-bold text-lg py-5 px-10 rounded-2xl transition-all duration-200"
+            >
+              Ya tengo cuenta
+            </Link>
           </div>
         </div>
       </section>
