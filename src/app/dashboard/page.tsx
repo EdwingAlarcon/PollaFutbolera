@@ -156,7 +156,7 @@ export default function DashboardPage() {
   const isAdmin = ADMIN_EMAILS.includes(authEmail)
 
   return (
-    <div className="min-h-screen bg-[#0B1020] text-white">
+    <div className="animate-page min-h-screen bg-[#0B1020] text-white">
       {/* Edit Modal */}
       {editingPool && (
         <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center px-4" onClick={() => setEditingPool(null)}>

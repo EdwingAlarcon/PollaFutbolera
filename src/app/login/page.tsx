@@ -39,7 +39,7 @@ export default function LoginPage() {
 
 
   return (
-    <div className="min-h-screen bg-[#0B1020] flex items-center justify-center px-4 relative overflow-hidden">
+    <div className="animate-page min-h-screen bg-[#0B1020] flex items-center justify-center px-4 relative overflow-hidden">
       {/* Background glow */}
       <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 80% 60% at 20% 50%, rgba(34,197,94,0.07) 0%, transparent 60%)' }} />
 

@@ -91,7 +91,7 @@ export default function JoinPoolPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0B1020] text-slate-50 relative overflow-hidden">
+    <div className="animate-page min-h-screen bg-[#0B1020] text-slate-50 relative overflow-hidden">
       {/* Background glow */}
       <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 70% 50% at 50% 30%, rgba(34,197,94,0.07) 0%, transparent 60%)' }} />
 

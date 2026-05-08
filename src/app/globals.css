@@ -12,6 +12,40 @@ textarea::placeholder {
   @apply text-slate-500 opacity-100;
 }
 
+/* ── Page fade-in on load ──────────────────────────────────────────────────── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+.animate-page {
+  animation: fadeInUp 0.35s ease-out both;
+}
+
+/* ── T&C accordion smooth expand/collapse ─────────────────────────────────── */
+.tc-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease;
+}
+.tc-body.tc-open {
+  grid-template-rows: 1fr;
+}
+.tc-body > div {
+  overflow: hidden;
+}
+
+/* ── Save button success pulse ────────────────────────────────────────────── */
+@keyframes savePulse {
+  0%   { box-shadow: 0 0 0 0  rgba(34, 197, 94, 0.7); }
+  60%  { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0);  }
+  100% { box-shadow: 0 0 0 0  rgba(34, 197, 94, 0);    }
+}
+
+.btn-save-success {
+  animation: savePulse 0.55s ease-out;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

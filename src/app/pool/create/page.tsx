@@ -119,7 +119,7 @@ export default function CreatePoolPage() {
   const selectedTournament = TOURNAMENTS.find(t => t.id === formData.tournament_id)
 
   return (
-    <div className="min-h-screen bg-[#0B1020] text-white">
+    <div className="animate-page min-h-screen bg-[#0B1020] text-white">
       <nav className="bg-[#0B1020]/90 backdrop-blur-xl border-b border-white/5">
         <div className="container mx-auto px-4 py-3">
           <Link href="/dashboard" className="text-green-400 hover:text-green-300 font-semibold text-sm transition">
@@ -414,16 +414,18 @@ export default function CreatePoolPage() {
                       <span className="text-yellow-300 text-xs font-bold">🏆 Premio al Ganador &amp; Términos y Condiciones</span>
                       <span className="text-yellow-500 text-xs">{showTc ? '▲' : '▼'}</span>
                     </button>
-                    {showTc && (
-                      <div className="px-4 pb-4 pt-2 space-y-2 text-xs text-yellow-200/60 leading-relaxed bg-yellow-900/10">
-                        <p className="text-yellow-300 font-bold text-sm">🏆 Premio al Ganador: Una (1) camiseta original de tu equipo favorito del torneo. <span className="font-normal text-yellow-500/70">(Aplican términos y condiciones)</span></p>
-                        <p><strong className="text-yellow-300/80">Selección de Equipo:</strong> La camiseta debe ser de uno de los equipos que participan activamente en el torneo actual.</p>
-                        <p><strong className="text-yellow-300/80">Versión:</strong> Camiseta original en versión aficionado/hincha. No aplica para versiones Match/Jugador de alto rendimiento.</p>
-                        <p><strong className="text-yellow-300/80">Temporada:</strong> Primera o segunda equipación (local o visitante) de la temporada vigente. No aplican ediciones retro, conmemorativas o de años anteriores.</p>
-                        <p><strong className="text-yellow-300/80">Personalización:</strong> La prenda se entrega en estado comercial estándar. No incluye estampados de nombres, números ni parches adicionales.</p>
-                        <p><strong className="text-yellow-300/80">Disponibilidad:</strong> Sujeta a disponibilidad de inventario en tiendas oficiales o distribuidores autorizados a nivel nacional al finalizar el torneo. En caso de no haber stock, se acordará una alternativa de igual valor con el ganador.</p>
+                    <div className={`tc-body${showTc ? ' tc-open' : ''}`}>
+                      <div>
+                        <div className="px-4 pb-4 pt-2 space-y-2 text-xs text-yellow-200/60 leading-relaxed bg-yellow-900/10">
+                          <p className="text-yellow-300 font-bold text-sm">🏆 Premio al Ganador: Una (1) camiseta original de tu equipo favorito del torneo. <span className="font-normal text-yellow-500/70">(Aplican términos y condiciones)</span></p>
+                          <p><strong className="text-yellow-300/80">Selección de Equipo:</strong> La camiseta debe ser de uno de los equipos que participan activamente en el torneo actual.</p>
+                          <p><strong className="text-yellow-300/80">Versión:</strong> Camiseta original en versión aficionado/hincha. No aplica para versiones Match/Jugador de alto rendimiento.</p>
+                          <p><strong className="text-yellow-300/80">Temporada:</strong> Primera o segunda equipación (local o visitante) de la temporada vigente. No aplican ediciones retro, conmemorativas o de años anteriores.</p>
+                          <p><strong className="text-yellow-300/80">Personalización:</strong> La prenda se entrega en estado comercial estándar. No incluye estampados de nombres, números ni parches adicionales.</p>
+                          <p><strong className="text-yellow-300/80">Disponibilidad:</strong> Sujeta a disponibilidad de inventario en tiendas oficiales o distribuidores autorizados a nivel nacional al finalizar el torneo. En caso de no haber stock, se acordará una alternativa de igual valor con el ganador.</p>
+                        </div>
                       </div>
-                    )}
+                    </div>
                   </div>
                 )}
               </div>

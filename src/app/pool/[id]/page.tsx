@@ -31,6 +31,7 @@ export default function PoolDetailPage() {
   const [localPredictions, setLocalPredictions] = useState<Record<string, { home: string; away: string }>>({})
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [saveSuccess, setSaveSuccess] = useState(false)
   const [saveMsg, setSaveMsg] = useState<string | null>(null)
   const [user, setUser] = useState<any>(null)
   const [activeTab, setActiveTab] = useState<Tab>('predictions')
@@ -210,6 +211,8 @@ export default function PoolDetailPage() {
       if (predictionsData) setPredictions(predictionsData)
 
       setSaveMsg(`✅ ${toSave.length} predicción(es) guardadas correctamente`)
+      setSaveSuccess(true)
+      setTimeout(() => setSaveSuccess(false), 600)
     } catch (err: any) {
       setSaveMsg(`❌ Error: ${err.message}`)
     } finally {
@@ -255,7 +258,7 @@ export default function PoolDetailPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-[#0B1020] text-white">
+    <div className="animate-page min-h-screen bg-[#0B1020] text-white">
       {/* Nav */}
       <nav className="bg-[#0B1020]/90 backdrop-blur-xl border-b border-white/5 sticky top-0 z-10">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -336,7 +339,7 @@ export default function PoolDetailPage() {
                 <button
                   onClick={handleSave}
                   disabled={saving}
-                  className="bg-green-600 hover:bg-green-500 disabled:bg-white/5 disabled:cursor-not-allowed text-white font-black py-2.5 px-6 rounded-xl transition flex items-center gap-2 text-sm"
+                  className={`bg-green-600 hover:bg-green-500 disabled:bg-white/5 disabled:cursor-not-allowed text-white font-black py-2.5 px-6 rounded-xl transition flex items-center gap-2 text-sm${saveSuccess ? ' btn-save-success' : ''}`}
                 >
                   {saving ? <><span className="animate-spin inline-block">⏳</span> Guardando...</> : <>💾 GUARDAR</>}
                 </button>
@@ -364,16 +367,18 @@ export default function PoolDetailPage() {
                   <span className="text-yellow-300/80 text-xs font-bold">🏆 Premio al Ganador &amp; Términos y Condiciones</span>
                   <span className="text-yellow-600 text-xs">{showTc ? '▲ Ocultar' : '▼ Ver'}</span>
                 </button>
-                {showTc && (
-                  <div className="px-4 pb-4 pt-2 space-y-2 text-xs text-yellow-200/60 leading-relaxed bg-yellow-900/10">
-                    <p className="text-yellow-300 font-bold text-sm">🏆 Premio al Ganador: Una (1) camiseta original de tu equipo favorito del torneo. <span className="font-normal text-yellow-500/70">(Aplican términos y condiciones)</span></p>
-                    <p><strong className="text-yellow-300/80">Selección de Equipo:</strong> La camiseta debe ser de uno de los equipos que participan activamente en el torneo actual.</p>
-                    <p><strong className="text-yellow-300/80">Versión:</strong> Camiseta original en versión aficionado/hincha. No aplica para versiones Match/Jugador de alto rendimiento.</p>
-                    <p><strong className="text-yellow-300/80">Temporada:</strong> Primera o segunda equipación (local o visitante) de la temporada vigente. No aplican ediciones retro, conmemorativas o de años anteriores.</p>
-                    <p><strong className="text-yellow-300/80">Personalización:</strong> La prenda se entrega en estado comercial estándar. No incluye estampados de nombres, números ni parches adicionales.</p>
-                    <p><strong className="text-yellow-300/80">Disponibilidad:</strong> Sujeta a disponibilidad de inventario en tiendas oficiales o distribuidores autorizados a nivel nacional al finalizar el torneo. En caso de no haber stock, se acordará una alternativa de igual valor con el ganador.</p>
+                <div className={`tc-body${showTc ? ' tc-open' : ''}`}>
+                  <div>
+                    <div className="px-4 pb-4 pt-2 space-y-2 text-xs text-yellow-200/60 leading-relaxed bg-yellow-900/10">
+                      <p className="text-yellow-300 font-bold text-sm">🏆 Premio al Ganador: Una (1) camiseta original de tu equipo favorito del torneo. <span className="font-normal text-yellow-500/70">(Aplican términos y condiciones)</span></p>
+                      <p><strong className="text-yellow-300/80">Selección de Equipo:</strong> La camiseta debe ser de uno de los equipos que participan activamente en el torneo actual.</p>
+                      <p><strong className="text-yellow-300/80">Versión:</strong> Camiseta original en versión aficionado/hincha. No aplica para versiones Match/Jugador de alto rendimiento.</p>
+                      <p><strong className="text-yellow-300/80">Temporada:</strong> Primera o segunda equipación (local o visitante) de la temporada vigente. No aplican ediciones retro, conmemorativas o de años anteriores.</p>
+                      <p><strong className="text-yellow-300/80">Personalización:</strong> La prenda se entrega en estado comercial estándar. No incluye estampados de nombres, números ni parches adicionales.</p>
+                      <p><strong className="text-yellow-300/80">Disponibilidad:</strong> Sujeta a disponibilidad de inventario en tiendas oficiales o distribuidores autorizados a nivel nacional al finalizar el torneo. En caso de no haber stock, se acordará una alternativa de igual valor con el ganador.</p>
+                    </div>
                   </div>
-                )}
+                </div>
               </div>
             )}
 
@@ -619,7 +624,7 @@ export default function PoolDetailPage() {
                 <button
                   onClick={handleSave}
                   disabled={saving}
-                  className="bg-green-600 hover:bg-green-500 disabled:bg-gray-700 disabled:cursor-not-allowed text-white font-black py-3 px-10 rounded-xl transition text-sm flex items-center gap-2"
+                  className={`bg-green-600 hover:bg-green-500 disabled:bg-white/5 disabled:cursor-not-allowed text-white font-black py-3 px-10 rounded-xl transition text-sm flex items-center gap-2${saveSuccess ? ' btn-save-success' : ''}`}
                 >
                   {saving ? '⏳ Guardando...' : '💾 GUARDAR PRONÓSTICOS'}
                 </button>

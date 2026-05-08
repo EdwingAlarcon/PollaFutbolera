@@ -159,7 +159,7 @@ export default function PredictMatchPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0B1020] text-white">
+    <div className="animate-page min-h-screen bg-[#0B1020] text-white">
       <nav className="bg-[#0B1020]/90 backdrop-blur-xl border-b border-white/5">
         <div className="container mx-auto px-4 py-4">
           <Link href={`/pool/${poolId}`} className="text-green-400 hover:text-green-300 font-semibold transition">
