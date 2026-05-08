@@ -55,6 +55,23 @@ export default function CreatePoolPage() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error('No autenticado')
 
+      // Guardrail: asegurar que el perfil existe en public.users
+      // (puede faltar si el trigger no disparó o si el email fue confirmado en otro dispositivo)
+      const { data: existingProfile } = await supabase
+        .from('users')
+        .select('id')
+        .eq('id', user.id)
+        .single()
+
+      if (!existingProfile) {
+        const { error: profileError } = await supabase.from('users').insert({
+          id: user.id,
+          username: user.user_metadata?.username || user.email?.split('@')[0] || 'user',
+          email: user.email!,
+        })
+        if (profileError) throw new Error('Error al crear perfil de usuario. Por favor recarga la página e intenta de nuevo.')
+      }
+
       const prizesRaw = [
         { position: '🥇 1er Lugar', prize: formData.prize1.trim() },
         { position: '🥈 2do Lugar', prize: formData.prize2.trim() },

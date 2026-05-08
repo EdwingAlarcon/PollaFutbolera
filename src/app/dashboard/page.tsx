@@ -31,13 +31,27 @@ export default function DashboardPage() {
 
     setAuthEmail(authUser.email ?? '')
 
-    const { data: profile } = await supabase
+    const { data: profile, error: profileError } = await supabase
       .from('users')
       .select('*')
       .eq('id', authUser.id)
       .single()
 
-    setUser(profile)
+    // Guardrail: si no hay perfil, crearlo ahora
+    if (!profile || profileError?.code === 'PGRST116') {
+      const { data: newProfile } = await supabase
+        .from('users')
+        .insert({
+          id: authUser.id,
+          username: authUser.user_metadata?.username || authUser.email?.split('@')[0] || 'user',
+          email: authUser.email!,
+        })
+        .select('*')
+        .single()
+      setUser(newProfile)
+    } else {
+      setUser(profile)
+    }
     setLoading(false)
   }
 
