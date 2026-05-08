@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
+import { TOURNAMENT_TEAMS } from '@/lib/tournamentTeams'
 import Link from 'next/link'
 
 // ─── Configura aquí los emails que pueden acceder al panel admin ───
@@ -417,8 +418,18 @@ export default function AdminMatchesPage() {
               ➕ Nuevo partido — {TOURNAMENTS.find(t => t.id === selectedTournament)?.label ?? selectedTournament}
             </h3>
             <div className="grid sm:grid-cols-2 gap-3 mb-3">
+              {/* datalist de equipos para el torneo seleccionado */}
+              <datalist id="team-suggestions">
+                {[...new Set([
+                  ...(TOURNAMENT_TEAMS[selectedTournament] ?? []),
+                  ...matches.flatMap(m => [m.home_team, m.away_team]),
+                ])].sort().map(team => (
+                  <option key={team} value={team} />
+                ))}
+              </datalist>
               <input
                 type="text"
+                list="team-suggestions"
                 placeholder="Equipo local (ej: Argentina)"
                 value={newMatch.home_team}
                 onChange={e => setNewMatch(p => ({ ...p, home_team: e.target.value }))}
@@ -426,6 +437,7 @@ export default function AdminMatchesPage() {
               />
               <input
                 type="text"
+                list="team-suggestions"
                 placeholder="Equipo visitante (ej: Francia)"
                 value={newMatch.away_team}
                 onChange={e => setNewMatch(p => ({ ...p, away_team: e.target.value }))}
