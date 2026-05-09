@@ -427,7 +427,7 @@ export default function PoolDetailPage() {
             ) : (
               <div className="bg-[#131A2E] rounded-2xl border border-white/5 overflow-hidden">
                 {/* Desktop header */}
-                <div className="hidden md:grid md:grid-cols-[48px_130px_1fr_110px_1fr_110px_64px] gap-2 px-4 py-3 bg-white/5 text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-white/5">
+                <div className="hidden md:grid md:grid-cols-[48px_130px_1fr_110px_1fr_110px_64px] gap-2 px-4 py-3 bg-[#0d1428] text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-white/8">
                   <div className="text-center">#</div>
                   <div>Horario</div>
                   <div className="text-right pr-2">Local</div>
@@ -498,7 +498,7 @@ export default function PoolDetailPage() {
                                     type="number" min="0" max="99"
                                     value={local?.home ?? ''}
                                     onChange={e => updateScore(match.id, 'home', e.target.value)}
-                                    className="w-12 h-12 text-center font-black text-lg bg-white/5 border-2 border-white/10 focus:border-green-500 rounded-lg text-white outline-none"
+                                    className="w-12 h-12 text-center font-black text-lg bg-white/5 border-2 border-white/15 focus:border-green-500 rounded-lg text-white outline-none"
                                     placeholder="-"
                                   />
                                   <span className="text-slate-600 font-black">:</span>
@@ -506,7 +506,7 @@ export default function PoolDetailPage() {
                                     type="number" min="0" max="99"
                                     value={local?.away ?? ''}
                                     onChange={e => updateScore(match.id, 'away', e.target.value)}
-                                    className="w-12 h-12 text-center font-black text-lg bg-white/5 border-2 border-white/10 focus:border-green-500 rounded-lg text-white outline-none"
+                                    className="w-12 h-12 text-center font-black text-lg bg-white/5 border-2 border-white/15 focus:border-green-500 rounded-lg text-white outline-none"
                                     placeholder="-"
                                   />
                                 </div>
@@ -562,7 +562,7 @@ export default function PoolDetailPage() {
                                   type="number" min="0" max="99"
                                   value={local?.home ?? ''}
                                   onChange={e => updateScore(match.id, 'home', e.target.value)}
-                  className="w-11 h-10 text-center font-black text-base bg-white/5 border-2 border-white/10 focus:border-green-500 rounded-lg text-white outline-none"
+                  className="w-11 h-10 text-center font-black text-base bg-white/5 border-2 border-white/15 focus:border-green-500 rounded-lg text-white outline-none"
                                     placeholder="-"
                                   />
                                   <span className="text-slate-600 font-black text-sm">:</span>
@@ -570,7 +570,7 @@ export default function PoolDetailPage() {
                                     type="number" min="0" max="99"
                                     value={local?.away ?? ''}
                                     onChange={e => updateScore(match.id, 'away', e.target.value)}
-                                    className="w-11 h-10 text-center font-black text-base bg-white/5 border-2 border-white/10 focus:border-green-500 rounded-lg text-white outline-none"
+                                    className="w-11 h-10 text-center font-black text-base bg-white/5 border-2 border-white/15 focus:border-green-500 rounded-lg text-white outline-none"
                                   placeholder="-"
                                 />
                               </div>

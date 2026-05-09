@@ -254,7 +254,7 @@ export default function CreatePoolPage() {
                     setError(null)
                     setStep(2)
                   }}
-                  className="w-full bg-green-600 hover:bg-green-500 text-white font-black py-3 rounded-xl transition"
+                  className="w-full bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white font-black py-3 rounded-xl transition shadow-lg shadow-green-700/30 active:scale-95"
                 >
                   SIGUIENTE →
                 </button>
@@ -280,14 +280,14 @@ export default function CreatePoolPage() {
                       <div className="flex items-center gap-2">
                         <button
                           onClick={() => setFormData(prev => ({ ...prev, [rule.key]: Math.max(0, (prev as any)[rule.key] - 1) }))}
-                          className="w-8 h-8 bg-white/5 hover:bg-white/10 rounded-lg font-bold text-white transition"
+                          className="w-8 h-8 bg-white/5 hover:bg-white/12 border border-white/15 hover:border-white/30 rounded-lg font-bold text-white transition"
                         >-</button>
                         <span className={`text-${rule.color}-400 font-black text-2xl w-10 text-center`}>
                           {(formData as any)[rule.key]}
                         </span>
                         <button
                           onClick={() => setFormData(prev => ({ ...prev, [rule.key]: (prev as any)[rule.key] + 1 }))}
-                          className="w-8 h-8 bg-white/5 hover:bg-white/10 rounded-lg font-bold text-white transition"
+                          className="w-8 h-8 bg-white/5 hover:bg-white/12 border border-white/15 hover:border-white/30 rounded-lg font-bold text-white transition"
                         >+</button>
                       </div>
                     </div>
@@ -319,13 +319,13 @@ export default function CreatePoolPage() {
                 <div className="flex gap-3 mt-6">
                   <button
                     onClick={() => setStep(1)}
-                    className="flex-1 bg-white/5 hover:bg-white/10 text-white font-bold py-3 rounded-xl transition border border-white/10"
+                    className="flex-1 bg-transparent hover:bg-white/5 text-slate-400 hover:text-white font-bold py-3 rounded-xl transition border border-white/15 hover:border-white/30"
                   >
                     ← ANTERIOR
                   </button>
                   <button
                     onClick={() => setStep(3)}
-                    className="flex-1 bg-green-600 hover:bg-green-500 text-white font-black py-3 rounded-xl transition"
+                    className="flex-1 bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white font-black py-3 rounded-xl transition shadow-lg shadow-green-700/30 active:scale-95"
                   >
                     SIGUIENTE →
                   </button>
@@ -390,14 +390,14 @@ export default function CreatePoolPage() {
                 <div className="flex gap-3 pt-2">
                   <button
                     onClick={() => setStep(2)}
-                    className="flex-1 bg-white/5 hover:bg-white/10 text-white font-bold py-3 rounded-xl transition border border-white/10"
+                    className="flex-1 bg-transparent hover:bg-white/5 text-slate-400 hover:text-white font-bold py-3 rounded-xl transition border border-white/15 hover:border-white/30"
                   >
                     ← ANTERIOR
                   </button>
                   <button
                     onClick={handleCreate}
                     disabled={loading}
-                    className="flex-1 bg-green-600 hover:bg-green-500 disabled:bg-gray-700 disabled:cursor-not-allowed text-white font-black py-3 rounded-xl transition flex items-center justify-center gap-2"
+                    className="flex-1 bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 disabled:from-gray-700 disabled:to-gray-700 disabled:cursor-not-allowed text-white font-black py-3 rounded-xl transition shadow-xl shadow-green-700/40 active:scale-95 flex items-center justify-center gap-2"
                   >
                     {loading ? '⏳ Creando...' : '⚽ CREAR GRUPO'}
                   </button>

@@ -244,20 +244,20 @@ export default function DashboardPage() {
           <div className="flex gap-3 flex-wrap">
             <Link
               href="/pool/create"
-              className="bg-green-600 hover:bg-green-500 text-white font-bold py-2.5 px-5 rounded-xl transition text-sm flex items-center gap-2"
+              className="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white font-bold py-2.5 px-5 rounded-xl transition text-sm flex items-center gap-2 shadow-lg shadow-green-700/30 active:scale-95"
             >
               ⚽ CREAR POLLA
             </Link>
             <Link
               href="/pool/join"
-              className="bg-white/5 hover:bg-white/10 text-white font-bold py-2.5 px-5 rounded-xl border border-white/10 transition text-sm"
+              className="bg-white/5 hover:bg-white/10 text-slate-200 font-bold py-2.5 px-5 rounded-xl border border-white/20 hover:border-white/30 transition text-sm"
             >
               + Unirme con Código
             </Link>
             {ADMIN_EMAILS.includes(authEmail) && (
               <Link
                 href="/admin/matches"
-                className="bg-red-900/60 hover:bg-red-800/60 text-red-300 font-bold py-2.5 px-5 rounded-xl border border-red-700/50 transition text-sm"
+                className="bg-red-700 hover:bg-red-600 text-white font-bold py-2.5 px-5 rounded-xl transition text-sm active:scale-95"
               >
                 🔒 Admin
               </Link>
@@ -280,13 +280,13 @@ export default function DashboardPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/pool/create"
-                className="bg-green-600 hover:bg-green-500 text-white font-bold py-3 px-8 rounded-xl transition text-center"
+                className="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white font-bold py-3 px-8 rounded-xl transition text-center shadow-lg shadow-green-700/30 active:scale-95"
               >
                 Crear Polla
               </Link>
               <Link
                 href="/pool/join"
-                className="bg-white/5 hover:bg-white/10 text-white font-bold py-3 px-8 rounded-xl border border-white/10 transition text-center"
+                className="bg-white/5 hover:bg-white/10 text-slate-200 font-bold py-3 px-8 rounded-xl border border-white/20 hover:border-white/30 transition text-center"
               >
                 Unirme con Código
               </Link>
@@ -299,7 +299,7 @@ export default function DashboardPage() {
               {pools.map((pool) => {
                 const myRanking = rankings.find(r => r.pool_id === pool.id)
                 return (
-                  <div key={pool.id} className="px-4 py-4 flex items-center gap-3 hover:bg-white/[0.03] transition">
+                  <div key={pool.id} className="px-4 py-4 flex items-center gap-3 hover:bg-white/[0.06] transition">
                     <div className="flex-1 min-w-0">
                       <div className="font-bold text-white text-sm leading-tight truncate">{pool.name}</div>
                       <div className="text-xs text-slate-500 font-mono mt-0.5 truncate">{pool.tournament_id}</div>
@@ -311,7 +311,7 @@ export default function DashboardPage() {
                     <div className="flex flex-col gap-1.5 flex-shrink-0">
                       <Link
                         href={`/pool/${pool.id}`}
-                        className="bg-green-600 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-xl text-sm transition text-center"
+                        className="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white font-bold py-2.5 px-4 rounded-xl text-sm transition text-center shadow-sm shadow-green-700/20 active:scale-95"
                       >
                         📋 Ver
                       </Link>
@@ -319,13 +319,13 @@ export default function DashboardPage() {
                         <>
                           <button
                             onClick={() => openEdit(pool)}
-                            className="bg-blue-700 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-xl text-sm transition"
+                            className="bg-blue-700 hover:bg-blue-600 text-white font-bold py-2.5 px-4 rounded-xl text-sm transition active:scale-95"
                           >
                             ✏️ Editar
                           </button>
                           <button
                             onClick={() => handleDeletePool(pool)}
-                            className="bg-red-800 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-xl text-sm transition"
+                            className="bg-red-700 hover:bg-red-600 text-white font-bold py-2.5 px-4 rounded-xl text-sm transition active:scale-95"
                           >
                             🗑️ Eliminar
                           </button>
@@ -351,7 +351,7 @@ export default function DashboardPage() {
                   return (
                     <div
                       key={pool.id}
-                      className={`grid ${isAdmin ? 'grid-cols-[1fr_180px_80px_80px_180px]' : 'grid-cols-[1fr_180px_80px_80px_100px]'} gap-2 px-6 py-4 items-center hover:bg-white/[0.03] transition`}
+                      className={`grid ${isAdmin ? 'grid-cols-[1fr_180px_80px_80px_180px]' : 'grid-cols-[1fr_180px_80px_80px_100px]'} gap-2 px-6 py-4 items-center hover:bg-white/[0.06] transition`}
                     >
                       <div>
                         <div className="font-bold text-white">{pool.name}</div>
@@ -373,7 +373,7 @@ export default function DashboardPage() {
                       <div className="flex items-center justify-center gap-1.5">
                         <Link
                           href={`/pool/${pool.id}`}
-                          className="bg-green-600 hover:bg-green-500 text-white font-bold py-2 px-3 rounded-lg text-xs transition"
+                          className="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-400 text-white font-bold py-2 px-3 rounded-xl text-xs transition shadow-sm shadow-green-700/20 active:scale-95"
                           title="Ver pronósticos"
                         >
                           📋 Ver
@@ -382,14 +382,14 @@ export default function DashboardPage() {
                           <>
                             <button
                               onClick={() => openEdit(pool)}
-                              className="bg-blue-700 hover:bg-blue-600 text-white font-bold py-2 px-3 rounded-lg text-xs transition"
+                              className="bg-blue-700 hover:bg-blue-600 text-white font-bold py-2 px-3 rounded-xl text-xs transition active:scale-95"
                               title="Editar polla"
                             >
                               ✏️
                             </button>
                             <button
                               onClick={() => handleDeletePool(pool)}
-                              className="bg-red-800 hover:bg-red-700 text-white font-bold py-2 px-3 rounded-lg text-xs transition"
+                              className="bg-red-700 hover:bg-red-600 text-white font-bold py-2 px-3 rounded-xl text-xs transition active:scale-95"
                               title="Eliminar polla"
                             >
                               🗑️

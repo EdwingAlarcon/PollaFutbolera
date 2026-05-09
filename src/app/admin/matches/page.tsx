@@ -433,7 +433,7 @@ export default function AdminMatchesPage() {
               onClick={handleCleanDuplicates}
               disabled={cleaning}
               title="Eliminar partidos duplicados del torneo seleccionado"
-              className="flex items-center gap-2 bg-orange-800 hover:bg-orange-700 disabled:bg-white/5 disabled:text-slate-600 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition whitespace-nowrap"
+              className="flex items-center gap-2 bg-orange-700 hover:bg-orange-600 disabled:bg-white/5 disabled:text-slate-600 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition whitespace-nowrap active:scale-95"
             >
               {cleaning ? (
                 <><span className="animate-spin">⏳</span> Limpiando...</>
@@ -504,8 +504,8 @@ export default function AdminMatchesPage() {
                 onClick={() => setFilter(f)}
                 className={`px-4 py-2.5 rounded-xl text-sm font-bold transition ${
                   filter === f
-                    ? 'bg-green-600 text-white'
-                    : 'bg-white/5 text-slate-400 hover:bg-white/10'
+                    ? 'bg-green-600 text-white shadow-sm shadow-green-700/30'
+                    : 'bg-white/5 border border-white/10 text-slate-400 hover:bg-white/10 hover:text-slate-200'
                 }`}
               >
                 {f === 'all' ? 'Todos' : f === 'scheduled' ? 'Pendientes' : f === 'live' ? 'En vivo' : 'Finalizados'}
@@ -514,13 +514,13 @@ export default function AdminMatchesPage() {
           </div>
           <button
             onClick={handleBulkFinish}
-            className="bg-yellow-600 hover:bg-yellow-500 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition whitespace-nowrap"
+            className="bg-yellow-600 hover:bg-yellow-500 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition whitespace-nowrap shadow-sm shadow-yellow-700/20 active:scale-95"
           >
             ✅ Finalizar con marcador
           </button>
           <button
             onClick={() => { setShowAddForm(s => !s); setAddError(null) }}
-            className="bg-blue-700 hover:bg-blue-600 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition whitespace-nowrap"
+            className="bg-blue-700 hover:bg-blue-600 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition whitespace-nowrap active:scale-95"
           >
             {showAddForm ? '✕ Cancelar' : '➕ Agregar partido'}
           </button>
@@ -614,7 +614,7 @@ export default function AdminMatchesPage() {
                     ? 'border-red-600/60'
                     : edit.status === 'finished'
                     ? 'border-white/8'
-                    : 'border-white/5'
+                    : 'border-blue-900/50'
                 }`}
               >
                 {/* Fecha + Ronda */}
@@ -693,15 +693,15 @@ export default function AdminMatchesPage() {
                     <button
                       onClick={() => handleSave(match.id)}
                       disabled={isSaving || !hasChanges}
-                      className={`px-5 py-2 rounded-lg font-bold text-sm transition ${
+                      className={`px-5 py-2 rounded-xl font-bold text-sm transition ${
                         isSaved
-                          ? 'bg-green-700 text-white'
+                          ? 'bg-emerald-600 text-white shadow-sm shadow-emerald-700/30'
                           : hasChanges
-                          ? 'bg-green-600 hover:bg-green-500 text-white'
-                          : 'bg-white/5 text-slate-600 cursor-default'
+                          ? 'bg-green-600 hover:bg-green-500 text-white shadow-sm shadow-green-700/20 active:scale-95'
+                          : 'bg-white/5 border border-white/8 text-slate-600 cursor-default'
                       }`}
                     >
-                      {isSaving ? '...' : isSaved ? '✓' : 'Guardar'}
+                      {isSaving ? '...' : isSaved ? '✓ Guardado' : 'Guardar'}
                     </button>
                   </div>
                 </div>
