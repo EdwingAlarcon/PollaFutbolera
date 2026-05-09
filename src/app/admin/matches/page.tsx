@@ -319,7 +319,7 @@ export default function AdminMatchesPage() {
                 <ol className="space-y-2.5 text-slate-300">
                   <li className="flex gap-3">
                     <span className="bg-blue-900/60 text-blue-300 font-black text-xs w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5">1</span>
-                    <span><strong className="text-white">Antes del partido</strong> — Estado <span className="bg-blue-900/50 text-blue-300 px-1.5 py-0.5 rounded text-xs font-bold">Programado</span>. Los usuarios pueden ingresar su pronóstico hasta que empiece.</span>
+                    <span><strong className="text-white">Antes del partido</strong> — Estado <span className="bg-blue-900/50 text-blue-300 px-1.5 py-0.5 rounded text-xs font-bold">Programado</span>. Los usuarios pueden ingresar su pronóstico hasta <strong className="text-white">5 minutos antes</strong> del inicio.</span>
                   </li>
                   <li className="flex gap-3">
                     <span className="bg-red-900/60 text-red-300 font-black text-xs w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5">2</span>
@@ -345,7 +345,7 @@ export default function AdminMatchesPage() {
               {/* Sistema de puntos */}
               <div>
                 <h3 className="text-yellow-400 font-bold mb-3 flex items-center gap-2">🏆 Cálculo de puntos (automático)</h3>
-                <div className="space-y-2 mb-4">
+                <div className="space-y-2 mb-3">
                   <div className="flex items-center justify-between bg-yellow-900/20 border border-yellow-700/30 rounded-lg px-3 py-2">
                     <span className="text-slate-300">🎯 Resultado exacto</span>
                     <span className="text-yellow-400 font-black">5 pts <span className="text-slate-600 font-normal text-xs">(por defecto)</span></span>
@@ -359,8 +359,12 @@ export default function AdminMatchesPage() {
                     <span className="text-purple-400 font-black">1 pt <span className="text-slate-600 font-normal text-xs">(por defecto)</span></span>
                   </div>
                 </div>
+                <div className="bg-green-900/20 border border-green-600/40 rounded-lg px-3 py-2 mb-3 flex items-center justify-between">
+                  <span className="text-slate-300">⚡ Fase eliminatoria</span>
+                  <span className="text-green-400 font-black">×2 multiplicador</span>
+                </div>
                 <p className="text-slate-500 text-xs leading-relaxed">
-                  Cada polla puede tener su propio sistema de puntos configurado al crearla. El cálculo usa el trigger <code className="bg-white/10 px-1 rounded">calculate_points</code> en Supabase.
+                  En rondas eliminatorias (32avos, octavos, cuartos, semis, final) los puntos se duplican. El cálculo usa el trigger <code className="bg-white/10 px-1 rounded">calculate_prediction_points</code> en Supabase.
                 </p>
               </div>
 
@@ -389,7 +393,7 @@ export default function AdminMatchesPage() {
                   <li>• Solo se cuentan los <strong className="text-slate-200">90 minutos reglamentarios</strong> (sin tiempo extra ni penales).</li>
                   <li>• Si un partido va a penales, el marcador a ingresar es el de los 90 min (ej: 1-1 aunque gane 4-3 en penales).</li>
                   <li>• Cambiar un partido de Finalizado a otro estado <strong className="text-slate-200">no recalcula los puntos</strong> automáticamente — solo la transición a Finalizado los dispara.</li>
-                  <li>• El panel actualmente muestra solo partidos del torneo <strong className="text-slate-200">Copa Mundial FIFA 2026</strong>.</li>
+                  <li>• El panel soporta múltiples torneos — usa el <strong className="text-slate-200">selector de torneo activo</strong> para cambiar entre ellos. Importa partidos con ESPN o agrégalos manualmente.</li>
                 </ul>
               </div>
 
