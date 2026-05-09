@@ -489,20 +489,36 @@ export default function AdminMatchesPage() {
         </div>
 
         {/* Filtros */}
-        <div className="flex flex-col sm:flex-row gap-3 mb-6">
-          <input
-            type="text"
-            placeholder="Buscar equipo..."
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            className="flex-1 bg-[#131A2E] border border-white/8 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-green-600"
-          />
+        <div className="flex flex-col gap-3 mb-6">
+          {/* Fila 1: búsqueda + botones de acción */}
+          <div className="flex flex-col sm:flex-row gap-3">
+            <input
+              type="text"
+              placeholder="Buscar equipo..."
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              className="flex-1 bg-[#131A2E] border border-white/8 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-green-600"
+            />
+            <button
+              onClick={handleBulkFinish}
+              className="bg-yellow-600 hover:bg-yellow-500 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition whitespace-nowrap shadow-sm shadow-yellow-700/20 active:scale-95"
+            >
+              ✅ Finalizar con marcador
+            </button>
+            <button
+              onClick={() => { setShowAddForm(s => !s); setAddError(null) }}
+              className="bg-blue-700 hover:bg-blue-600 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition whitespace-nowrap active:scale-95"
+            >
+              {showAddForm ? '✕ Cancelar' : '➕ Agregar partido'}
+            </button>
+          </div>
+          {/* Fila 2: filtros de estado */}
           <div className="flex flex-wrap gap-2">
             {(['all', 'scheduled', 'live', 'finished'] as const).map(f => (
               <button
                 key={f}
                 onClick={() => setFilter(f)}
-                className={`px-4 py-2.5 rounded-xl text-sm font-bold transition ${
+                className={`px-4 py-2 rounded-xl text-sm font-bold transition ${
                   filter === f
                     ? 'bg-green-600 text-white shadow-sm shadow-green-700/30'
                     : 'bg-white/5 border border-white/10 text-slate-400 hover:bg-white/10 hover:text-slate-200'
@@ -512,18 +528,6 @@ export default function AdminMatchesPage() {
               </button>
             ))}
           </div>
-          <button
-            onClick={handleBulkFinish}
-            className="bg-yellow-600 hover:bg-yellow-500 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition whitespace-nowrap shadow-sm shadow-yellow-700/20 active:scale-95"
-          >
-            ✅ Finalizar con marcador
-          </button>
-          <button
-            onClick={() => { setShowAddForm(s => !s); setAddError(null) }}
-            className="bg-blue-700 hover:bg-blue-600 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition whitespace-nowrap active:scale-95"
-          >
-            {showAddForm ? '✕ Cancelar' : '➕ Agregar partido'}
-          </button>
         </div>
 
         {/* ── Formulario: agregar nuevo partido ── */}
