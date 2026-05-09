@@ -289,12 +289,12 @@ export default function AdminMatchesPage() {
             <span className="text-white font-bold">Panel Admin — Resultados</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-xs bg-red-900/60 border border-red-700/50 text-red-300 px-3 py-1 rounded-full font-bold">
+            <span className="text-xs bg-red-700 text-white px-3 py-1 rounded-xl font-bold">
               🔒 ADMIN
             </span>
             <button
               onClick={() => setShowHelp(h => !h)}
-              className="text-xs bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 px-3 py-1 rounded-full font-bold transition"
+              className="text-xs bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 px-3 py-1 rounded-xl font-bold transition"
             >
               {showHelp ? '✕ Cerrar ayuda' : '? Ayuda'}
             </button>
@@ -421,7 +421,7 @@ export default function AdminMatchesPage() {
               onClick={handleImport}
               disabled={importing || selectedTournament === 'otro'}
               title={selectedTournament === 'otro' ? 'Importación no disponible para torneos personalizados' : 'Importar partidos desde ESPN API'}
-              className="flex items-center gap-2 bg-indigo-700 hover:bg-indigo-600 disabled:bg-white/5 disabled:text-slate-600 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition whitespace-nowrap"
+              className="flex items-center gap-2 bg-[#131A2E] hover:bg-white/10 border border-white/10 hover:border-green-600/50 disabled:opacity-40 disabled:cursor-not-allowed text-slate-200 font-bold px-4 py-2.5 rounded-xl text-sm transition whitespace-nowrap active:scale-95"
             >
               {importing ? (
                 <><span className="animate-spin">⏳</span> Importando...</>
@@ -433,7 +433,7 @@ export default function AdminMatchesPage() {
               onClick={handleCleanDuplicates}
               disabled={cleaning}
               title="Eliminar partidos duplicados del torneo seleccionado"
-              className="flex items-center gap-2 bg-orange-700 hover:bg-orange-600 disabled:bg-white/5 disabled:text-slate-600 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition whitespace-nowrap active:scale-95"
+              className="flex items-center gap-2 bg-[#131A2E] hover:bg-white/10 border border-white/10 hover:border-orange-600/40 disabled:opacity-40 disabled:cursor-not-allowed text-slate-200 font-bold px-4 py-2.5 rounded-xl text-sm transition whitespace-nowrap active:scale-95"
             >
               {cleaning ? (
                 <><span className="animate-spin">⏳</span> Limpiando...</>
@@ -476,12 +476,12 @@ export default function AdminMatchesPage() {
         {/* Stats */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-8">
           {[
-            { label: 'Total', value: stats.total, color: 'text-white' },
-            { label: 'Finalizados', value: stats.finished, color: 'text-green-400' },
-            { label: 'En vivo', value: stats.live, color: 'text-red-400' },
-            { label: 'Pendientes', value: stats.scheduled, color: 'text-blue-400' },
+            { label: 'Total',       value: stats.total,     color: 'text-white',      border: 'border-white/8' },
+            { label: 'Finalizados', value: stats.finished,  color: 'text-green-400',  border: 'border-green-800/40' },
+            { label: 'En vivo',     value: stats.live,      color: 'text-red-400',    border: 'border-red-800/40' },
+            { label: 'Pendientes',  value: stats.scheduled, color: 'text-blue-400',   border: 'border-blue-900/50' },
           ].map(s => (
-            <div key={s.label} className="bg-[#131A2E] border border-white/5 rounded-xl p-4 text-center">
+            <div key={s.label} className={`bg-[#131A2E] border ${s.border} rounded-xl p-4 text-center`}>
               <div className={`text-3xl font-black ${s.color}`}>{s.value}</div>
               <div className="text-slate-500 text-xs mt-1">{s.label}</div>
             </div>
