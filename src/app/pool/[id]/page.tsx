@@ -158,8 +158,9 @@ export default function PoolDetailPage() {
     setTimeout(() => setCopied(false), 2000)
   }
 
+  const CUTOFF_MS = 5 * 60 * 1000 // 5 minutos antes del partido
   const canPredict = (match: any) =>
-    match.status === 'scheduled' && new Date(match.match_date) > new Date()
+    match.status === 'scheduled' && new Date(match.match_date) > new Date(Date.now() + CUTOFF_MS)
 
   const updateScore = (matchId: string, side: 'home' | 'away', value: string) => {
     const num = value.replace(/[^0-9]/g, '')
@@ -404,7 +405,7 @@ export default function PoolDetailPage() {
                       {soonMissed.map(m => `${m.home_team} vs ${m.away_team}`).join(' · ')}
                     </p>
                     <p className="text-orange-500/60 text-xs mt-1">
-                      Los campos se bloquean automáticamente al inicio del partido.
+                      Los pronósticos se bloquean 5 minutos antes del inicio del partido.
                     </p>
                   </div>
                 </div>
@@ -855,7 +856,7 @@ export default function PoolDetailPage() {
                 <p>• <strong className="text-slate-200">Corte a los 90 minutos:</strong> Solo se cuentan los goles del tiempo reglamentario. Tiempo extra y penales no aplican.</p>
                 <p>• <strong className="text-slate-200">Solo el marcador exacto da los puntos completos</strong> — si aciertas el marcador, no se suman las otras categorías.</p>
                 <p>• <strong className="text-slate-200">Pronósticos en blanco</strong> no equivalen a 0-0. Deben ingresarse explícitamente.</p>
-                <p>• <strong className="text-slate-200">Cierre automático:</strong> Los campos se bloquean al inicio de cada partido.</p>
+                <p>• <strong className="text-slate-200">Cierre automático:</strong> Los pronósticos se bloquean <strong className="text-white">5 minutos antes</strong> del inicio de cada partido. Asegúrate de guardar con anticipación.</p>
               </div>
             </div>
 

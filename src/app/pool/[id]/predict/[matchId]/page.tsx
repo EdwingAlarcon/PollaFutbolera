@@ -46,9 +46,10 @@ export default function PredictMatchPage() {
       if (matchData) {
         setMatch(matchData)
         
-        // Verificar si ya pasó el partido
-        if (new Date(matchData.match_date) <= new Date()) {
-          setError('Este partido ya comenzó, no puedes hacer predicciones')
+        // Bloquear 5 minutos antes del partido
+        const CUTOFF_MS = 5 * 60 * 1000
+        if (new Date(matchData.match_date) <= new Date(Date.now() + CUTOFF_MS)) {
+          setError('Los pronósticos se bloquean 5 minutos antes del partido. Ya no puedes modificar este pronóstico.')
         }
       }
 
